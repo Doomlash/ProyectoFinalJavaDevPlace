@@ -55,10 +55,10 @@ public class UserController {
 		user.get().setAvatar(userDetails.getAvatar());
 		user.get().setEmail(userDetails.getEmail());
 		user.get().setLanguage(userDetails.getLanguage());
-		user.get().setLastName(userDetails.getLastName());
-		user.get().setListBlock(userDetails.getListBlock());
-		user.get().setListContacts(userDetails.getListContacts());
-		user.get().setListGroups(userDetails.getListGroups());
+		user.get().setSurname(userDetails.getSurname());
+		//user.get().setListBlock(userDetails.getListBlock());
+		//user.get().setListContacts(userDetails.getListContacts());
+		//user.get().setListGroups(userDetails.getListGroups());
 		user.get().setUsername(userDetails.getUsername());
 		return ResponseEntity.status(HttpStatus.CREATED).body(uService.save(user.get()));
 	}
