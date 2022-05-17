@@ -13,7 +13,7 @@ public class MyUser {
 	@Id
 	private Long id;
 
-	private Integer email;
+	private String email;
 	private String avatar;
 	private String username;
 

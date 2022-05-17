@@ -7,8 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import otakus_de_la_costa.grupo3.model.MyUser;
-
-import otakus_de_la_costa.grupo3.reposiories.UserRepository;
+import otakus_de_la_costa.grupo3.repositories.UserRepository;
 
 //CRUD DE USUARIOS FUNCIONES PRINCIPALES
 @Service

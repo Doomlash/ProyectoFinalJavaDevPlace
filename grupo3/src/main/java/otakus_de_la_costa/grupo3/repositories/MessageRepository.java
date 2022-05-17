@@ -1,4 +1,4 @@
-package otakus_de_la_costa.grupo3.reposiories;
+package otakus_de_la_costa.grupo3.repositories;
 
 import java.util.Optional;
 

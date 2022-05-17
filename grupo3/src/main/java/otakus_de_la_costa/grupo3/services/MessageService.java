@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import otakus_de_la_costa.grupo3.model.Messages;
-import otakus_de_la_costa.grupo3.reposiories.MessageRepository;
+import otakus_de_la_costa.grupo3.repositories.MessageRepository;
 
 @Service
 public class MessageService {
