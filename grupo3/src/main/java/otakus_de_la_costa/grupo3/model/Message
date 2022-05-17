@@ -1,7 +1,7 @@
 package otakus_de_la_costa.grupo3.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import javax.persistance.*;
+import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
