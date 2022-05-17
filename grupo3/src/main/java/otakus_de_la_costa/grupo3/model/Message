@@ -1,40 +1,17 @@
 package otakus_de_la_costa.grupo3.model;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import javax.persistance.*;
 
-@Data
-@NoArgsConstructor
-@Entity
-@Table(name="messages")
 public class Messages{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name="content")
     private String content;
-
-    @Column(name="transmitter")
-    private User transmitter;
-
-    @Column(name="receiver")
-    private User receiver;
-
-    @Column(name="messageLanguage")
     private String messageLanguage;
 
-    @Column(name="receiver")
+    private User transmitter;
     private User receiver;
 
-    @Column(name="dateSend")
     private String dateSend;
-
-    @Column(name="dateReceive")
     private String dateReceive;
-
-    @Column(name="dateRead")
     private String dateRead;
 
 
