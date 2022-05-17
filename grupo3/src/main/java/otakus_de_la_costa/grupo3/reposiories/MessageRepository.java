@@ -12,5 +12,5 @@ import otakus_de_la_costa.grupo3.model.MyUser;
 public interface MessageRepository extends JpaRepository<Messages, Long> {
 	public Optional<Messages> findByDateReceive(String dataReceive);
 	public Optional<Messages> findByDateSend(String dataSend);
-	public Optional<Messages> findByReceiver(MyUser receiver);
+	public Optional<Messages> findByTransmitter(MyUser transmitter);
 }
