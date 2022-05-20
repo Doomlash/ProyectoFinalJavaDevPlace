@@ -2,6 +2,7 @@ package otakus_de_la_costa.grupo3.database;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -22,5 +23,4 @@ public class GroupJPA extends MessengerJPA{
 
     @Column(name = "active")
     private Boolean active;
-
 }

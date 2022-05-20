@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import otakus_de_la_costa.grupo3.database.MyUserJPA;
 import otakus_de_la_costa.grupo3.model.MyUser;
 import otakus_de_la_costa.grupo3.services.UserService;
 
@@ -28,58 +29,42 @@ public class UserController {
 	
 	//CREATE ONE USER
 	@PostMapping("/addUser")
-	public ResponseEntity<?> createUser(@RequestBody MyUser user){
-		return ResponseEntity.status(HttpStatus.CREATED).body(uService.save(user));
+	public ResponseEntity<MyUser> createUser(@RequestBody MyUser user){
+		return new ResponseEntity<>(uService.createUser(user),HttpStatus.CREATED);
 	}
-	
-	//READ USER
-	
-	@GetMapping("/{id}")
-	public ResponseEntity<?> readUser(@PathVariable Long id){
-		Optional<MyUser> user = uService.findById(id);//Se guarda la busqueda de ese id en un objeto de user
-		if (!user.isPresent()) {//Se valida si existe
-			return ResponseEntity.notFound().build();//Si no existe ese usuario devuelve 404
-		}
-		return ResponseEntity.ok(user); //Devuelve codigo 200 si esta todo ok
-	}
-	
-	@PutMapping("/updateUser/{id}")
-	public ResponseEntity<?> updateUser(@RequestBody MyUser userDetails,@PathVariable(value="id") Long userId)
-	{
-		Optional<MyUser> user = uService.findById(userId);
-		if(!user.isPresent()) {
-			return ResponseEntity.notFound().build();
-		}
-		user.get().setName(userDetails.getName());
-		user.get().setAge(userDetails.getAge());
-		user.get().setAvatar(userDetails.getAvatar());
-		user.get().setEmail(userDetails.getEmail());
-		user.get().setLanguage(userDetails.getLanguage());
-		user.get().setSurname(userDetails.getSurname());
-		//user.get().setListBlock(userDetails.getListBlock());
-		//user.get().setListContacts(userDetails.getListContacts());
-		//user.get().setListGroups(userDetails.getListGroups());
-		user.get().setUsername(userDetails.getUsername());
-		return ResponseEntity.status(HttpStatus.CREATED).body(uService.save(user.get()));
-	}
-	
-	//Delete user
-	
-	@DeleteMapping("/deleteUser/{id}")
-	public ResponseEntity<?> deleteUser(@PathVariable (value = "id") Long userId){
-		if(!uService.findById(userId).isPresent()) {
-			return ResponseEntity.notFound().build();
-		}
-		uService.delete(userId);
-		return ResponseEntity.ok().build();
-	}
-	
 	//List users
-	
 	@GetMapping("/listUsers")
 	public List<MyUser> listUsers(){
-		return uService.findAll();
+		return uService.listAllUsers();
 	}
+	//READ USER
+	@GetMapping("/{id}")
+	public ResponseEntity<MyUser> readUser(@PathVariable (value = "id") Long id){
+		MyUser myuser=uService.findUserById(id);
+		if(myuser!=null) {return  ResponseEntity.ok(uService.findUserById(id));}
+		return ResponseEntity.notFound().build();
+	}
+	
+	//UPDATE USER
+	@PutMapping("/{id}")
+	public ResponseEntity<MyUser> updateUser(@PathVariable (value = "id")Long id,@RequestBody MyUser myUser){
+		MyUser myNewUser=uService.updateMyUser(myUser, id);
+		return new ResponseEntity<>(myNewUser,HttpStatus.OK);
+	}
+	
+	//DELETE USER
+	@DeleteMapping("/{id}")
+	public ResponseEntity<String> deleteUser(@PathVariable(value = "id")Long id){
+		boolean delete=uService.deleteUser(id);
+		if(delete) {
+		return new ResponseEntity<>("Usuario eliminado con exito",HttpStatus.OK);}
+		return ResponseEntity.notFound().build();
+	}
+	
+	
+	
+	
+	
 
 	
 	

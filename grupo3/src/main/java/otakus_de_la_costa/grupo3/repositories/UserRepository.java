@@ -11,6 +11,8 @@ import otakus_de_la_costa.grupo3.model.MyUser;
 @Repository
 public interface UserRepository extends JpaRepository<MyUserJPA, Long> {
 	public Optional<MyUser> findByUsername(String username);
+
 	public Optional<MyUser> findByEmail(String email);
-	public Optional<MyUser> findByUsernameOrEmail(String username,String email);
+
+	public Optional<MyUser> findByUsernameOrEmail(String username, String email);
 }

@@ -1,10 +1,7 @@
 package otakus_de_la_costa.grupo3.model;
 
-
-
 import java.util.Date;
 import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,9 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MyUser{
-	private List<Messages> sent;
-	private List<Messages> received;
+public class MyUser {
 	private Long id;
 	private String username;
 	private String mail;

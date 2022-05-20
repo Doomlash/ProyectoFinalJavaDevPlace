@@ -14,7 +14,8 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 public class GroupMembersID implements Serializable{
-    @Column(name = "group_id")
+    private static final long serialVersionUID = 3016095248990399429L;
+	@Column(name = "group_id")
     private Long groupId;
     @Column(name = "group_member")
     private Long userId;

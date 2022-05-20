@@ -42,7 +42,7 @@ public class MyUserJPA extends MessengerJPA{
     private String profileImage;
 
     @Column(name = "birth_date", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date birthDate;
 
     @Column(name = "active")
