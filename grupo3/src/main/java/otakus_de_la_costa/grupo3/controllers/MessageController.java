@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import otakus_de_la_costa.grupo3.database.MessageJPA;
 import otakus_de_la_costa.grupo3.model.Messages;
 import otakus_de_la_costa.grupo3.services.MessageService;
 
@@ -27,14 +28,14 @@ public class MessageController {
 	
 	//CREATE MESSAGE
 	@PostMapping("/addMessage")
-	public ResponseEntity<?> createMessage(@RequestBody Messages message ){
-		return ResponseEntity.status(HttpStatus.CREATED).body(mService.save(message));
+	public ResponseEntity<Messages> createMessage(@RequestBody Messages message ){
+		return new ResponseEntity<>(mService.createMessage(message),HttpStatus.CREATED);
 	}
-	
+	/*
 	//READ MESSAGE
 	@GetMapping("/{id}")
 	public ResponseEntity<?> readMessage(@PathVariable (value = "id") Long id){
-		Optional<Messages> message= mService.findById(id);
+		Optional<MessageJPA> message= mService.findById(id);
 		if (!message.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
@@ -44,22 +45,22 @@ public class MessageController {
 	
 	//READ ALL MESSAGES
 	@GetMapping("/allMessages")
-	public List<Messages> readAll(){
+	public List<MessageJPA> readAll(){
 		return mService.findAll();
 	}
 	
 	//EDIT MESSAGE
 	
 	@PutMapping("/editMessage/{id}")
-	public ResponseEntity<?> editMessage(@PathVariable (value = "id") Long idMessage,@RequestBody Messages myMessage){
-		Optional<Messages> message= mService.findById(idMessage);
+	public ResponseEntity<?> editMessage(@PathVariable (value = "id") Long idMessage,@RequestBody MessageJPA myMessage){
+		Optional<MessageJPA> message= mService.findById(idMessage);
 		if(!message.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
 		message.get().setContent(myMessage.getContent());
-		message.get().setDateRead(myMessage.getDateRead());
-		message.get().setDateReceive(myMessage.getDateReceive());
-		message.get().setDateSend(myMessage.getDateSend());
+		message.get().setReadDate(myMessage.getReadDate());
+		message.get().setReceptionDate(myMessage.getReceptionDate());
+		message.get().setCreationDate(myMessage.getCreationDate());
 		return ResponseEntity.status(HttpStatus.CREATED).body(mService.save(message.get()));
 	}
 	
@@ -73,6 +74,6 @@ public class MessageController {
 		mService.delete(id);
 		return ResponseEntity.ok().build();
 	}
-	
+	*/
 	
 }
