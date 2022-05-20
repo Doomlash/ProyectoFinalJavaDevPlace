@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import otakus_de_la_costa.grupo3.database.GroupJPA;
+import otakus_de_la_costa.grupo3.model.Group;
+import otakus_de_la_costa.grupo3.model.MyUser;
 import otakus_de_la_costa.grupo3.services.GroupService;
 
 
@@ -26,50 +28,37 @@ public class GroupController {
 	private GroupService gService;
 	
 	
-	//CREATE GROUP
-	@PostMapping("/addGroup")
-	public ResponseEntity<?> createGroup(@RequestBody GroupJPA group ){
-		return ResponseEntity.status(HttpStatus.CREATED).body(gService.save(group));
-	}
-	
-	//READ GROUP
-	@GetMapping("/{id}")
-	public ResponseEntity<?> readGroup(@PathVariable (value = "id") Long id){
-		Optional<GroupJPA> group= gService.findById(id);
-		if (!group.isPresent()) {
+	//CREATE ONE GROUP
+		@PostMapping("/addGroup")
+		public ResponseEntity<Group> createGroup(@RequestBody Group group){
+			return new ResponseEntity<>(gService.createGroup(group),HttpStatus.CREATED);
+		}
+		//List groups
+		@GetMapping("/listGroups")
+		public List<Group> listGroups(){
+			return gService.listAllGroups();
+		}
+		//READ Group
+		@GetMapping("/{id}")
+		public ResponseEntity<Group> readgroup(@PathVariable (value = "id") Long id){
+			Group group=gService.findGroupById(id);
+			if(group!=null) {return  ResponseEntity.ok(gService.findGroupById(id));}
 			return ResponseEntity.notFound().build();
 		}
-		return ResponseEntity.ok(group);
-
-	}
-	
-	//READ ALL GROUP
-	@GetMapping("/allGroups")
-	public List<GroupJPA> readAll(){
-		return gService.findAll();
-	}
-	
-	//EDIT GROUP
-	
-	@PutMapping("/editGroup/{id}")
-	public ResponseEntity<?> editGroup(@PathVariable (value = "id") Long idGroup,@RequestBody GroupJPA myGroup){
-		Optional<GroupJPA> group= gService.findById(idGroup);
-		if(!group.isPresent()) {
+		
+		//UPDATE Group
+		@PutMapping("/{id}")
+		public ResponseEntity<Group> updateGroup(@PathVariable (value = "id")Long id,@RequestBody Group group){
+			Group myNewGroup=gService.updateGroup(group, id);
+			return new ResponseEntity<>(myNewGroup,HttpStatus.OK);
+		}
+		
+		//DELETE Group
+		@DeleteMapping("/{id}")
+		public ResponseEntity<String> deleteGroup(@PathVariable(value = "id")Long id){
+			boolean delete=gService.deleteGroup(id);
+			if(delete) {
+			return new ResponseEntity<>("Grupo eliminado con exito",HttpStatus.OK);}
 			return ResponseEntity.notFound().build();
 		}
-		group.get().setName(myGroup.getName());
-		group.get().setDescription(myGroup.getDescription());
-		return ResponseEntity.status(HttpStatus.CREATED).body(gService.save(group.get()));
-	}
-	
-	//DELETE GROUP
-	
-	@DeleteMapping("/deleteGroup({id}")
-	public ResponseEntity<?> deleteGroup(@PathVariable (value = "id") Long id){
-		if(!gService.findById(id).isPresent()) {
-			return ResponseEntity.notFound().build();
-		}
-		gService.delete(id);
-		return ResponseEntity.ok().build();
-	}
 }

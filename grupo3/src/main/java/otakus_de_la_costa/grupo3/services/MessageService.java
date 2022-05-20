@@ -1,22 +1,24 @@
 package otakus_de_la_costa.grupo3.services;
 
+
+
+
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import otakus_de_la_costa.grupo3.database.MessageJPA;
-import otakus_de_la_costa.grupo3.database.MyUserJPA;
 import otakus_de_la_costa.grupo3.model.Messages;
-import otakus_de_la_costa.grupo3.model.MyUser;
 import otakus_de_la_costa.grupo3.repositories.MessageRepository;
 
 @Service
-public class MessageService {
+public class MessageService implements IMenssageService {
 	@Autowired
 	private MessageRepository mRepo;
-	
+	//GUARDADO DEL OBJETO JSON A JPA
 	public Messages createMessage(Messages message) {
 		MessageJPA myMessageJPA= mapearMessageJPA(message);
 		MessageJPA  newMessageJPA = mRepo.save(myMessageJPA);
@@ -24,7 +26,7 @@ public class MessageService {
 		return response;
 		
 	}
-	
+	//MAPEOS DEL JSON AL JPA
 	private MessageJPA mapearMessageJPA(Messages message) {
 		MessageJPA myMessageJPA = new MessageJPA();
 		myMessageJPA.setContent(message.getContent());
@@ -34,7 +36,7 @@ public class MessageService {
 		myMessageJPA.setReceptionDate(message.getReceptionDate());
 		return myMessageJPA;
 	}
-
+	//MAPEOS DEL JPA AL JSON
 	private Messages mapearMessage(MessageJPA newMessageJPA) {
 		Messages myMessage = new Messages();
 		myMessage.setId(newMessageJPA.getId());
@@ -45,46 +47,42 @@ public class MessageService {
 		myMessage.setReceptionDate(newMessageJPA.getReceptionDate());
 		return myMessage;
 	}
-	/*
-	//GET ALL MESSAGES
-	
-	public List<MessageJPA> findAll(){
-		return mRepo.findAll();
+	@Override
+	public List<Messages> listAllMessages() {
+		List<MessageJPA> messages = mRepo.findAll();
+		return messages.stream().map(messageJPA -> mapearMessage(messageJPA)).collect(Collectors.toList());
 	}
 	
-	//GET ONE MESSAGE
-	
-	public Optional<MessageJPA> findById(Long id){
-		if(mRepo.existsById(id)) {
-			return mRepo.findById(id);
+	@Override
+	public Messages findMessageById(Long id) {
+		Optional<MessageJPA> myMessageJPA= mRepo.findById(id);
+		if(myMessageJPA.isPresent()) {
+		return mapearMessage(myMessageJPA.get());
 		}
 		return null;
 	}
-	
-	//POST MESSAGE
-	
-	public MessageJPA save(MessageJPA message) {
-		return mRepo.save(message);
+	@Override
+	public Messages updateMessage(Messages message, Long id) {
+		Optional<MessageJPA> myMessageJPA = mRepo.findById(id);
+		myMessageJPA.get().setContent(message.getContent());
+		myMessageJPA.get().setCreationDate(message.getCreationDate());
+		myMessageJPA.get().setLanguage(message.getLanguage());
+		myMessageJPA.get().setReadDate(message.getReadDate());
+		myMessageJPA.get().setReceptionDate(message.getReceptionDate());
+		MessageJPA updateMessage = mRepo.save(myMessageJPA.get());
+		return mapearMessage(updateMessage);
 	}
 	
-	//UPDATE MESSAGE (PUT)
-	
-	public MessageJPA update(MessageJPA message) {
-		if(mRepo.existsById(message.getId())) {
-			return mRepo.save(message);
-		}
-		return null;
-	}
-	
-	//DELETE MESSSAGE
-	
-	public boolean delete(Long id) {
-		if(mRepo.existsById(id)) {
-			mRepo.deleteById(id);
+	@Override
+	public boolean deleteMessage(Long id) {
+		Optional<MessageJPA> message=mRepo.findById(id);
+		if(message.isPresent())
+		{
+			mRepo.delete(message.get());
 			return true;
 		}
 		return false;
-	}*/
-
-
+		
+	}
 }
+	

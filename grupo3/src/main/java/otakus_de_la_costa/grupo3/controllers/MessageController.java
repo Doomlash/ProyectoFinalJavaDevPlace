@@ -1,7 +1,6 @@
 package otakus_de_la_costa.grupo3.controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import otakus_de_la_costa.grupo3.database.MessageJPA;
 import otakus_de_la_costa.grupo3.model.Messages;
+
 import otakus_de_la_costa.grupo3.services.MessageService;
 
 @RestController
@@ -31,6 +30,34 @@ public class MessageController {
 	public ResponseEntity<Messages> createMessage(@RequestBody Messages message ){
 		return new ResponseEntity<>(mService.createMessage(message),HttpStatus.CREATED);
 	}
+	//List messages
+		@GetMapping("/listUsers")
+		public List<Messages> listMessages(){
+			return mService.listAllMessages();
+		}
+		//READ Message
+		@GetMapping("/{id}")
+		public ResponseEntity<Messages> readMessage(@PathVariable (value = "id") Long id){
+			Messages message=mService.findMessageById(id);
+			if(message!=null) {return  ResponseEntity.ok(mService.findMessageById(id));}
+			return ResponseEntity.notFound().build();
+		}
+		
+		//UPDATE Message
+		@PutMapping("/{id}")
+		public ResponseEntity<Messages> updateMessage(@PathVariable (value = "id")Long id,@RequestBody Messages myMessage){
+			Messages myNewMessage=mService.updateMessage(myMessage, id);
+			return new ResponseEntity<>(myNewMessage,HttpStatus.OK);
+		}
+		
+		//DELETE Message
+		@DeleteMapping("/{id}")
+		public ResponseEntity<String> deleteMessage(@PathVariable(value = "id")Long id){
+			boolean delete=mService.deleteMessage(id);
+			if(delete) {
+			return new ResponseEntity<>("Mesaje eliminado con exito",HttpStatus.OK);}
+			return ResponseEntity.notFound().build();
+		}
 	/*
 	//READ MESSAGE
 	@GetMapping("/{id}")
