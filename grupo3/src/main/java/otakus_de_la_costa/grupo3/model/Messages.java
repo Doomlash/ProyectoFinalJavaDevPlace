@@ -1,6 +1,7 @@
 package otakus_de_la_costa.grupo3.model;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,8 +12,10 @@ import lombok.NoArgsConstructor;
 public class Messages {
 	private Long id;
 	private String messageLanguage;
-	private MyUser sender;
-	private MyUser receiver;
+	@JsonManagedReference
+	private Messenger sender;
+	@JsonManagedReference
+	private Messenger receiver;
 	private String content;
 	private String language;
 	private Date creationDate;

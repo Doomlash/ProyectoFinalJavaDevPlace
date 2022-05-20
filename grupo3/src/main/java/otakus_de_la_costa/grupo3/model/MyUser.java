@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MyUser {
+public class MyUser extends Messenger{
 	private Long id;
 	private String username;
 	private String mail;
