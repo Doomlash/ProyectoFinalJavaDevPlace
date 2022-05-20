@@ -1,33 +1,30 @@
 package otakus_de_la_costa.grupo3.model;
 
-import java.util.ArrayList;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.util.Date;
+import java.util.List;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-@Entity
-@Table(name = "users")
+
 @Data
 @NoArgsConstructor
-public class MyUser {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+@AllArgsConstructor
+public class MyUser{
+	private List<Messages> sent;
+	private List<Messages> received;
 	private Long id;
-
 	private String username;
-	private String name;
-	private String surname;
-	private String age;
+	private String mail;
+	private String firstName;
+	private String lastName;
 	private String language;
-	private String email;
-	private String avatar;
-	//private ArrayList<MyUser> listContacts;
-	//private ArrayList<MyUser> listGroups;
-	//private ArrayList<MyUser> listBlock;
+	private String profileImage;
+	private Date birthDate;
+	private Boolean active;
+	private List<MyUser> contacts;
+	private List<MyUser> blocks;
 }
+
