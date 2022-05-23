@@ -27,15 +27,7 @@ public class MessageJPA {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "sender", nullable = false)
-    private MessengerJPA sender;
-
-    @ManyToOne
-    @JoinColumn(name = "receiver", nullable = false)
-    private MessengerJPA receiver;
-
+    
     @Column(name = "content", nullable = false, columnDefinition = "text")
     private String content;
 
@@ -54,5 +46,12 @@ public class MessageJPA {
     @Temporal(TemporalType.TIMESTAMP)
     private Date readDate;
 
+    @ManyToOne
+    @JoinColumn(name = "sender", nullable = true)
+    private MyUserJPA sender;
+
+    @ManyToOne
+    @JoinColumn(name = "receiver", nullable = true)
+    private ContactJPA receiver;
 
 }

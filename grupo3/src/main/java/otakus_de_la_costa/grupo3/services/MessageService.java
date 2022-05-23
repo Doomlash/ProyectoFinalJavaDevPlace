@@ -44,7 +44,7 @@ public class MessageService implements IMenssageService {
 		myMessage.setCreationDate(newMessageJPA.getCreationDate());
 		myMessage.setLanguage(newMessageJPA.getLanguage());
 		myMessage.setReadDate(newMessageJPA.getReadDate());
-		myMessage.setReceptionDate(newMessageJPA.getReceptionDate());
+		myMessage.setReceptionDate(newMessageJPA.getReceptionDate());;
 		return myMessage;
 	}
 	@Override

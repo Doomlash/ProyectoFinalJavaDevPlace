@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import otakus_de_la_costa.grupo3.model.Messages;
-
+import otakus_de_la_costa.grupo3.services.IMenssageService;
 import otakus_de_la_costa.grupo3.services.MessageService;
 
 @RestController
 @RequestMapping("/api/messages")
 public class MessageController {
 	@Autowired
-	private MessageService mService;
+	private IMenssageService mService;
 	
 	
 	//CREATE MESSAGE
@@ -31,7 +31,7 @@ public class MessageController {
 		return new ResponseEntity<>(mService.createMessage(message),HttpStatus.CREATED);
 	}
 	//List messages
-		@GetMapping("/listUsers")
+		@GetMapping("/listMessages")
 		public List<Messages> listMessages(){
 			return mService.listAllMessages();
 		}
@@ -58,49 +58,6 @@ public class MessageController {
 			return new ResponseEntity<>("Mesaje eliminado con exito",HttpStatus.OK);}
 			return ResponseEntity.notFound().build();
 		}
-	/*
-	//READ MESSAGE
-	@GetMapping("/{id}")
-	public ResponseEntity<?> readMessage(@PathVariable (value = "id") Long id){
-		Optional<MessageJPA> message= mService.findById(id);
-		if (!message.isPresent()) {
-			return ResponseEntity.notFound().build();
-		}
-		return ResponseEntity.ok(message);
 
-	}
-	
-	//READ ALL MESSAGES
-	@GetMapping("/allMessages")
-	public List<MessageJPA> readAll(){
-		return mService.findAll();
-	}
-	
-	//EDIT MESSAGE
-	
-	@PutMapping("/editMessage/{id}")
-	public ResponseEntity<?> editMessage(@PathVariable (value = "id") Long idMessage,@RequestBody MessageJPA myMessage){
-		Optional<MessageJPA> message= mService.findById(idMessage);
-		if(!message.isPresent()) {
-			return ResponseEntity.notFound().build();
-		}
-		message.get().setContent(myMessage.getContent());
-		message.get().setReadDate(myMessage.getReadDate());
-		message.get().setReceptionDate(myMessage.getReceptionDate());
-		message.get().setCreationDate(myMessage.getCreationDate());
-		return ResponseEntity.status(HttpStatus.CREATED).body(mService.save(message.get()));
-	}
-	
-	//DELETE MESSAGE
-	
-	@DeleteMapping("/deleteMessage({id}")
-	public ResponseEntity<?> deleteMessage(@PathVariable (value = "id") Long id){
-		if(!mService.findById(id).isPresent()) {
-			return ResponseEntity.notFound().build();
-		}
-		mService.delete(id);
-		return ResponseEntity.ok().build();
-	}
-	*/
 	
 }

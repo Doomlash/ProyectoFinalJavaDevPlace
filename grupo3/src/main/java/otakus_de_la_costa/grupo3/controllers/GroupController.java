@@ -19,13 +19,14 @@ import otakus_de_la_costa.grupo3.database.GroupJPA;
 import otakus_de_la_costa.grupo3.model.Group;
 import otakus_de_la_costa.grupo3.model.MyUser;
 import otakus_de_la_costa.grupo3.services.GroupService;
+import otakus_de_la_costa.grupo3.services.IGroupService;
 
 
 @RestController
 @RequestMapping("/api/groups")
 public class GroupController {
 	@Autowired
-	private GroupService gService;
+	private IGroupService gService;
 	
 	
 	//CREATE ONE GROUP
