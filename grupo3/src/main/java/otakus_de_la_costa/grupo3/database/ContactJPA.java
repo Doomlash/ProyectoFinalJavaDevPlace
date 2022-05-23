@@ -1,5 +1,9 @@
 package otakus_de_la_costa.grupo3.database;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -7,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -27,5 +32,8 @@ public class ContactJPA {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_user", nullable = false)
 	private MyUserJPA myUser;
+	
+	@OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
+	private Set<MessageJPA> received;
 
 }

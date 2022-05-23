@@ -1,5 +1,6 @@
 package otakus_de_la_costa.grupo3.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import otakus_de_la_costa.grupo3.database.MyUserJPA;
 import otakus_de_la_costa.grupo3.model.MyUser;
+import otakus_de_la_costa.grupo3.repositories.ContactRepository;
+import otakus_de_la_costa.grupo3.repositories.MessageRepository;
 import otakus_de_la_costa.grupo3.repositories.UserRepository;
 import otakus_de_la_costa.grupo3.repositories.UserRepository;
 
@@ -17,6 +20,12 @@ import otakus_de_la_costa.grupo3.repositories.UserRepository;
 public class UserService implements IUserService{
 	@Autowired
 	private UserRepository uRepo;
+	
+	@Autowired
+	private ContactRepository cRepo;
+	
+	@Autowired
+	private MessageRepository mRepo;
 	
 	//GUARDADO DEL OBJETO JSON A JPA
 	@Override

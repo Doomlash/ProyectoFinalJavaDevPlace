@@ -10,20 +10,38 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import otakus_de_la_costa.grupo3.database.ContactJPA;
 import otakus_de_la_costa.grupo3.database.MessageJPA;
+import otakus_de_la_costa.grupo3.database.MyUserJPA;
 import otakus_de_la_costa.grupo3.model.Messages;
+import otakus_de_la_costa.grupo3.repositories.ContactRepository;
 import otakus_de_la_costa.grupo3.repositories.MessageRepository;
+import otakus_de_la_costa.grupo3.repositories.UserRepository;
 
 @Service
 public class MessageService implements IMenssageService {
 	@Autowired
 	private MessageRepository mRepo;
+	
+	@Autowired 
+	private UserRepository uRepo;
+	
+	@Autowired
+	private ContactRepository cRepo;
 	//GUARDADO DEL OBJETO JSON A JPA
-	public Messages createMessage(Messages message) {
+	public Messages createMessage(Messages message,Long userId,Long contId) {
+		Optional<MyUserJPA> myUser=uRepo.findById(userId);
+	//	System.out.println("se registro");
+		Optional<ContactJPA> myContact=cRepo.findById(contId);
+		if(!(myUser.get().getId()==myContact.get().getMyUser().getId())) {
+			return null;
+					
+		}
 		MessageJPA myMessageJPA= mapearMessageJPA(message);
+		myMessageJPA.setReceiver(myContact.get());
+		myMessageJPA.setSender(myUser.get());
 		MessageJPA  newMessageJPA = mRepo.save(myMessageJPA);
-		Messages response = mapearMessage(newMessageJPA);
-		return response;
+		return mapearMessage(newMessageJPA);
 		
 	}
 	//MAPEOS DEL JSON AL JPA

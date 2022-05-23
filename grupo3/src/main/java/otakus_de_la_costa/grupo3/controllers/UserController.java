@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import otakus_de_la_costa.grupo3.database.MyUserJPA;
 import otakus_de_la_costa.grupo3.model.MyUser;
+import otakus_de_la_costa.grupo3.services.IContact;
 import otakus_de_la_costa.grupo3.services.IUserService;
 import otakus_de_la_costa.grupo3.services.UserService;
 

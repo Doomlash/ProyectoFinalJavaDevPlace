@@ -15,6 +15,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.sql.Delete;
+
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -54,6 +56,12 @@ public class MyUserJPA {
 	@Column(name = "active")
 	private Boolean active;
 
-	@OneToMany(mappedBy = "myUser", cascade = CascadeType.ALL, orphanRemoval = true)
-	private Set<ContactJPA> contacts = new HashSet<>();
+	@OneToMany(mappedBy = "myUser", cascade = CascadeType.ALL)
+	private Set<ContactJPA> contacts;
+	
+	@OneToMany(mappedBy = "sender",cascade = CascadeType.ALL)
+    private Set<MessageJPA> menssages;
+	
+	/**/
+   
 }

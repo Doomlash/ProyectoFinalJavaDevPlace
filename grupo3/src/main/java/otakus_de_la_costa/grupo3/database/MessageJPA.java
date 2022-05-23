@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -46,12 +47,12 @@ public class MessageJPA {
     @Temporal(TemporalType.TIMESTAMP)
     private Date readDate;
 
-    @ManyToOne
-    @JoinColumn(name = "sender", nullable = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_user", nullable = true)
     private MyUserJPA sender;
 
-    @ManyToOne
-    @JoinColumn(name = "receiver", nullable = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_contact", nullable = true)
     private ContactJPA receiver;
 
 }

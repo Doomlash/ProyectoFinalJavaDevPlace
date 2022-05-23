@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Messages {
+public class Messages  {
 	private Long id;
 	private String messageLanguage;
 	private String content;

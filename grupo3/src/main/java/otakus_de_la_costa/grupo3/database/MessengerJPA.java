@@ -1,6 +1,8 @@
 package otakus_de_la_costa.grupo3.database;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,9 +30,9 @@ public class MessengerJPA {
     @Column(name = "id")
     private Long id;
 
-    @OneToMany(mappedBy = "sender")
-    private List<MessageJPA> sent;
+   /* @OneToMany(mappedBy = "sender")
+    private Set<MessageJPA> sent=new HashSet<>();
 
     @OneToMany(mappedBy = "receiver")
-    private List<MessageJPA> received;
+    private Set<MessageJPA> received= new HashSet<>();*/
 }

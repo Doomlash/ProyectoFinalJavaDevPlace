@@ -19,19 +19,23 @@ import otakus_de_la_costa.grupo3.services.IMenssageService;
 import otakus_de_la_costa.grupo3.services.MessageService;
 
 @RestController
-@RequestMapping("/api/messages")
+@RequestMapping("/api/")
 public class MessageController {
 	@Autowired
 	private IMenssageService mService;
 	
 	
 	//CREATE MESSAGE
-	@PostMapping("/addMessage")
-	public ResponseEntity<Messages> createMessage(@RequestBody Messages message ){
-		return new ResponseEntity<>(mService.createMessage(message),HttpStatus.CREATED);
+	@PostMapping("/users/{idUser}/addMessage/{idContact}")
+	public ResponseEntity<Messages> createMessage(@RequestBody Messages message,@PathVariable(value = "idUser")Long idUser,@PathVariable(value = "idContact")Long idContact ){
+		Messages messages=mService.createMessage(message, idUser, idContact);
+		if(messages!=null) {
+		return  ResponseEntity.ok().build();
+		}
+		return ResponseEntity.notFound().build();
 	}
 	//List messages
-		@GetMapping("/listMessages")
+		@GetMapping("/users/listMessages")
 		public List<Messages> listMessages(){
 			return mService.listAllMessages();
 		}
@@ -39,8 +43,9 @@ public class MessageController {
 		@GetMapping("/{id}")
 		public ResponseEntity<Messages> readMessage(@PathVariable (value = "id") Long id){
 			Messages message=mService.findMessageById(id);
-			if(message!=null) {return  ResponseEntity.ok(mService.findMessageById(id));}
-			return ResponseEntity.notFound().build();
+			if(message==null) {return ResponseEntity.notFound().build();}
+			return  ResponseEntity.ok().build();
+			
 		}
 		
 		//UPDATE Message
