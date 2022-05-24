@@ -11,7 +11,7 @@ import reactor.core.publisher.Flux;
 import java.util.List;
 
 @Service
-public class MessangesService {
+public class MessagesService {
     private WebClient webClient = WebClient.builder().baseUrl("http://localhost:8080/api/messages")
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .defaultHeader(HttpHeaders.ACCEPT,MediaType.APPLICATION_JSON_VALUE).build();
