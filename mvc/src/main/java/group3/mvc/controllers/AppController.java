@@ -33,7 +33,6 @@ public class AppController {
 
     @GetMapping("/gif")
     public String gif(@ModelAttribute("id") String gifId, Model model){
-
         model.addAttribute("showGif", true);
         model.addAttribute("form", new FormRequest());
         model.addAttribute("id", gifId);
