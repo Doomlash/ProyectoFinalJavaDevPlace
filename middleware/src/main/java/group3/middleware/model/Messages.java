@@ -12,7 +12,6 @@ import java.util.Date;
 @AllArgsConstructor
 public class Messages {
 	private Long id;
-	private String messageLanguage;
 	private Messenger sender;
 	private Messenger receiver;
 	private String content;

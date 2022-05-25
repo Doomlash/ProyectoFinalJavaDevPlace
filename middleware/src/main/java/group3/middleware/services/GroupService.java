@@ -1,20 +1,19 @@
 package group3.middleware.services;
 
+import group3.middleware.services.connection.Connection;
 import group3.middleware.model.Group;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import group3.middleware.services.implementation.IGroup;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
-public class GroupService {
-    private WebClient webClient = org.springframework.web.reactive.function.client.WebClient.builder().baseUrl("http://localhost:8080/api/groups")
-            .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-            .defaultHeader(HttpHeaders.ACCEPT,MediaType.APPLICATION_JSON_VALUE).build();
+public class GroupService implements IGroup {
+
+    private WebClient wCg = new Connection('g').getClient();
 
     public int createGroup(Group group){
-        ResponseEntity<String> response = webClient.post()
+        ResponseEntity<String> response = wCg.post()
                 .uri("/addGroup")
                 .body(group,Group.class)
                 .retrieve().toEntity(String.class).block();
@@ -22,7 +21,7 @@ public class GroupService {
     }
 
     public Group readGroup(Long id){
-        Group group = webClient.get()
+        Group group = wCg.get()
                 .uri("/"+ id)
                 .retrieve()
                 .bodyToMono(Group.class)
@@ -31,7 +30,7 @@ public class GroupService {
     }
 
     public int updateGroup(Long id, Group group) {
-        ResponseEntity<String> response = webClient.put()
+        ResponseEntity<String> response = wCg.put()
                 .uri("/" + id)
                 .body(group, Group.class)
                 .retrieve()
@@ -41,7 +40,7 @@ public class GroupService {
     }
 
     public int deleteGroup(Long id){
-        ResponseEntity<String> response = webClient.delete()
+        ResponseEntity<String> response = wCg.delete()
                 .uri("/"+id)
                 .retrieve().toEntity(String.class).block();
         return response.getStatusCodeValue();
@@ -49,14 +48,14 @@ public class GroupService {
 
     //////////////////////////////
     public int addUserToGroup(Long idUser,Long idGroup){
-        ResponseEntity<String> response = webClient.get()
+        ResponseEntity<String> response = wCg.get()
                 .uri("/"+idUser+"/"+idGroup)
                 .retrieve().toEntity(String.class).block();
         return response.getStatusCodeValue();
     }
 
     public int deleteUserToGroup(Long idUser,Long idGroup){
-        ResponseEntity<String> response = webClient.delete()
+        ResponseEntity<String> response = wCg.delete()
                 .uri("/"+idUser+"/"+idGroup)
                 .retrieve().toEntity(String.class).block();
         return response.getStatusCodeValue();
