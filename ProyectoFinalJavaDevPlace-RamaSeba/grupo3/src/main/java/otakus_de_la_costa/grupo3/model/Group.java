@@ -5,9 +5,10 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class Contact {
+public class Group {
 	private Long id;
-	private String username;
-	private String email;
-	private boolean isBlock;
+    private String name;
+    private String description;
+    private Boolean active;
+
 }

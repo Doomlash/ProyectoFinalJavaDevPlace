@@ -30,7 +30,7 @@ public class GroupMembersJPA {
     @JoinColumn(name = "group_id")
     private GroupJPA group;
 
-    @ManyToOne()
+    @ManyToOne
     @MapsId("userId")
     @JoinColumn(name = "group_member")
     private MyUserJPA user;
