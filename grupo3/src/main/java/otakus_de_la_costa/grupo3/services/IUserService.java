@@ -9,7 +9,7 @@ public interface IUserService {
 	public boolean createUser(MyUser myUser);
 	public List<MyUser> listAllUsers();
 	public MyUser findUserById(Long id);
-	public MyUser updateMyUser(MyUser myUser, Long id);
+	public boolean updateMyUser(MyUser myUser);
 	public boolean deleteUser(Long id);
     public void addContact(RelationRequest request);
     public void deleteContact(RelationRequest request);

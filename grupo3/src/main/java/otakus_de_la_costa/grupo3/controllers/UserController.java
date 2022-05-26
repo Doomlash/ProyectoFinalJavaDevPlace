@@ -76,10 +76,17 @@ public class UserController {
 	}
 	
 	//UPDATE USER
-	@PutMapping("/{id}")
-	public ResponseEntity<MyUser> updateUser(@PathVariable (value = "id")Long id,@RequestBody MyUser myUser){
-		MyUser myNewUser=uService.updateMyUser(myUser, id);
-		return new ResponseEntity<>(myNewUser,HttpStatus.OK);
+	@PutMapping()
+	public ResponseEntity<String> updateUser(@RequestBody MyUser myUser){
+		if(myUser.getId()==null){
+            return ResponseEntity.badRequest().body("la id debe contener una id valida");
+        }
+        if(uService.updateMyUser(myUser)){
+            return new ResponseEntity<>("usuario actualizado",HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>("el usuario no existe",HttpStatus.BAD_REQUEST);
+        }
 	}
 	
 	//DELETE USER

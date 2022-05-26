@@ -33,4 +33,5 @@ public interface UserRepository extends JpaRepository<MyUserJPA, Long> {
     @Modifying
     public void deleteBlock(@Param("blockOwner")Long blockOwner,@Param("blocked") Long blocked);
 	
+    
 }

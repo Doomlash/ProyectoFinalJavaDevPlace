@@ -4,10 +4,12 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class MyUser extends Messenger{
 	private String username;
@@ -36,5 +38,6 @@ public class MyUser extends Messenger{
     public void addGroup(Long groupId) {
         groups.add(groupId);
     }
+    
 }
 

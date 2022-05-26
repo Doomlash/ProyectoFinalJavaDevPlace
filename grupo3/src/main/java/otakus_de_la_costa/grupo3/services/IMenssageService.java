@@ -3,12 +3,12 @@ package otakus_de_la_costa.grupo3.services;
 import java.util.List;
 
 import otakus_de_la_costa.grupo3.model.Message;
+import otakus_de_la_costa.grupo3.model.MessageRequest;
 
 public interface IMenssageService {
 	public List<Message> listAllMessages();
-	public Message findMessageById(Long id);
-	public Message updateMessage(Message message, Long id);
-	public boolean deleteMessage(Long id);
-    public Message createMessage(Message message);
+    public boolean createMessage(MessageRequest message);
+    public void receiveMessage(Long id);
+    public void readMessage(Long id);
 	
 }

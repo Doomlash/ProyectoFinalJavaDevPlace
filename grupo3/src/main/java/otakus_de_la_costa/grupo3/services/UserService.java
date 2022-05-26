@@ -22,7 +22,6 @@ public class UserService implements IUserService{
 	private UserRepository uRepo;
 	
 	private MyUser mapearMyUser(MyUserJPA myUserJPA) {
-        System.out.println("asdasdasdasd");
 		MyUser myUser = new MyUser();
 		myUser.setId(myUserJPA.getId());
 		myUser.setUsername(myUserJPA.getUsername());
@@ -32,7 +31,6 @@ public class UserService implements IUserService{
 		myUser.setLanguage(myUserJPA.getLanguage());
 		myUser.setProfileImage(myUserJPA.getProfileImage());
 		myUser.setBirthDate(myUserJPA.getBirthDate());
-        System.out.println(myUserJPA.getContacts().size());
         for (MyUserJPA u : myUserJPA.getContacts()) {
             myUser.addContact(u.getId(),u.getUsername());
         }
@@ -80,8 +78,11 @@ public class UserService implements IUserService{
 		return null;
 	}
 	@Override
-	public MyUser updateMyUser(MyUser myUser, Long id) {
-		Optional<MyUserJPA> optional = uRepo.findById(id);
+	public boolean updateMyUser(MyUser myUser) {
+		Optional<MyUserJPA> optional = uRepo.findById(myUser.getId());
+        if(optional.isEmpty()){
+            return false;
+        }
         MyUserJPA myUserJPA = optional.get();
         if(myUser.getUsername()!=null){
             myUserJPA.setUsername(myUser.getUsername());
@@ -107,8 +108,8 @@ public class UserService implements IUserService{
         if(myUser.getBirthDate()!=null){
             myUserJPA.setBirthDate(myUser.getBirthDate());
         }
-		MyUserJPA updateUser = uRepo.save(myUserJPA);
-		return mapearMyUser(updateUser);
+		uRepo.save(myUserJPA);
+		return true;
 	}
 	
 	@Override
