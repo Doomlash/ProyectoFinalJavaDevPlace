@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -59,4 +60,7 @@ public class MyUserJPA extends MessengerJPA{
                 joinColumns = {@JoinColumn(name = "block_owner")}, 
                 inverseJoinColumns = {@JoinColumn(name = "blocked")})
     private List<MyUserJPA> blocks;
+
+    @OneToMany(mappedBy = "user")
+    private List<GroupMembersJPA> groups;
 }
