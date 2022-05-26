@@ -1,8 +1,10 @@
 package otakus_de_la_costa.grupo3.database;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -15,6 +17,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class GroupJPA extends MessengerJPA{
+
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -23,4 +26,8 @@ public class GroupJPA extends MessengerJPA{
 
     @Column(name = "active")
     private Boolean active;
+
+    @OneToMany(mappedBy = "group")
+    private List<GroupMembersJPA> members;
+
 }

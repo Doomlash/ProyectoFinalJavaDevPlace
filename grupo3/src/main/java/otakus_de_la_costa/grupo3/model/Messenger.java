@@ -1,16 +1,15 @@
 package otakus_de_la_costa.grupo3.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import java.util.HashSet;
+import java.util.Set;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor
 public class Messenger {
-    @JsonBackReference
-    private List<Messages> sent;
-    @JsonBackReference
-    private List<Messages> received;
+    private Long id;
+    private	Set<Message> sent= new HashSet<>();
+    private Set<Message> received= new HashSet<>();
 }

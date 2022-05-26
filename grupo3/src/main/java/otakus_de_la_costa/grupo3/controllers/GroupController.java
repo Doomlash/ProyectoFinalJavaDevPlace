@@ -1,7 +1,6 @@
 package otakus_de_la_costa.grupo3.controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,50 +14,71 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import otakus_de_la_costa.grupo3.database.GroupJPA;
 import otakus_de_la_costa.grupo3.model.Group;
-import otakus_de_la_costa.grupo3.model.MyUser;
-import otakus_de_la_costa.grupo3.services.GroupService;
+import otakus_de_la_costa.grupo3.model.GroupMemberRequest;
+import otakus_de_la_costa.grupo3.services.IGroupService;
 
 
 @RestController
 @RequestMapping("/api/groups")
 public class GroupController {
 	@Autowired
-	private GroupService gService;
-	
-	
+	private IGroupService gService;
+
+
 	//CREATE ONE GROUP
-		@PostMapping("/addGroup")
-		public ResponseEntity<Group> createGroup(@RequestBody Group group){
-			return new ResponseEntity<>(gService.createGroup(group),HttpStatus.CREATED);
+	@PostMapping()
+	public ResponseEntity<String> createGroup(@RequestBody Group group){
+		group.setId(null);
+		group.setActive(true);
+		gService.createGroup(group);
+		return new ResponseEntity<>("group created",HttpStatus.CREATED);
+	}
+
+	@PostMapping("/member")
+	public ResponseEntity<String> addMember(@RequestBody GroupMemberRequest request){
+		gService.addMember(request);
+		return new ResponseEntity<>("member added",HttpStatus.CREATED);
+	}
+
+	@DeleteMapping("/member")
+	public ResponseEntity<String> removeMember(@RequestBody GroupMemberRequest request){
+		gService.deleteMember(request);
+		return new ResponseEntity<>("member removed",HttpStatus.CREATED);
+	}
+	//List groups
+	@GetMapping()
+	public ResponseEntity<List<Group>> listGroups(){
+		return ResponseEntity.ok(gService.listAllGroups());
+	}
+	//READ Group
+	@GetMapping("/{id}")
+	public ResponseEntity<Group> readgroup(@PathVariable (value = "id") Long id){
+		Group group=gService.findGroupById(id);
+		if(group!=null) {return  ResponseEntity.ok(gService.findGroupById(id));}
+		return ResponseEntity.notFound().build();
+	}
+
+	//UPDATE Group
+	@PutMapping()
+	public ResponseEntity<Object> updateGroup(@RequestBody Group group){
+		if(group.getId()==null){
+			return ResponseEntity.badRequest().body("la id debe contener una id valida");
 		}
-		//List groups
-		@GetMapping("/listGroups")
-		public List<Group> listGroups(){
-			return gService.listAllGroups();
+		if(gService.updateGroup(group)){
+			return new ResponseEntity<>("grupo actualizado",HttpStatus.OK);
 		}
-		//READ Group
-		@GetMapping("/{id}")
-		public ResponseEntity<Group> readgroup(@PathVariable (value = "id") Long id){
-			Group group=gService.findGroupById(id);
-			if(group!=null) {return  ResponseEntity.ok(gService.findGroupById(id));}
-			return ResponseEntity.notFound().build();
+		else{
+			return new ResponseEntity<>("el grupo no existe",HttpStatus.BAD_REQUEST);
 		}
-		
-		//UPDATE Group
-		@PutMapping("/{id}")
-		public ResponseEntity<Group> updateGroup(@PathVariable (value = "id")Long id,@RequestBody Group group){
-			Group myNewGroup=gService.updateGroup(group, id);
-			return new ResponseEntity<>(myNewGroup,HttpStatus.OK);
+	}
+
+	//DELETE Group
+	@DeleteMapping("/{id}")
+	public ResponseEntity<String> deleteGroup(@PathVariable(value = "id")Long id){
+		if(gService.deleteGroup(id)) {
+			return new ResponseEntity<>("Grupo eliminado con exito",HttpStatus.OK);
 		}
-		
-		//DELETE Group
-		@DeleteMapping("/{id}")
-		public ResponseEntity<String> deleteGroup(@PathVariable(value = "id")Long id){
-			boolean delete=gService.deleteGroup(id);
-			if(delete) {
-			return new ResponseEntity<>("Grupo eliminado con exito",HttpStatus.OK);}
-			return ResponseEntity.notFound().build();
-		}
+		return ResponseEntity.notFound().build();
+	}
 }

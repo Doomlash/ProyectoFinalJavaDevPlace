@@ -133,25 +133,19 @@ BEGIN
 	END IF;
 END$
 DROP PROCEDURE IF EXISTS message_received$
-CREATE PROCEDURE message_received(IN var_sender BIGINT UNSIGNED,
-									IN var_receiver BIGINT UNSIGNED, 
-                                    IN var_date DATETIME)
+CREATE PROCEDURE message_received(IN var_message BIGINT UNSIGNED)
 BEGIN
-	UPDATE messages 
+	UPDATE messages
 		SET reception_date = NOW()
-		WHERE sender = var_sender AND receiver = var_receiver AND creation_date = var_date;
+        WHERE id = var_message;
 END$
 
 DROP PROCEDURE IF EXISTS message_read$
-CREATE PROCEDURE message_read(IN var_sender BIGINT UNSIGNED,
-									IN var_receiver BIGINT UNSIGNED, 
-                                    IN var_date DATETIME)
+CREATE PROCEDURE message_read(IN var_message BIGINT UNSIGNED)
 BEGIN
-	UPDATE messages 
+	UPDATE messages
 		SET read_date = NOW()
-		WHERE sender = var_sender AND receiver = var_receiver AND creation_date = var_date;
+		WHERE id = var_message;
 END$
 DELIMITER ;
-
-
 
