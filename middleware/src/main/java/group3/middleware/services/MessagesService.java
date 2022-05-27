@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import group3.middleware.model.Group;
 import group3.middleware.model.Message;
 import group3.middleware.model.MessageRequest;
+import group3.middleware.model.MyUser;
 import group3.middleware.services.connection.Connection;
 import group3.middleware.services.implementation.IMessages;
 import org.springframework.http.ResponseEntity;
@@ -31,20 +32,11 @@ public class MessagesService implements IMessages{
         return rCm;
     }
 
-    public ResponseEntity<List<Message>> listAllMessages(){
-        Flux<Message> fm = wCs.get()
+    public ResponseEntity<Message[]> listAllMessages(){
+        ResponseEntity<Message[]> rLAm = wCs.get()
                 .retrieve()
-                .bodyToFlux(Message.class);
-
-        List<Message> messages = fm.collectList().block();
-
-        ResponseEntity<String> res = wCs.get()
-                .retrieve()
-                .toEntity(String.class)
+                .toEntity(Message[].class)
                 .block();
-
-        ResponseEntity<List<Message>> rLAm = ResponseEntity.status(res.getStatusCode()).body(messages);
-
         return rLAm;
     }
 

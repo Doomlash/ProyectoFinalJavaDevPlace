@@ -21,7 +21,7 @@ public class MessagesController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<Message>> listAll(){
+    public ResponseEntity<Message[]> listAll(){
         return iM.listAllMessages();
     }
 

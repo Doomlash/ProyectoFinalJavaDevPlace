@@ -4,12 +4,15 @@ import group3.middleware.model.RelationRequest;
 import group3.middleware.services.connection.Connection;
 import group3.middleware.model.MyUser;
 import group3.middleware.services.implementation.IMyUser;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -27,18 +30,11 @@ public class MyUserService implements IMyUser {
     }
 
     @Override
-    public ResponseEntity<List<MyUser>> listAllUsers() {
-        Flux<MyUser> fu = wCu.get()
+    public ResponseEntity<MyUser[]> listAllUsers() {
+        ResponseEntity<MyUser[]> rLAu = wCu.get()
                 .retrieve()
-                .bodyToFlux(MyUser.class);
-        List<MyUser> users = fu.collectList().block();
-
-        ResponseEntity<String> rSu = wCu.get()
-                .retrieve()
-                .toEntity(String.class)
+                .toEntity(MyUser[].class)
                 .block();
-
-        ResponseEntity<List<MyUser>> rLAu = new ResponseEntity<>(users,rSu.getStatusCode());
         return rLAu;
     }
 
@@ -87,13 +83,17 @@ public class MyUserService implements IMyUser {
 
     @Override
     public ResponseEntity<String> removeC(RelationRequest rr) {
-        System.out.println("entre");
-        ResponseEntity<String> rRCu = wCu.delete()
-                .uri("/contact",Mono.just(rr),RelationRequest.class)
+        ResponseEntity<String> rRCu = wCu.put()
+                .uri("/contact")
+                .body(Mono.just(rr),RelationRequest.class)
                 .retrieve()
                 .toEntity(String.class)
                 .block();
-        System.out.println("sali");
+                /*delete()
+                .uri("/contact",Mono.just(rr),RelationRequest.class)
+                .retrieve()
+                .toEntity(String.class)
+                .block();*/
         return rRCu;
     }
 

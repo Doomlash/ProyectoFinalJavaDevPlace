@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RequestMapping("/middle/groups")
 @RestController
@@ -16,13 +15,12 @@ public class GroupController {
     private IGroup iG;
 
     @GetMapping()
-    public ResponseEntity<List<Group>> listAll(){
+    public ResponseEntity<Group[]> listAll(){
         return iG.listAllG();
     }
 
     @PostMapping()
     public ResponseEntity<String> create(@RequestBody Group group){
-        System.out.println("pase");
         return iG.createG(group);
     }
 
@@ -47,7 +45,7 @@ public class GroupController {
         return iG.addM(gmr);
     }
 
-    @DeleteMapping("/member")
+    @PutMapping("/member")
     public ResponseEntity<String> deleteM(@RequestBody GroupMemberRequest gmr){
         return iG.removeM(gmr);
     }

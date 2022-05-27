@@ -46,7 +46,7 @@ public class UserController {
 	}
 
 	//remove contact
-	@DeleteMapping("/contact")
+	@PutMapping("/contact")
 	public ResponseEntity<String> removeContact(@RequestBody RelationRequest request){
 		uService.deleteContact(request);
 		return new ResponseEntity<String>("borrado con exito", HttpStatus.OK);
@@ -60,7 +60,7 @@ public class UserController {
 	}
 
 	//remove block
-	@DeleteMapping("/block")
+	@PutMapping("/block")
 	public ResponseEntity<String> removeBlock(@RequestBody RelationRequest request){
 		uService.deleteBlock(request);
 		return new ResponseEntity<String>("borrado con exito", HttpStatus.OK);

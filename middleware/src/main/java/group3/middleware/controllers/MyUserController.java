@@ -18,7 +18,7 @@ public class MyUserController {
     private IMyUser iMU;
 
     @GetMapping
-    public ResponseEntity<List<MyUser>> listAll(){
+    public ResponseEntity<MyUser[]> listAll(){
         return iMU.listAllUsers();
     }
 
@@ -51,7 +51,7 @@ public class MyUserController {
         return iMU.addC(rr);
     }
 
-    @DeleteMapping("/contact")
+    @PutMapping("/contact")
     public ResponseEntity<String> delContact(@RequestBody RelationRequest rr){
         return iMU.removeC(rr);
     }
@@ -61,7 +61,7 @@ public class MyUserController {
         return iMU.addB(rr);
     }
 
-    @DeleteMapping("/block")
+    @PutMapping("/block")
     public ResponseEntity<String> delBlock(@RequestBody RelationRequest rr){
         return iMU.removeB(rr);
     }

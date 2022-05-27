@@ -41,7 +41,7 @@ public class GroupController {
 		return new ResponseEntity<>("member added",HttpStatus.CREATED);
 	}
 
-	@DeleteMapping("/member")
+	@PutMapping("/member")
 	public ResponseEntity<String> removeMember(@RequestBody GroupMemberRequest request){
 		gService.deleteMember(request);
 		return new ResponseEntity<>("member removed",HttpStatus.CREATED);
