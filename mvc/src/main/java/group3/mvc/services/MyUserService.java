@@ -1,19 +1,13 @@
-package group3.middleware.services;
+package group3.mvc.services;
 
-import group3.middleware.model.RelationRequest;
-import group3.middleware.services.connection.Connection;
-import group3.middleware.model.MyUser;
-import group3.middleware.services.implementation.IMyUser;
-import org.springframework.http.HttpMethod;
+import group3.mvc.model.MyUser;
+import group3.mvc.model.RelationRequest;
+import group3.mvc.services.connection.Connection;
+import group3.mvc.services.implementation.IMyUser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
 
 @Service
 public class MyUserService implements IMyUser {

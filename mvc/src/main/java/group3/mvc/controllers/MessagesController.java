@@ -1,15 +1,13 @@
-package group3.middleware.controllers;
+package group3.mvc.controllers;
 
-import group3.middleware.model.Message;
-import group3.middleware.model.MessageRequest;
-import group3.middleware.services.implementation.IMessages;
+import group3.mvc.model.Message;
+import group3.mvc.model.MessageRequest;
+import group3.mvc.services.implementation.IMessages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RequestMapping("/middle/messages")
+@RequestMapping("/mvc/messages")
 @RestController
 public class MessagesController {
     @Autowired
@@ -37,7 +35,7 @@ public class MessagesController {
 
 
 
-    @PostMapping("/translate")
+    @GetMapping("/translate")
     public Message translate(@RequestBody Message message) {
         return iM.translate(message);
     }
