@@ -1,63 +1,89 @@
 package group3.middleware.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import group3.middleware.model.GroupMemberRequest;
 import group3.middleware.services.connection.Connection;
 import group3.middleware.model.Group;
 import group3.middleware.services.implementation.IGroup;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @Service
 public class GroupService implements IGroup {
 
     private WebClient wCg = new Connection('g').getClient();
 
-    public int createGroup(Group group){
+    public ResponseEntity<String> createG(Group group){
         ResponseEntity<String> response = wCg.post()
-                .uri("/addGroup")
-                .body(group,Group.class)
-                .retrieve().toEntity(String.class).block();
-        return response.getStatusCodeValue();
-    }
-
-    public Group readGroup(Long id){
-        Group group = wCg.get()
-                .uri("/"+ id)
-                .retrieve()
-                .bodyToMono(Group.class)
-                .block();
-        return group;
-    }
-
-    public int updateGroup(Long id, Group group) {
-        ResponseEntity<String> response = wCg.put()
-                .uri("/" + id)
-                .body(group, Group.class)
+                .body(Mono.just(group),Group.class)
                 .retrieve()
                 .toEntity(String.class)
                 .block();
-        return response.getStatusCodeValue();
+        return response;
     }
 
-    public int deleteGroup(Long id){
-        ResponseEntity<String> response = wCg.delete()
+    public ResponseEntity<List<Group>> listAllG(){
+        Flux<Group> response = wCg.get()
+                .retrieve()
+                .bodyToFlux(Group.class);
+        List<Group> groups = response.collectList().block();
+
+        ResponseEntity<String> rta = wCg.get()
+                .retrieve()
+                .toEntity(String.class)
+                .block();
+
+        ResponseEntity<List<Group>> rt = ResponseEntity.status(rta.getStatusCode()).body(groups);
+
+        return rt;
+    }
+
+    public ResponseEntity<Group> readG(Long id){
+        ResponseEntity<Group> rg = wCg.get()
+                .uri("/" + id)
+                .retrieve()
+                .toEntity(Group.class)
+                .block();
+        return rg;
+    }
+
+    public ResponseEntity<String> updateG(Group group) {
+        ResponseEntity<String> ug = wCg.put()
+                .body(Mono.just(group),Group.class)
+                .retrieve()
+                .toEntity(String.class)
+                .block();
+        return ug;
+    }
+
+    public ResponseEntity<String> deleteG(Long id){
+        ResponseEntity<String> dg = wCg.delete()
                 .uri("/"+id)
-                .retrieve().toEntity(String.class).block();
-        return response.getStatusCodeValue();
+                .retrieve()
+                .toEntity(String.class)
+                .block();
+        return dg;
     }
 
-    //////////////////////////////
-    public int addUserToGroup(Long idUser,Long idGroup){
-        ResponseEntity<String> response = wCg.get()
-                .uri("/"+idUser+"/"+idGroup)
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+    public ResponseEntity<String> addM(GroupMemberRequest gmr){
+        ResponseEntity<String> response = wCg.post()
+                .uri("/member")
+                .body(Mono.just(gmr),GroupMemberRequest.class)
                 .retrieve().toEntity(String.class).block();
-        return response.getStatusCodeValue();
+        return response;
     }
 
-    public int deleteUserToGroup(Long idUser,Long idGroup){
+    public ResponseEntity<String> removeM(GroupMemberRequest gmr){
         ResponseEntity<String> response = wCg.delete()
-                .uri("/"+idUser+"/"+idGroup)
+                .uri("/member",Mono.just(gmr),GroupMemberRequest.class)
                 .retrieve().toEntity(String.class).block();
-        return response.getStatusCodeValue();
+        return response;
     }
 }

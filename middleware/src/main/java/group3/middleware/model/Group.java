@@ -1,15 +1,25 @@
 package group3.middleware.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+import java.util.HashSet;
+import java.util.Set;
+
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Group extends Messenger{
-    private Long id;
     private String name;
     private String description;
     private Boolean active;
+
+    private Set<SimpleUserResponse> group_members = new HashSet<>();
+
+    public void addMember(Long id, String username){
+        group_members.add(new SimpleUserResponse(id, username));
+    }
 }

@@ -1,45 +1,55 @@
 package group3.middleware.controllers;
 
 import group3.middleware.model.Group;
+import group3.middleware.model.GroupMemberRequest;
 import group3.middleware.services.implementation.IGroup;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/middleware/")
+import java.util.List;
+
+@RequestMapping("/middle/groups")
 @RestController
 public class GroupController {
     @Autowired
     private IGroup iG;
 
-    @PostMapping
-    public int create(@RequestBody Group group){
-        return iG.createGroup(group);
+    @GetMapping()
+    public ResponseEntity<List<Group>> listAll(){
+        return iG.listAllG();
+    }
+
+    @PostMapping()
+    public ResponseEntity<String> create(@RequestBody Group group){
+        System.out.println("pase");
+        return iG.createG(group);
     }
 
     @GetMapping("/{idG}")
-    public Group get(@PathVariable("idG") Long idG){
-        return iG.readGroup(idG);
+    public ResponseEntity<Group> get(@PathVariable("idG") Long idG){
+        return iG.readG(idG);
     }
 
-    @PutMapping("/{idG}")
-    public int update(@PathVariable("idG") Long idG,@RequestBody Group group){
-        return iG.updateGroup(idG,group);
+    @PutMapping()
+    public ResponseEntity<String> update(@RequestBody Group group){
+        return iG.updateG(group);
     }
 
     @DeleteMapping("/{idG}")
-    public int delete(@PathVariable("idG") Long idG){
-        return iG.deleteGroup(idG);
+    public ResponseEntity<String> delete(@PathVariable("idG") Long idG){
+        return iG.deleteG(idG);
     }
 
-    @PostMapping("/{idU}/{idG}")
-    public int add(@PathVariable("idU") Long idU,@PathVariable("idG") Long idG){
-        return iG.addUserToGroup(idU,idG);
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    @PostMapping("/member")
+    public ResponseEntity<String> addM(@RequestBody GroupMemberRequest gmr){
+        return iG.addM(gmr);
     }
 
-    @DeleteMapping("/{idU}/{idG}")
-    public int drop(@PathVariable("idU") Long idU,@PathVariable("idG") Long idG){
-        return iG.deleteUserToGroup(idU,idG);
+    @DeleteMapping("/member")
+    public ResponseEntity<String> deleteM(@RequestBody GroupMemberRequest gmr){
+        return iG.removeM(gmr);
     }
-
 
 }

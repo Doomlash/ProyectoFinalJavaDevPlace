@@ -34,8 +34,8 @@ public class UserController {
 
 	//List users
 	@GetMapping()
-	public List<MyUser> listUsers(){
-		return uService.listAllUsers();
+	public ResponseEntity<List<MyUser>> listUsers(){
+		return new ResponseEntity<List<MyUser>>(uService.listAllUsers(),HttpStatus.CREATED);
 	}
 
 	//add a contact

@@ -49,5 +49,4 @@ public class MessageController {
 		mService.readMessage(id);
 		return ResponseEntity.ok("mensaje leido");
 	}
-
 }

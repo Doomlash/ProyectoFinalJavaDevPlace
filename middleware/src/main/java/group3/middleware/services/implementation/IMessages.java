@@ -1,32 +1,16 @@
 package group3.middleware.services.implementation;
 
-import group3.middleware.model.Messages;
+import group3.middleware.model.Message;
+import group3.middleware.model.MessageRequest;
+import org.springframework.http.ResponseEntity;
+
 import java.util.List;
 
 public interface IMessages {
-     int create(Long idU, Messages m);
-     List<Messages> messagesByContact(Long idU, Long idC);
-     List<Messages> messageByGroup(Long idU,Long idG);
-     List<Messages> getAll(Long idU);
-     int delete(Long idM);
-     Messages translate(Messages m);
+     public ResponseEntity<Message> createMessage(MessageRequest message);
+     public ResponseEntity<List<Message>> listAllMessages();
+     public ResponseEntity<String> receiveMessage(Long id);
+     public ResponseEntity<String> readMessage(Long id);
 
-    /*
-    public List<Messages> messagesSentByContact(Long idUser,Long idContact){
-        Flux<Messages> messagesF = wCs.get()
-                .uri("/sent/" + idUser + "/" + idContact)
-                .retrieve()
-                .bodyToFlux(Messages.class);
-        List<Messages> messages = messagesF.collectList().block();
-        return messages;
-    }
-
-    public List<Messages> messagesReceivedByContact(Long idUser,Long idContact){
-        Flux<Messages> messagesF = wCs.get()
-                .uri("/received/" + idUser + "/" + idContact)
-                .retrieve()
-                .bodyToFlux(Messages.class);
-        List<Messages> messages = messagesF.collectList().block();
-        return messages;
-    }*/
+     public Message translate(Message m);
 }

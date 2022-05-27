@@ -61,7 +61,7 @@ public class GroupController {
 
 	//UPDATE Group
 	@PutMapping()
-	public ResponseEntity<Object> updateGroup(@RequestBody Group group){
+	public ResponseEntity<String> updateGroup(@RequestBody Group group){
 		if(group.getId()==null){
 			return ResponseEntity.badRequest().body("la id debe contener una id valida");
 		}
