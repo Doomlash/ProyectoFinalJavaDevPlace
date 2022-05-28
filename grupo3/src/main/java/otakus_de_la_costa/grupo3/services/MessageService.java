@@ -1,7 +1,7 @@
 package otakus_de_la_costa.grupo3.services;
 
-
-
+import static otakus_de_la_costa.grupo3.model.Constants.NOT_FOUND;
+import static otakus_de_la_costa.grupo3.model.Constants.OK;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -63,14 +63,22 @@ public class MessageService implements IMenssageService {
 
     @Override
     @Transactional
-    public void receiveMessage(Long id) {
+    public int receiveMessage(Long id) {
+        if(mr.findById(id).isEmpty()){
+            return NOT_FOUND;
+        }
         mr.receiveMessage(id);
+        return OK;      
     }
 
     @Override
     @Transactional
-    public void readMessage(Long id) {
-        mr.readMessage(id);        
+    public int readMessage(Long id) {
+        if(mr.findById(id).isEmpty()){
+            return NOT_FOUND;
+        }
+        mr.readMessage(id);  
+        return OK;      
     }
 }
 	

@@ -34,7 +34,6 @@ CREATE TABLE user_groups(
 	id BIGINT UNSIGNED NOT NULL,   
 	name VARCHAR(64) NOT NULL,
     description TEXT,
-    active BOOLEAN DEFAULT TRUE,
     
     CONSTRAINT PK_group PRIMARY KEY(id),
     CONSTRAINT FK_id_group
@@ -51,7 +50,6 @@ CREATE TABLE my_users(
     language VARCHAR(5) NOT NULL,
     birth_date DATE NOT NULL,
     profile_image VARCHAR(256) NOT NULL,
-    active BOOLEAN DEFAULT TRUE,
     
     CONSTRAINT PK_user PRIMARY KEY(id),
     CONSTRAINT FK_id_user 
@@ -120,18 +118,66 @@ CREATE TABLE user_autentications(
 		FOREIGN KEY (role) REFERENCES roles(id)
 )ENGINE=InnoDB;
 
+
+#-------------------------------------------------------------------------------------------------
+# TRIGGERS
+
 DELIMITER $
-DROP TRIGGER IF EXISTS messages_Create$
+DROP TRIGGER IF EXISTS group_members_insert$
+CREATE TRIGGER group_members_insert BEFORE INSERT ON group_members FOR EACH ROW 
+BEGIN
+	DECLARE members integer;
+    SET members := (SELECT COUNT(*) FROM group_members WHERE group_id = NEW.group_id);
+    IF members = 0 AND NEW.is_admin = false THEN
+		SIGNAL SQLSTATE '99999' 
+			SET MESSAGE_TEXT = 'the first member of the group must be an admin';
+	END IF;
+END$
+
+DROP TRIGGER IF EXISTS group_members_delete$
+CREATE TRIGGER group_members_delete BEFORE DELETE ON group_members FOR EACH ROW 
+BEGIN
+	DECLARE members integer;
+    IF OLD.is_admin=true THEN
+		SET members := (SELECT COUNT(*) 
+							FROM group_members 
+							WHERE group_id = OLD.group_id 
+								AND group_member != OLD.group_member 
+								AND is_admin = true);
+		IF members = 0 THEN
+			SIGNAL SQLSTATE '99998' 
+				SET MESSAGE_TEXT = 'the group must have another admin before deletion';
+		END IF;
+	END IF;
+END$
+
+DROP TRIGGER IF EXISTS messages_create$
 CREATE TRIGGER messages_Create BEFORE INSERT ON messages FOR EACH ROW 
 BEGIN
 	IF NEW.sender = NEW.receiver THEN
-		SIGNAL SQLSTATE '99999' 
-			SET MESSAGE_TEXT = 'The sender and the recipient must be different';
+		SIGNAL SQLSTATE '99997' 
+			SET MESSAGE_TEXT = 'The sender and the receiver must be different';
 	END IF;
 	IF NEW.creation_date != NOW() THEN
 		SET NEW.creation_date = NOW();
 	END IF;
 END$
+
+DROP TRIGGER IF EXISTS my_user_delete$
+CREATE TRIGGER my_user_delete BEFORE DELETE ON my_users FOR EACH ROW 
+BEGIN
+	DELETE FROM group_members WHERE group_member = OLD.id;
+    DELETE FROM contacts WHERE contact_owner = OLD.id OR contacted = OLD.id;
+    DELETE FROM blocks WHERE block_owner = OLD.id OR blocked = OLD.id;
+END$
+
+DROP TRIGGER IF EXISTS user_group_delete$
+CREATE TRIGGER user_group_delete BEFORE DELETE ON user_groups FOR EACH ROW 
+BEGIN
+	DELETE FROM group_members WHERE group_id = OLD.id;
+END$
+
+
 DROP PROCEDURE IF EXISTS message_received$
 CREATE PROCEDURE message_received(IN var_message BIGINT UNSIGNED)
 BEGIN

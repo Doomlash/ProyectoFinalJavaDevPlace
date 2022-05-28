@@ -24,9 +24,6 @@ public class GroupJPA extends MessengerJPA{
     @Column(name = "description", columnDefinition = "text")
     private String description;
 
-    @Column(name = "active")
-    private Boolean active;
-
     @OneToMany(mappedBy = "group")
     private List<GroupMembersJPA> members;
 

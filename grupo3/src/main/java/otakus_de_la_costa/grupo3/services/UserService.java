@@ -1,5 +1,8 @@
 package otakus_de_la_costa.grupo3.services;
 
+import static otakus_de_la_costa.grupo3.model.Constants.NOT_FOUND;
+import static otakus_de_la_costa.grupo3.model.Constants.OK;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -57,9 +60,18 @@ public class UserService implements IUserService{
 
     //GUARDADO DEL OBJETO JSON A JPA
 	@Override
-	public boolean createUser(MyUser myUser) {
-		uRepo.save(mapearMyUserJPASinListas(myUser));
-        return true;
+	public int createUser(MyUser myUser) {
+        int response = 0;
+        if(uRepo.findByUsername(myUser.getUsername()).isPresent()){
+            response++;
+        }
+        if(uRepo.findByMail(myUser.getMail()).isPresent()){
+            response+=2;
+        }
+        if(response == 0){
+            uRepo.save(mapearMyUserJPASinListas(myUser));
+        }
+        return response;
 		
 	}
 	
@@ -78,50 +90,49 @@ public class UserService implements IUserService{
 		return null;
 	}
 	@Override
-	public boolean updateMyUser(MyUser myUser) {
-		Optional<MyUserJPA> optional = uRepo.findById(myUser.getId());
-        if(optional.isEmpty()){
-            return false;
+	public int updateMyUser(MyUser myUser) {
+        int response = 0;
+        if(uRepo.findByUsername(myUser.getUsername()).isPresent()){
+            response++;
         }
-        MyUserJPA myUserJPA = optional.get();
-        if(myUser.getUsername()!=null){
-            myUserJPA.setUsername(myUser.getUsername());
+        if(uRepo.findByMail(myUser.getMail()).isPresent()){
+            response+=2;
         }
-		if(myUser.getFirstName()!=null){
-            myUserJPA.setFirstName(myUser.getFirstName());
+        if(response == 0){
+            Optional<MyUserJPA> optional = uRepo.findById(myUser.getId());
+            if(optional.isEmpty()){
+                return NOT_FOUND;
+            }
+            MyUserJPA myUserJPA = optional.get();
+            if(myUser.getUsername()!=null){
+                myUserJPA.setUsername(myUser.getUsername());
+            }
+            if(myUser.getFirstName()!=null){
+                myUserJPA.setFirstName(myUser.getFirstName());
+            }
+            if(myUser.getLastName()!=null){
+                myUserJPA.setLastName(myUser.getLastName());
+            }
+            if(myUser.getMail()!=null){
+                myUserJPA.setMail(myUser.getMail());
+            }
+            if(myUser.getLanguage()!=null){
+                myUserJPA.setLanguage(myUser.getLanguage());
+            }
+            if(myUser.getProfileImage()!=null){
+                myUserJPA.setProfileImage(myUser.getProfileImage());
+            }
+            if(myUser.getBirthDate()!=null){
+                myUserJPA.setBirthDate(myUser.getBirthDate());
+            }
+            uRepo.save(myUserJPA);
         }
-        if(myUser.getLastName()!=null){
-            myUserJPA.setLastName(myUser.getLastName());
-        }
-        if(myUser.getMail()!=null){
-            myUserJPA.setMail(myUser.getMail());
-        }
-        if(myUser.getLanguage()!=null){
-            myUserJPA.setLanguage(myUser.getLanguage());
-        }
-        if(myUser.getProfileImage()!=null){
-            myUserJPA.setProfileImage(myUser.getProfileImage());
-        }
-        if(myUser.getActive()!=null){
-            myUserJPA.setActive(myUser.getActive());
-        }
-        if(myUser.getBirthDate()!=null){
-            myUserJPA.setBirthDate(myUser.getBirthDate());
-        }
-		uRepo.save(myUserJPA);
-		return true;
+        return response;
 	}
 	
 	@Override
-	public boolean deleteUser(Long id) {
-		Optional<MyUserJPA> myUser=uRepo.findById(id);
-		if(myUser.isPresent())
-		{
-			uRepo.delete(myUser.get());
-			return true;
-		}
-		return false;
-		
+	public void deleteUser(Long id) {
+        uRepo.deleteById(id);
 	}
 
     @Override
@@ -132,9 +143,12 @@ public class UserService implements IUserService{
 
     @Override
     @Transactional
-    public void deleteContact(RelationRequest request) {
+    public int deleteContact(RelationRequest request) {
+        if(uRepo.findById(request.getRelationOwner()).isEmpty() || uRepo.findById(request.getRelated()).isEmpty()){
+            return NOT_FOUND;
+        }
         uRepo.deleteContact(request.getRelationOwner(), request.getRelated());
-        
+        return OK;
     }
 
     @Override
@@ -146,9 +160,13 @@ public class UserService implements IUserService{
 
     @Override
     @Transactional
-    public void deleteBlock(RelationRequest request) {
-        uRepo.deleteBlock(request.getRelationOwner(), request.getRelated());
+    public int deleteBlock(RelationRequest request) {
         
+        if(uRepo.findById(request.getRelationOwner()).isEmpty() || uRepo.findById(request.getRelated()).isEmpty()){
+            return NOT_FOUND;
+        }
+        uRepo.deleteBlock(request.getRelationOwner(), request.getRelated());
+        return OK;
     }
 	
 

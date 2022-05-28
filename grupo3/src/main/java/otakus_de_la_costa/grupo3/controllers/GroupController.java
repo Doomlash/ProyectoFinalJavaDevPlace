@@ -1,10 +1,16 @@
 package otakus_de_la_costa.grupo3.controllers;
 
+import static otakus_de_la_costa.grupo3.model.Constants.NOT_FOUND;
+import static otakus_de_la_costa.grupo3.model.Constants.NULL_ID;
+
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import otakus_de_la_costa.grupo3.model.Group;
 import otakus_de_la_costa.grupo3.model.GroupMemberRequest;
+import otakus_de_la_costa.grupo3.model.GroupRequest;
 import otakus_de_la_costa.grupo3.services.IGroupService;
 
 
@@ -28,23 +35,43 @@ public class GroupController {
 	
 	//CREATE ONE GROUP
     @PostMapping()
-    public ResponseEntity<String> createGroup(@RequestBody Group group){
-        group.setId(null);
-        group.setActive(true);
-        gService.createGroup(group);
-        return new ResponseEntity<>("group created",HttpStatus.CREATED);
+    public ResponseEntity<Integer> createGroup(@RequestBody GroupRequest group){
+        try {
+            if(group.getUserId()==null){
+                return new ResponseEntity<>(NULL_ID,HttpStatus.BAD_REQUEST);
+            }
+            gService.createGroup(group);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (DataIntegrityViolationException e) {
+            return new ResponseEntity<>(((SQLException) e.getRootCause()).getErrorCode(), HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     @PostMapping("/member")
-    public ResponseEntity<String> addMember(@RequestBody GroupMemberRequest request){
-        gService.addMember(request);
-        return new ResponseEntity<>("member added",HttpStatus.CREATED);
+    public ResponseEntity<Integer> addMember(@RequestBody GroupMemberRequest request){
+        try{
+            gService.addMember(request);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (JpaSystemException e){
+            if (e.getRootCause().getClass()==SQLException.class) {
+                return new ResponseEntity<>(Integer.valueOf(((SQLException) e.getRootCause()).getSQLState()),HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    @DeleteMapping("/member")
+    @PutMapping("/member")
     public ResponseEntity<String> removeMember(@RequestBody GroupMemberRequest request){
-        gService.deleteMember(request);
-        return new ResponseEntity<>("member removed",HttpStatus.CREATED);
+        try{
+            gService.deleteMember(request);
+            return new ResponseEntity<>("member removed",HttpStatus.OK);
+        } catch (JpaSystemException e){
+            if (e.getRootCause().getClass()==SQLException.class) {
+                return new ResponseEntity<>(e.getRootCause().getMessage(),HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
     //List groups
     @GetMapping()
@@ -61,15 +88,15 @@ public class GroupController {
 		
     //UPDATE Group
     @PutMapping()
-    public ResponseEntity<Object> updateGroup(@RequestBody Group group){
+    public ResponseEntity<Integer> updateGroup(@RequestBody Group group){
         if(group.getId()==null){
-            return ResponseEntity.badRequest().body("la id debe contener una id valida");
+            return ResponseEntity.badRequest().body(NULL_ID);
         }
         if(gService.updateGroup(group)){
-            return new ResponseEntity<>("grupo actualizado",HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
         else{
-            return new ResponseEntity<>("el grupo no existe",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(NOT_FOUND, HttpStatus.BAD_REQUEST);
         }
     }
 		
@@ -77,8 +104,10 @@ public class GroupController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteGroup(@PathVariable(value = "id")Long id){
         if(gService.deleteGroup(id)) {
-            return new ResponseEntity<>("Grupo eliminado con exito",HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
         return ResponseEntity.notFound().build();
     }
+
+    
 }
