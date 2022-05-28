@@ -1,6 +1,7 @@
 package group3.middleware.services;
 
 import group3.middleware.model.request.GroupMemberRequest;
+import group3.middleware.model.request.GroupRequest;
 import group3.middleware.services.connection.Connection;
 import group3.middleware.model.Group;
 import group3.middleware.services.implementation.IGroup;
@@ -15,11 +16,11 @@ public class GroupService implements IGroup {
 
     private WebClient wCg = new Connection('g').getClient();
 
-    public ResponseEntity<String> createG(Group group){
-        ResponseEntity<String> response = wCg.post()
-                .body(Mono.just(group),Group.class)
+    public ResponseEntity<Integer> createG(GroupRequest group){
+        ResponseEntity<Integer> response = wCg.post()
+                .body(Mono.just(group),GroupRequest.class)
                 .retrieve()
-                .toEntity(String.class)
+                .toEntity(Integer.class)
                 .block();
         return response;
     }
@@ -41,42 +42,42 @@ public class GroupService implements IGroup {
         return rg;
     }
 
-    public ResponseEntity<String> updateG(Group group) {
-        ResponseEntity<String> ug = wCg.put()
+    public ResponseEntity<Integer> updateG(Group group) {
+        ResponseEntity<Integer> ug = wCg.put()
                 .body(Mono.just(group),Group.class)
                 .retrieve()
-                .toEntity(String.class)
+                .toEntity(Integer.class)
                 .block();
         return ug;
     }
 
-    public ResponseEntity<String> deleteG(Long id){
-        ResponseEntity<String> dg = wCg.delete()
+    public ResponseEntity<Integer> deleteG(Long id){
+        ResponseEntity<Integer> dg = wCg.delete()
                 .uri("/"+id)
                 .retrieve()
-                .toEntity(String.class)
+                .toEntity(Integer.class)
                 .block();
         return dg;
     }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-    public ResponseEntity<String> addM(GroupMemberRequest gmr){
-        ResponseEntity<String> response = wCg.post()
+    public ResponseEntity<Integer> addM(GroupMemberRequest gmr){
+        ResponseEntity<Integer> response = wCg.post()
                 .uri("/member")
                 .body(Mono.just(gmr),GroupMemberRequest.class)
                 .retrieve()
-                .toEntity(String.class)
+                .toEntity(Integer.class)
                 .block();
         return response;
     }
 
-    public ResponseEntity<String> removeM(GroupMemberRequest gmr){
-        ResponseEntity<String> response = wCg.put()
+    public ResponseEntity<Integer> removeM(GroupMemberRequest gmr){
+        ResponseEntity<Integer> response = wCg.put()
                 .uri("/member")
                 .body(Mono.just(gmr),GroupMemberRequest.class)
                 .retrieve()
-                .toEntity(String.class)
+                .toEntity(Integer.class)
                 .block();
         return response;
     }

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import otakus_de_la_costa.grupo3.model.request.SimpleMemberResponse;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,11 +16,10 @@ import java.util.Set;
 public class Group extends Messenger{
     private String name;
     private String description;
-    private Boolean active;
 
-    private Set<SimpleUserResponse> group_members = new HashSet<>();
+    private Set<SimpleMemberResponse> group_members = new HashSet<>();
 
-    public void addMember(Long id, String username){
-        group_members.add(new SimpleUserResponse(id, username));
+    public void addMember(Long id, String username, boolean admin){
+        group_members.add(new SimpleMemberResponse(id, username,admin));
     }
 }

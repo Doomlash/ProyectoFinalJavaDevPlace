@@ -35,20 +35,20 @@ public class MessagesService implements IMessages{
         return rLAm;
     }
 
-    public ResponseEntity<String> receiveMessage(Long idM){
-        ResponseEntity<String> rRCm = wCs.put()
+    public ResponseEntity<Integer> receiveMessage(Long idM){
+        ResponseEntity<Integer> rRCm = wCs.put()
                 .uri("/receive/"+ idM)
                 .retrieve()
-                .toEntity(String.class)
+                .toEntity(Integer.class)
                 .block();
         return rRCm;
     }
 
-    public ResponseEntity<String> readMessage (Long idM){
-        ResponseEntity<String> rRDm = wCs.put()
+    public ResponseEntity<Integer> readMessage (Long idM){
+        ResponseEntity<Integer> rRDm = wCs.put()
                 .uri("/read/"+ idM)
                 .retrieve()
-                .toEntity(String.class)
+                .toEntity(Integer.class)
                 .block();
         return rRDm;
     }

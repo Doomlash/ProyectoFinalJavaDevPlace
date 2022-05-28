@@ -14,11 +14,11 @@ public class MyUserService implements IMyUser {
     private WebClient wCu = new Connection('u').getClient();
 
     @Override
-    public ResponseEntity<String> createU(MyUser myUser) {
-        ResponseEntity<String> rCu = wCu.post()
+    public ResponseEntity<Integer> createU(MyUser myUser) {
+        ResponseEntity<Integer> rCu = wCu.post()
                 .body(Mono.just(myUser),MyUser.class)
                 .retrieve()
-                .toEntity(String.class)
+                .toEntity(Integer.class)
                 .block();
         return rCu;
     }
@@ -43,21 +43,21 @@ public class MyUserService implements IMyUser {
     }
 
     @Override
-    public ResponseEntity<String> updateMyUser(MyUser myUser) {
-        ResponseEntity<String> rUu = wCu.put()
+    public ResponseEntity<Integer> updateMyUser(MyUser myUser) {
+        ResponseEntity<Integer> rUu = wCu.put()
                 .body(Mono.just(myUser),MyUser.class)
                 .retrieve()
-                .toEntity(String.class)
+                .toEntity(Integer.class)
                 .block();
         return rUu;
     }
 
     @Override
-    public ResponseEntity<String> deleteU(Long idU) {
-        ResponseEntity<String> rDu = wCu.delete()
+    public ResponseEntity<Integer> deleteU(Long idU) {
+        ResponseEntity<Integer> rDu = wCu.delete()
                 .uri("/"+ idU)
                 .retrieve()
-                .toEntity(String.class)
+                .toEntity(Integer.class)
                 .block();
         return rDu;
     }
@@ -65,44 +65,44 @@ public class MyUserService implements IMyUser {
     ////////////////////////////////////////////////////////////////
 
     @Override
-    public ResponseEntity<String> addC(RelationRequest rr) {
-        ResponseEntity<String> rACu = wCu.post()
+    public ResponseEntity<Integer> addC(RelationRequest rr) {
+        ResponseEntity<Integer> rACu = wCu.post()
                 .uri("/contact")
                 .body(Mono.just(rr),RelationRequest.class)
                 .retrieve()
-                .toEntity(String.class)
+                .toEntity(Integer.class)
                 .block();
         return rACu;
     }
 
     @Override
-    public ResponseEntity<String> removeC(RelationRequest rr) {
-        ResponseEntity<String> rRCu = wCu.put()
+    public ResponseEntity<Integer> removeC(RelationRequest rr) {
+        ResponseEntity<Integer> rRCu = wCu.put()
                 .uri("/contact")
                 .body(Mono.just(rr),RelationRequest.class)
                 .retrieve()
-                .toEntity(String.class)
+                .toEntity(Integer.class)
                 .block();
         return rRCu;
     }
 
     @Override
-    public ResponseEntity<String> addB(RelationRequest rr) {
-        ResponseEntity<String> rABu = wCu.post()
+    public ResponseEntity<Integer> addB(RelationRequest rr) {
+        ResponseEntity<Integer> rABu = wCu.post()
                 .uri("/block")
                 .body(Mono.just(rr),RelationRequest.class)
                 .retrieve()
-                .toEntity(String.class)
+                .toEntity(Integer.class)
                 .block();
         return rABu;
     }
 
     @Override
-    public ResponseEntity<String> removeB(RelationRequest rr) {
-        ResponseEntity<String> rABu = wCu.delete()
+    public ResponseEntity<Integer> removeB(RelationRequest rr) {
+        ResponseEntity<Integer> rABu = wCu.delete()
                 .uri("/block",Mono.just(rr),RelationRequest.class)
                 .retrieve()
-                .toEntity(String.class)
+                .toEntity(Integer.class)
                 .block();
         return rABu;
     }

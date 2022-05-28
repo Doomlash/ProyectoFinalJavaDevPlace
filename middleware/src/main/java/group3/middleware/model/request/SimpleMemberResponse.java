@@ -5,10 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class GroupMemberRequest {
-    private Long group;
-    private Long user;
+@NoArgsConstructor
+public class SimpleMemberResponse{
+    private Long id;
+    private String username;
     private boolean admin;
 }

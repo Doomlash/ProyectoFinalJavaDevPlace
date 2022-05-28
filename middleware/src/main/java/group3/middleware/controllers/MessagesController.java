@@ -4,8 +4,11 @@ import group3.middleware.model.Message;
 import group3.middleware.model.request.MessageRequest;
 import group3.middleware.services.implementation.IMessages;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.sql.SQLException;
 
 @RequestMapping("/middle/messages")
 @RestController
@@ -14,8 +17,13 @@ public class MessagesController {
     private IMessages iM;
 
     @PostMapping()
-    public ResponseEntity<Message> create(@RequestBody MessageRequest message){
-        return iM.createMessage(message);
+    public ResponseEntity<Integer> create(@RequestBody MessageRequest message){
+        try{
+            iM.createMessage(message);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping()
@@ -24,13 +32,23 @@ public class MessagesController {
     }
 
     @PutMapping("/receive/{idM}")
-    public ResponseEntity<String> receiveMessage(@PathVariable (value = "idM") Long idM){
-        return iM.receiveMessage(idM);
+    public ResponseEntity<Integer> receiveMessage(@PathVariable (value = "idM") Long idM){
+        ResponseEntity<Integer> rRcm = iM.receiveMessage(idM);
+        if(rRcm.getStatusCodeValue() == HttpStatus.OK.value()){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(rRcm.getBody(),HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/read/{idM}")
-    public ResponseEntity<String> readMessage(@PathVariable (value = "idM") Long idM){
-        return iM.readMessage(idM);
+    public ResponseEntity<Integer> readMessage(@PathVariable (value = "idM") Long idM){
+        ResponseEntity<Integer> rRdm = iM.readMessage(idM);
+        if(rRdm.getStatusCodeValue() == HttpStatus.OK.value()){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(rRdm.getBody(),HttpStatus.BAD_REQUEST);
+        }
     }
 
 

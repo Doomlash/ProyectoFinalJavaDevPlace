@@ -19,7 +19,6 @@ public class MyUser extends Messenger{
 	private String language;
 	private String profileImage;
 	private Date birthDate;
-	private Boolean active;
 
 	private Set<SimpleUserResponse> contacts = new HashSet<>();
 	private Set<SimpleUserResponse> blocks = new HashSet<>();
