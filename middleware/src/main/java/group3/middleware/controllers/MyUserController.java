@@ -1,15 +1,11 @@
 package group3.middleware.controllers;
 
 import group3.middleware.model.MyUser;
-import group3.middleware.model.RelationRequest;
-import group3.middleware.services.MyUserService;
+import group3.middleware.model.request.RelationRequest;
 import group3.middleware.services.implementation.IMyUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.management.relation.Relation;
-import java.util.List;
 
 @RequestMapping("/middle/users")
 @RestController

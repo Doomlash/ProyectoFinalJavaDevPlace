@@ -2,19 +2,14 @@ package group3.middleware.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import group3.middleware.model.Group;
 import group3.middleware.model.Message;
-import group3.middleware.model.MessageRequest;
-import group3.middleware.model.MyUser;
+import group3.middleware.model.request.MessageRequest;
 import group3.middleware.services.connection.Connection;
 import group3.middleware.services.implementation.IMessages;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.List;
 
 @Service
 public class MessagesService implements IMessages{

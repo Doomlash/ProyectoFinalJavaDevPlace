@@ -1,7 +1,6 @@
 package group3.middleware.services;
 
-import group3.middleware.model.GroupMemberRequest;
-import group3.middleware.model.Message;
+import group3.middleware.model.request.GroupMemberRequest;
 import group3.middleware.services.connection.Connection;
 import group3.middleware.model.Group;
 import group3.middleware.services.implementation.IGroup;

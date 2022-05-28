@@ -1,7 +1,7 @@
 package group3.middleware.services.implementation;
 
 import group3.middleware.model.MyUser;
-import group3.middleware.model.RelationRequest;
+import group3.middleware.model.request.RelationRequest;
 import org.springframework.http.ResponseEntity;
 
 

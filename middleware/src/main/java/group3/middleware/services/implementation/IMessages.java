@@ -1,7 +1,7 @@
 package group3.middleware.services.implementation;
 
 import group3.middleware.model.Message;
-import group3.middleware.model.MessageRequest;
+import group3.middleware.model.request.MessageRequest;
 import org.springframework.http.ResponseEntity;
 
 

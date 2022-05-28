@@ -1,7 +1,7 @@
 package group3.middleware.services.implementation;
 
 import group3.middleware.model.Group;
-import group3.middleware.model.GroupMemberRequest;
+import group3.middleware.model.request.GroupMemberRequest;
 import org.springframework.http.ResponseEntity;
 
 import java.util.NoSuchElementException;

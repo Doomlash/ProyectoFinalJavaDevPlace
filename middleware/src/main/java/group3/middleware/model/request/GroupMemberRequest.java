@@ -1,4 +1,4 @@
-package group3.middleware.model;
+package group3.middleware.model.request;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

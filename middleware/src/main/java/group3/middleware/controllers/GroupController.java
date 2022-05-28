@@ -1,7 +1,7 @@
 package group3.middleware.controllers;
 
 import group3.middleware.model.Group;
-import group3.middleware.model.GroupMemberRequest;
+import group3.middleware.model.request.GroupMemberRequest;
 import group3.middleware.services.implementation.IGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
