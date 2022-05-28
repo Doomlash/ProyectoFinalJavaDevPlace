@@ -1,4 +1,4 @@
-package otakus_de_la_costa.grupo3.model;
+package otakus_de_la_costa.grupo3.model.request;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

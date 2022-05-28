@@ -3,6 +3,7 @@ package otakus_de_la_costa.grupo3.database;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -46,16 +47,16 @@ public class MyUserJPA extends MessengerJPA{
     @Temporal(TemporalType.DATE)
     private Date birthDate;
 
-    @Column(name = "active")
-    private Boolean active;
-
-    @ManyToMany()
+    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.DETACH})
     @JoinTable(name = "contacts",
             joinColumns = {@JoinColumn(name = "contact_owner")},
             inverseJoinColumns = {@JoinColumn(name = "contacted")})
     private List<MyUserJPA> contacts;
 
-    @ManyToMany()
+    @ManyToMany(mappedBy = "contacts", cascade = {CascadeType.PERSIST,CascadeType.DETACH})
+    private List<MyUserJPA> contactedBy;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.DETACH})
     @JoinTable(name = "blocks",
             joinColumns = {@JoinColumn(name = "block_owner")},
             inverseJoinColumns = {@JoinColumn(name = "blocked")})
@@ -63,5 +64,4 @@ public class MyUserJPA extends MessengerJPA{
 
     @OneToMany(mappedBy = "user")
     private List<GroupMembersJPA> groups;
-
 }

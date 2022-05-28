@@ -7,6 +7,7 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import otakus_de_la_costa.grupo3.model.request.SimpleUserResponse;
 
 @Getter
 @Setter
@@ -19,7 +20,6 @@ public class MyUser extends Messenger{
 	private String language;
 	private String profileImage;
 	private Date birthDate;
-	private Boolean active;
 
 	private Set<SimpleUserResponse> contacts = new HashSet<>();
 	private Set<SimpleUserResponse> blocks = new HashSet<>();

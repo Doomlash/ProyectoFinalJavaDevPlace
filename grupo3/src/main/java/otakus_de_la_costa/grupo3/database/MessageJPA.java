@@ -55,4 +55,5 @@ public class MessageJPA {
     @Temporal(TemporalType.TIMESTAMP)
     private Date readDate;
 
+
 }

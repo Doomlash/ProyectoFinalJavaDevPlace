@@ -1,6 +1,5 @@
 package otakus_de_la_costa.grupo3.repositories;
 
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,5 +17,4 @@ public interface MessageRepository extends JpaRepository<MessageJPA, Long> {
 	@Query(value = "CALL message_read(:id)", nativeQuery = true)
 	@Modifying
 	void readMessage(@Param("id")Long id);
-
 }

@@ -12,11 +12,13 @@ import org.springframework.stereotype.Service;
 import otakus_de_la_costa.grupo3.database.GroupJPA;
 import otakus_de_la_costa.grupo3.database.GroupMembersJPA;
 import otakus_de_la_costa.grupo3.model.Group;
-import otakus_de_la_costa.grupo3.model.GroupMemberRequest;
+import otakus_de_la_costa.grupo3.model.request.GroupMemberRequest;
+import otakus_de_la_costa.grupo3.model.request.GroupRequest;
 import otakus_de_la_costa.grupo3.repositories.GroupRepository;
+import otakus_de_la_costa.grupo3.services.implementation.IGroupService;
 
 @Service
-public class GroupService implements IGroupService{
+public class GroupService implements IGroupService {
 	@Autowired
 	private GroupRepository gRepo;
 
@@ -24,10 +26,9 @@ public class GroupService implements IGroupService{
 		Group group = new Group();
 		group.setId(myGroupJPA.getId());
 		group.setName(myGroupJPA.getName());
-		group.setActive(myGroupJPA.getActive());
 		group.setDescription(myGroupJPA.getDescription());
 		for ( GroupMembersJPA member: myGroupJPA.getMembers()) {
-			group.addMember(member.getUser().getId(), member.getUser().getUsername());
+			group.addMember(member.getUser().getId(), member.getUser().getUsername(),member.isAdmin());
 		}
 		return group;
 	}
@@ -35,16 +36,20 @@ public class GroupService implements IGroupService{
 	private GroupJPA mapearGroupJPA(Group group) {
 		GroupJPA groupJPA = new GroupJPA();
 		groupJPA.setName(group.getName());
-		groupJPA.setActive(group.getActive());
 		groupJPA.setDescription(group.getDescription());
 		return groupJPA;
 	}
 
 	//GUARDADO DEL OBJETO JSON A JPA
 	@Override
-	public void createGroup(Group myGroup) {
-		GroupJPA groupJPA= mapearGroupJPA(myGroup);
-		gRepo.save(groupJPA);
+	@Transactional
+	public void createGroup(GroupRequest myGroup) {
+		Group g = new Group();
+		g.setDescription(myGroup.getDescription());
+		g.setName(myGroup.getName());
+		GroupJPA groupJPA= mapearGroupJPA(g);
+		groupJPA = gRepo.save(groupJPA);
+		addMember(new GroupMemberRequest(groupJPA.getId(), myGroup.getUserId(), true));
 	}
 
 	@Override
@@ -93,7 +98,7 @@ public class GroupService implements IGroupService{
 
 	@Override
 	@Transactional
-	public void addMember(GroupMemberRequest request) {
+	public void addMember(GroupMemberRequest request){
 		gRepo.addMember(request.getGroup(), request.getUser(), request.isAdmin());
 
 	}

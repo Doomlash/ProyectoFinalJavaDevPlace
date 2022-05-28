@@ -12,9 +12,10 @@ import otakus_de_la_costa.grupo3.database.MyUserJPA;
 
 @Repository
 public interface UserRepository extends JpaRepository<MyUserJPA, Long> {
-		public Optional<MyUserJPA> findByUsername(String username);
-		public Optional<MyUserJPA> findByMail(String mail);
-		public Optional<MyUserJPA> findByUsernameOrMail(String username,String mail);
+	public Optional<MyUserJPA> findByUsername(String username);
+	public Optional<MyUserJPA> findByMail(String mail);
+	public Optional<MyUserJPA> findByUsernameOrMail(String username,String mail);
+
 
 	@Query(value = "INSERT INTO contacts VALUES(:contactOwner,:contacted)", nativeQuery = true)
 	@Modifying

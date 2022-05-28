@@ -13,7 +13,9 @@ public interface GroupRepository extends JpaRepository<GroupJPA, Long> {
 
     @Query(value = "INSERT INTO group_members VALUES(:group_id,:group_member,:is_admin)", nativeQuery = true)
     @Modifying
-    public void addMember(@Param("group_id")Long groupId,@Param("group_member") Long groupMember,@Param("is_admin")boolean isAdmin);
+    public void addMember(@Param("group_id")Long groupId,
+                          @Param("group_member") Long groupMember,
+                          @Param("is_admin")boolean isAdmin);
 
     @Query(value = "DELETE FROM group_members WHERE group_id = :group_id AND group_member = :group_member", nativeQuery = true)
     @Modifying

@@ -23,6 +23,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class MessengerJPA {
+
     public MessengerJPA(Long id){
         this.id=id;
     }
