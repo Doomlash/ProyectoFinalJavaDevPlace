@@ -70,7 +70,14 @@ body{
 }
 
 .bgDiv{
-    background-image: url('/grupo3/src/main/resources/img/bgSection.png'); width: 100%; height: 100%;
+    background-image: url('/grupo3/src/main/resources/img/bgSection.png'); 
+    width: 100%; 
+    height: 100%;
+    background-repeat: no-repeat;
 }
 
 
+.file {
+    visibility: hidden;
+    position: absolute;
+    }

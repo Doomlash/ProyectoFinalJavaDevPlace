@@ -24,10 +24,19 @@
             </div>
         
                 <div class="container-fluid  col-12 col-lg-6 col-md-6  py-3 mt-3 bgDiv   ">
+                    <form action="myAction" method="post">
                     <div class="col-md-6 mb-3 d-grid gap-2">
                         <label for="validationCustom01"
                             class="form-label text-center text-white fst-italic fw-bold fs-4">Username</label>
                         <input type="text" class="form-control" id="validationCustom01" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3 d-grid gap-2">
+                        <label for="validationCustom01"
+                            class="form-label text-center text-white fst-italic fw-bold fs-4">Password</label>
+                        <input type="password" class="form-control" id="passwordCustom" required>
                         <div class="valid-feedback">
                             Looks good!
                         </div>
@@ -49,7 +58,7 @@
                         </div>
                     </div>
                     <div class="col-md-6 mb-3 d-grid gap-2">
-                        <label for="validationCustom03"
+                        <label for="validationCustom04"
                             class="form-label text-center text-white fst-italic fw-bold fs-4">Mail</label>
                         <input type="text" class="form-control" id="validationCustom04" required>
                         <div class="valid-feedback">
@@ -57,15 +66,19 @@
                         </div>
                     </div>
                     <div class="col-md-6 mb-3 d-grid gap-2">
-                        <label for="validationCustom03"
+                        <label for="validationCustom05"
                             class="form-label text-center text-white fst-italic fw-bold fs-4">Language</label>
-                        <input type="text" class="form-control" id="validationCustom05" required>
+                            <select class="form-select" name="selectLang">
+                                <option selected>Open language menu</option>
+                                <option value="reemplazo por th:value">languajeexample</option>
+                              </select>
+                    
                         <div class="valid-feedback">
                             Looks good!
                         </div>
                     </div>
                     <div class="col-md-6 mb-3 d-grid gap-2">
-                        <label for="validationCustom03"
+                        <label for="validationCustom06"
                             class="form-label text-center text-white fst-italic fw-bold fs-4">Birth Day</label>
                         <input type="text" class="form-control" name="birthday" id="validationCustom06" required>
                         <div class="valid-feedback">
@@ -73,18 +86,30 @@
                         </div>
                     </div>
                     <div class="col-md-6 mb-3 d-grid gap-2">
-                        <label for="validationCustom03"
-                            class="form-label text-center text-white fst-italic fw-bold fs-4">Initials</label>
-                        <input type="text" class="form-control" id="validationCustom07" required>
+                        <label for="validationCustom07"
+                            class="form-label text-center text-white fst-italic fw-bold fs-4">Avatar</label>
+                            
+
+                                <select id="selectImg">
+                                    <option value="/grupo3/src/main/resources/img/icons/1.png">default</option>
+                                    <option value="/grupo3/src/main/resources/img/icons/2.png">zanahoria </option>
+                                    <option value="/grupo3/src/main/resources/img/icons/3.png">pepino</option>
+                                    <option value="/grupo3/src/main/resources/img/icons/4.png">berenjena</option>
+                                    <option value="/grupo3/src/main/resources/img/icons/5.png">tomate</option>
+                                    <option value="/grupo3/src/main/resources/img/icons/6.png">zapallo</option>
+                                    </select>
+                                    <img class="pl-4" id="images" width="48px" src="/grupo3/src/main/resources/img/icons/1.png" />
                         <div class="valid-feedback">
                             Looks good!
                         </div>
                     </div>
+                    
                     <div class="col-md-6 mb-3">
                         <button class="btn btn-primary text-dark fst-italic fw-bold d-grid gap-2 col-6 mx-auto mt-3 "
                             style="font-size: 1rem" type="submit">Register</button>
-                        <a class="btn btn-primary text-dark fst-italic fw-bold  mx-2 mt-3 " href="#" role="button">Go to Back</a>
+                        <a class="btn btn-primary text-dark fst-italic fw-bold fs-5 mx-2 mt-3 " href="login.html" role="button">Go to Back</a>
                     </div>
+                </form>
                 </div>
             
         </div>
@@ -105,6 +130,14 @@
             });
         });
     </script>
+
+<script>
+
+    selectImg.addEventListener("change",()=>{
+        images.setAttribute("src", selectImg.selectedOptions[0].value )
+      })
+    </script>
+    
 </body>
 
 </html>
