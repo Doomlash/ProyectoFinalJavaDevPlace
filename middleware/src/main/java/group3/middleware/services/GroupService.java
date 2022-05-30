@@ -85,12 +85,8 @@ public class GroupService implements IGroup {
                     .block();
             return dg;
         }catch (WebClientResponseException e){
-            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
-                return ResponseEntity.internalServerError().build();
-            }
             return ResponseEntity
-                    .status(e.getStatusCode())
-                    .body((Integer.valueOf(e.getResponseBodyAsString())));
+                    .status(e.getStatusCode()).build();
         }
     }
 
