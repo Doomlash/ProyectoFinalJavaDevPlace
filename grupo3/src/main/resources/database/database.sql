@@ -118,6 +118,11 @@ CREATE TABLE user_autentications(
 		FOREIGN KEY (role) REFERENCES roles(id)
 )ENGINE=InnoDB;
 
+#------------------------------------------------------------------------------------------------
+# roles
+
+
+
 
 #-------------------------------------------------------------------------------------------------
 # TRIGGERS
@@ -151,22 +156,22 @@ BEGIN
 	END IF;
 END$
 
-DROP TRIGGER IF EXISTS group_members_delete$
-CREATE TRIGGER group_members_delete BEFORE DELETE ON group_members FOR EACH ROW 
-BEGIN
-	DECLARE members integer;
-    IF OLD.is_admin=true THEN
-		SET members := (SELECT COUNT(*) 
-							FROM group_members 
-							WHERE group_id = OLD.group_id 
-								AND group_member != OLD.group_member 
-								AND is_admin = true);
-		IF members = 0 THEN
-			SIGNAL SQLSTATE '99998' 
-				SET MESSAGE_TEXT = 'the group must have another admin before deletion';
-		END IF;
-	END IF;
-END$
+-- DROP TRIGGER IF EXISTS group_members_delete$
+-- CREATE TRIGGER group_members_delete BEFORE DELETE ON group_members FOR EACH ROW 
+-- BEGIN
+-- 	DECLARE members integer;
+--     IF OLD.is_admin=true THEN
+-- 		SET members := (SELECT COUNT(*) 
+-- 							FROM group_members 
+-- 							WHERE group_id = OLD.group_id 
+-- 								AND group_member != OLD.group_member 
+-- 								AND is_admin = true);
+-- 		IF members = 0 THEN
+-- 			SIGNAL SQLSTATE '99998' 
+-- 				SET MESSAGE_TEXT = 'the group must have another admin before deletion';
+-- 		END IF;
+-- 	END IF;
+-- END$
 
 DROP TRIGGER IF EXISTS messages_create$
 CREATE TRIGGER messages_Create BEFORE INSERT ON messages FOR EACH ROW 
@@ -183,15 +188,26 @@ END$
 DROP TRIGGER IF EXISTS my_user_delete$
 CREATE TRIGGER my_user_delete BEFORE DELETE ON my_users FOR EACH ROW 
 BEGIN
+	DECLARE admins integer;
+	SET admins := (SELECT COUNT(*) 
+						FROM group_members 
+						WHERE group_member = OLD.id 
+							AND is_admin = true);
+	IF admins > 0 THEN
+		SIGNAL SQLSTATE '99996' 
+			SET MESSAGE_TEXT = 'The user must not be admin in any group for deletion';
+	END IF;
 	DELETE FROM group_members WHERE group_member = OLD.id;
     DELETE FROM contacts WHERE contact_owner = OLD.id OR contacted = OLD.id;
     DELETE FROM blocks WHERE block_owner = OLD.id OR blocked = OLD.id;
+    DELETE FROM messages WHERE sender = OLD.id OR receiver = OLD.id;
 END$
 
 DROP TRIGGER IF EXISTS user_group_delete$
 CREATE TRIGGER user_group_delete BEFORE DELETE ON user_groups FOR EACH ROW 
 BEGIN
 	DELETE FROM group_members WHERE group_id = OLD.id;
+    DELETE FROM messages WHERE sender = OLD.id OR receiver = OLD.id;
 END$
 
 
@@ -221,6 +237,45 @@ BEGIN
 		SET is_admin = NOT var_is_admin
 		WHERE group_id = var_group AND group_member = var_member;
 END$
+
+-- DROP TRIGGER IF EXISTS group_members_delete$
+-- CREATE TRIGGER group_members_delete BEFORE DELETE ON group_members FOR EACH ROW 
+-- BEGIN
+-- 	DECLARE members integer;
+--     IF OLD.is_admin=true THEN
+-- 		SET members := (SELECT COUNT(*) 
+-- 							FROM group_members 
+-- 							WHERE group_id = OLD.group_id 
+-- 								AND group_member != OLD.group_member 
+-- 								AND is_admin = true);
+-- 		IF members = 0 THEN
+-- 			SIGNAL SQLSTATE '99998' 
+-- 				SET MESSAGE_TEXT = 'the group must have another admin before deletion';
+-- 		END IF;
+-- 	END IF;
+-- END$
+
+DROP PROCEDURE IF EXISTS delete_group_member$
+CREATE PROCEDURE delete_group_member(IN var_group BIGINT UNSIGNED, IN var_member BIGINT UNSIGNED)
+BEGIN
+	DECLARE var_is_admin BOOLEAN;
+    DECLARE admins integer;
+    SET var_is_admin := (SELECT is_admin FROM group_members WHERE group_id = var_group AND group_member = var_member);
+	IF var_is_admin=true THEN
+		SET admins := (SELECT COUNT(*) 
+							FROM group_members 
+							WHERE group_id = var_group
+								AND group_member != var_member
+								AND is_admin = true);
+		IF admins = 0 THEN
+				SIGNAL SQLSTATE '99998' 
+					SET MESSAGE_TEXT = 'the group must have another admin before deletion';
+		END IF;
+	END IF;
+	DELETE FROM group_members WHERE group_id = var_group AND group_member = var_member;
+
+END$
+
 DELIMITER ;
 
 

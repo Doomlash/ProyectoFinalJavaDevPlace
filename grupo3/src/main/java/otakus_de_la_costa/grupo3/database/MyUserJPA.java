@@ -52,9 +52,6 @@ public class MyUserJPA extends MessengerJPA{
                 joinColumns = {@JoinColumn(name = "contact_owner")}, 
                 inverseJoinColumns = {@JoinColumn(name = "contacted")})
     private List<MyUserJPA> contacts;
-    
-    @ManyToMany(mappedBy = "contacts", cascade = {CascadeType.PERSIST,CascadeType.DETACH})
-    private List<MyUserJPA> contactedBy;
 
     @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.DETACH})
     @JoinTable(name = "blocks",

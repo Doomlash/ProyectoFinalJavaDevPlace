@@ -68,8 +68,12 @@ public class GroupController {
     @PutMapping("/member")
     public ResponseEntity<Integer> removeMember(@RequestBody GroupMemberRequest request){
         try{
-            gService.deleteMember(request);
-            return new ResponseEntity<>(HttpStatus.OK);
+            Integer response = gService.deleteMember(request);
+            if(response == OK){
+                return new ResponseEntity<>(HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
         } catch (JpaSystemException e){
             if (e.getRootCause().getClass()==SQLException.class) {
                 return new ResponseEntity<>(Integer.valueOf(((SQLException) e.getRootCause()).getSQLState()),HttpStatus.BAD_REQUEST);

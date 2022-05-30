@@ -17,7 +17,7 @@ public interface GroupRepository extends JpaRepository<GroupJPA, Long> {
                             @Param("group_member") Long groupMember,
                             @Param("is_admin")boolean isAdmin);
 
-    @Query(value = "DELETE FROM group_members WHERE group_id = :group_id AND group_member = :group_member", nativeQuery = true)
+    @Query(value = "CALL delete_group_member(:group_id, :group_member)", nativeQuery = true)
     @Modifying
     public void deleteMember(@Param("group_id")Long groupId,@Param("group_member") Long groupMember);
 	

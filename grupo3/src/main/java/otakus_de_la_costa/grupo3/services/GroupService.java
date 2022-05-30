@@ -129,15 +129,22 @@ public class GroupService implements IGroupService{
 
     @Override
     @Transactional
-    public void deleteMember(GroupMemberRequest request) {
+    public Integer deleteMember(GroupMemberRequest request) {
+        if(gRepo.findById(request.getGroup()).isEmpty()){
+            return IDS_NOT_FOUND;
+        }
+        if(gRepo.isAdmin(request.getGroup(), request.getUser())==null){
+            return NOT_MEMBER;
+        }
         gRepo.deleteMember(request.getGroup(), request.getUser());
+        return OK;
     }
 
     @Override
     public Boolean isAdmin(Long group, Long user) {
         if(gRepo.findById(group).isEmpty()){
             throw new NoSuchElementException();
-        } else{
+        }else{
             Boolean result = gRepo.isAdmin(group, user);
             return result;
         }
