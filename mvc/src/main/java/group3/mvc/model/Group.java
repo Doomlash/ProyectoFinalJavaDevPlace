@@ -1,5 +1,6 @@
 package group3.mvc.model;
 
+import group3.mvc.model.request.SimpleMemberResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,11 +16,10 @@ import java.util.Set;
 public class Group extends Messenger{
     private String name;
     private String description;
-    private Boolean active;
 
-    private Set<SimpleUserResponse> group_members = new HashSet<>();
+    private Set<SimpleMemberResponse> group_members = new HashSet<>();
 
-    public void addMember(Long id, String username){
-        group_members.add(new SimpleUserResponse(id, username));
+    public void addMember(Long id, String username, boolean admin){
+        group_members.add(new SimpleMemberResponse(id, username,admin));
     }
 }

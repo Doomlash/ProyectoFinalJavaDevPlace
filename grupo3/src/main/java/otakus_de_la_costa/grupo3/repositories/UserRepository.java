@@ -29,7 +29,7 @@ public interface UserRepository extends JpaRepository<MyUserJPA, Long> {
     @Modifying
     public void addBlock(@Param("blockOwner")Long blockOwner,@Param("blocked") Long blocked);
 
-    @Query(value = "DELETE FROM blovalcks WHERE block_owner = :blockOwner AND blocked = :blocked", nativeQuery = true)
+    @Query(value = "DELETE FROM blocks WHERE block_owner = :blockOwner AND blocked = :blocked", nativeQuery = true)
     @Modifying
     public void deleteBlock(@Param("blockOwner")Long blockOwner,@Param("blocked") Long blocked);
 

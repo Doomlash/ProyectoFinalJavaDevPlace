@@ -17,4 +17,7 @@ public interface IGroup {
     public ResponseEntity<Integer> updateG(Group group) throws NoSuchElementException;
     public ResponseEntity<Integer> deleteG(Long id);
 
+    public ResponseEntity<Object> isAdmin(Long idG,Long idU);
+    public ResponseEntity<Object> changeAdmin(Long idG,Long idU);
+
 }

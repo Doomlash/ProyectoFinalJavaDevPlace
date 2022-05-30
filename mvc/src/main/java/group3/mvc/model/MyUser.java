@@ -1,5 +1,6 @@
 package group3.mvc.model;
 
+import group3.mvc.model.request.SimpleUserResponse;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,7 +20,6 @@ public class MyUser extends Messenger{
 	private String language;
 	private String profileImage;
 	private Date birthDate;
-	private Boolean active;
 
 	private Set<SimpleUserResponse> contacts = new HashSet<>();
 	private Set<SimpleUserResponse> blocks = new HashSet<>();

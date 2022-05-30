@@ -9,7 +9,8 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Message{
+public class Message  {
+
 	private Long id;
 	private String content;
 	private String language;

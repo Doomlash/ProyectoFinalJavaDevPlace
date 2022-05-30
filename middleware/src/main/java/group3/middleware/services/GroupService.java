@@ -90,6 +90,45 @@ public class GroupService implements IGroup {
         }
     }
 
+    public ResponseEntity<Object> isAdmin(Long idG,Long idU){
+        try {
+            ResponseEntity<Object> dg = wCg.get()
+                    .uri("/"+idG + "/isAdmin/"+idU)
+                    .retrieve()
+                    .toEntity(Object.class)
+                    .block();
+            return dg;
+        }catch (WebClientResponseException e){
+            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+                return ResponseEntity.internalServerError().build();
+            }
+            return ResponseEntity
+                    .status(e.getStatusCode())
+                    .body((Integer.valueOf(e.getResponseBodyAsString())));
+        }
+    }
+
+    public ResponseEntity<Object> changeAdmin(Long idG,Long idU){
+        try {
+            ResponseEntity<Object> dg = wCg.put()
+                    .uri("/"+idG + "/changeAdmin/"+idU)
+                    .retrieve()
+                    .toEntity(Object.class)
+                    .block();
+            return dg;
+        }catch (WebClientResponseException e){
+            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+                return ResponseEntity.internalServerError().build();
+            }
+            return ResponseEntity
+                    .status(e.getStatusCode())
+                    .body((Integer.valueOf(e.getResponseBodyAsString())));
+        }
+    }
+
+
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
     public ResponseEntity<Integer> addM(GroupMemberRequest gmr){

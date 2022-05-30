@@ -1,4 +1,4 @@
-package group3.mvc.model;
+package group3.mvc.model.request;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

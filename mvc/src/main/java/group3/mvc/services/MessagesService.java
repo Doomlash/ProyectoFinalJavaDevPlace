@@ -1,65 +1,94 @@
 package group3.mvc.services;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import group3.mvc.model.Message;
-import group3.mvc.model.MessageRequest;
+import group3.mvc.model.request.MessageRequest;
 import group3.mvc.services.connection.Connection;
 import group3.mvc.services.implementation.IMessages;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class MessagesService implements IMessages{
     private WebClient wCs = new Connection('m').getClient();
 
-    public ResponseEntity<Message> createMessage(MessageRequest mr){
-        ResponseEntity<Message> rCm = wCs.post()
-                .body(Mono.just(mr), MessageRequest.class)
-                .retrieve()
-                .toEntity(Message.class)
-                .block();
-        return rCm;
+    public Integer createMessage(MessageRequest mr){
+        try {
+            ResponseEntity<Integer> rCm = wCs.post()
+                    .body(Mono.just(mr), MessageRequest.class)
+                    .retrieve()
+                    .toEntity(Integer.class)
+                    .block();
+            return rCm.getBody();
+        }catch (WebClientResponseException e){
+            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+                return ResponseEntity.internalServerError().build().getStatusCodeValue();
+            }
+            return ResponseEntity
+                    .status(e.getStatusCode())
+                    .body((Integer.valueOf(e.getResponseBodyAsString()))).getBody();
+        }
     }
 
-    public ResponseEntity<Message[]> listAllMessages(){
+    public List<Message> listAllMessages(){
         ResponseEntity<Message[]> rLAm = wCs.get()
                 .retrieve()
                 .toEntity(Message[].class)
                 .block();
-        return rLAm;
+        List<Message> rLAml = Arrays.asList(rLAm.getBody());
+        return rLAml;
     }
 
-    public ResponseEntity<String> receiveMessage(Long idM){
-        ResponseEntity<String> rRCm = wCs.put()
-                .uri("/receive/"+ idM)
-                .retrieve()
-                .toEntity(String.class)
-                .block();
-        return rRCm;
+    public Integer receiveMessage(Long idM){
+        try{
+            ResponseEntity<Integer> rRCm = wCs.put()
+                    .uri("/receive/"+ idM)
+                    .retrieve()
+                    .toEntity(Integer.class)
+                    .block();
+            return rRCm.getBody();
+        }catch (WebClientResponseException e){
+            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+                return ResponseEntity.internalServerError().build().getStatusCodeValue();
+            }
+            return ResponseEntity
+                    .status(e.getStatusCode())
+                    .body((Integer.valueOf(e.getResponseBodyAsString()))).getBody();
+        }
+
     }
 
-    public ResponseEntity<String> readMessage (Long idM){
-        ResponseEntity<String> rRDm = wCs.put()
-                .uri("/read/"+ idM)
-                .retrieve()
-                .toEntity(String.class)
-                .block();
-        return rRDm;
+    public Integer readMessage (Long idM){
+        try{
+            ResponseEntity<Integer> rRDm = wCs.put()
+                    .uri("/read/"+ idM)
+                    .retrieve()
+                    .toEntity(Integer.class)
+                    .block();
+            return rRDm.getBody();
+        }catch (WebClientResponseException e){
+            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+                return ResponseEntity.internalServerError().build().getStatusCodeValue();
+            }
+            return ResponseEntity
+                    .status(e.getStatusCode())
+                    .body((Integer.valueOf(e.getResponseBodyAsString()))).getBody();
+        }
     }
 
-
-////////////////////////////////////////////////////////////////////////////////////
-
-    public ResponseEntity<Message> translate(Message m) {
-        ResponseEntity<Message> rT = wCs.post()
-                .uri("/translate")
-                .body(m,Message.class)
-                .retrieve()
-                .toEntity(Message.class)
-                .block();
-    return rT;
+    public Message translate(Message message, String langU){
+            ResponseEntity<Message> rTm = wCs.post()
+                    .uri("/translate/"+langU)
+                    .body(Mono.just(message),Message.class)
+                    .retrieve()
+                    .toEntity(Message.class)
+                    .block();
+            return rTm.getBody();
     }
 }

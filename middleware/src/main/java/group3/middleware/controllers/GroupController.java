@@ -56,4 +56,13 @@ public class GroupController {
        return iG.removeM(gmr);
     }
 
+    @GetMapping("/{idG}/isAdmin/{idU}")
+    public ResponseEntity<Object> isAdmin(@PathVariable("idG") Long idG,@PathVariable("idU") Long idU){
+        return iG.isAdmin(idG,idU);
+    }
+
+    @PutMapping("/{idG}/changeAdmin/{idU}")
+    public ResponseEntity<Object> changeAdmin(@PathVariable("idG") Long idG,@PathVariable("idU") Long idU){
+        return iG.changeAdmin(idG,idU);
+    }
 }

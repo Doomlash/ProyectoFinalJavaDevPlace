@@ -1,109 +1,183 @@
 package group3.mvc.services;
 
 import group3.mvc.model.MyUser;
-import group3.mvc.model.RelationRequest;
+import group3.mvc.model.request.RelationRequest;
 import group3.mvc.services.connection.Connection;
 import group3.mvc.services.implementation.IMyUser;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
+
+import java.util.*;
 
 @Service
 public class MyUserService implements IMyUser {
     private WebClient wCu = new Connection('u').getClient();
 
     @Override
-    public ResponseEntity<String> createU(MyUser myUser) {
-        ResponseEntity<String> rCu = wCu.post()
-                .body(Mono.just(myUser),MyUser.class)
-                .retrieve()
-                .toEntity(String.class)
-                .block();
-        return rCu;
+    public Integer createU(MyUser myUser) {
+        try{
+            ResponseEntity<Integer> rCu = wCu.post()
+                    .body(Mono.just(myUser),MyUser.class)
+                    .retrieve()
+                    .toEntity(Integer.class)
+                    .block();
+            return rCu.getBody();
+        }catch (WebClientResponseException e){
+            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+                return ResponseEntity.internalServerError().build().getStatusCodeValue();
+            }
+            return ResponseEntity
+                    .status(e.getStatusCode())
+                    .body((Integer.valueOf(e.getResponseBodyAsString()))).getBody();
+        }
+
     }
 
     @Override
-    public ResponseEntity<MyUser[]> listAllUsers() {
+    public List<MyUser> listAllUsers() {
         ResponseEntity<MyUser[]> rLAu = wCu.get()
                 .retrieve()
                 .toEntity(MyUser[].class)
                 .block();
-        return rLAu;
+        List<MyUser> rLAul = Arrays.asList(rLAu.getBody());
+        return rLAul;
     }
 
     @Override
-    public ResponseEntity<MyUser> readU(Long idU) {
-        ResponseEntity<MyUser> rRu = wCu.get()
-                .uri("/"+idU)
-                .retrieve()
-                .toEntity(MyUser.class)
-                .block();
-        return rRu;
+    public Optional<MyUser> readU(Long idU) {
+        try{
+            ResponseEntity<Optional> rRu = wCu.get()
+                    .uri("/"+idU)
+                    .retrieve()
+                    .toEntity(Optional.class)
+                    .block();
+            return rRu.getBody();
+        }catch (WebClientResponseException e){
+            return Optional.empty();
+        }
     }
 
     @Override
-    public ResponseEntity<String> updateMyUser(MyUser myUser) {
-        ResponseEntity<String> rUu = wCu.put()
-                .body(Mono.just(myUser),MyUser.class)
-                .retrieve()
-                .toEntity(String.class)
-                .block();
-        return rUu;
+    public Integer updateMyUser(MyUser myUser) {
+        try {
+            ResponseEntity<Integer> rUu = wCu.put()
+                    .body(Mono.just(myUser),MyUser.class)
+                    .retrieve()
+                    .toEntity(Integer.class)
+                    .block();
+            return rUu.getBody();
+        }catch (WebClientResponseException e){
+            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+                return ResponseEntity.internalServerError().build().getStatusCodeValue();
+            }
+            return ResponseEntity
+                    .status(e.getStatusCode())
+                    .body((Integer.valueOf(e.getResponseBodyAsString()))).getBody();
+        }
     }
 
     @Override
-    public ResponseEntity<String> deleteU(Long idU) {
-        ResponseEntity<String> rDu = wCu.delete()
-                .uri("/"+ idU)
-                .retrieve()
-                .toEntity(String.class)
-                .block();
-        return rDu;
+    public Integer deleteU(Long idU) {
+        try {
+            ResponseEntity<Integer> rDu = wCu.delete()
+                    .uri("/"+ idU)
+                    .retrieve()
+                    .toEntity(Integer.class)
+                    .block();
+            return rDu.getBody();
+        }catch (WebClientResponseException e){
+            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+                return ResponseEntity.internalServerError().build().getStatusCodeValue();
+            }
+            return ResponseEntity
+                    .status(e.getStatusCode())
+                    .body((Integer.valueOf(e.getResponseBodyAsString()))).getBody();
+        }
     }
 
     ////////////////////////////////////////////////////////////////
 
     @Override
-    public ResponseEntity<String> addC(RelationRequest rr) {
-        ResponseEntity<String> rACu = wCu.post()
-                .uri("/contact")
-                .body(Mono.just(rr),RelationRequest.class)
-                .retrieve()
-                .toEntity(String.class)
-                .block();
-        return rACu;
+    public Integer addC(RelationRequest rr) {
+        try {
+            ResponseEntity<Integer> rACu = wCu.post()
+                    .uri("/contact")
+                    .body(Mono.just(rr),RelationRequest.class)
+                    .retrieve()
+                    .toEntity(Integer.class)
+                    .block();
+            return rACu.getBody();
+        }catch (WebClientResponseException e){
+            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+                return ResponseEntity.internalServerError().build().getStatusCodeValue();
+            }
+            return ResponseEntity
+                    .status(e.getStatusCode())
+                    .body((Integer.valueOf(e.getResponseBodyAsString()))).getBody();
+        }
     }
 
     @Override
-    public ResponseEntity<String> removeC(RelationRequest rr) {
-        ResponseEntity<String> rRCu = wCu.put()
-                .uri("/contact")
-                .body(Mono.just(rr),RelationRequest.class)
-                .retrieve()
-                .toEntity(String.class)
-                .block();
-        return rRCu;
+    public Integer removeC(RelationRequest rr) {
+        try {
+            ResponseEntity<Integer> rRCu = wCu.put()
+                    .uri("/contact")
+                    .body(Mono.just(rr),RelationRequest.class)
+                    .retrieve()
+                    .toEntity(Integer.class)
+                    .block();
+            return rRCu.getBody();
+        }catch (WebClientResponseException e){
+            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+                return ResponseEntity.internalServerError().build().getStatusCodeValue();
+            }
+            return ResponseEntity
+                    .status(e.getStatusCode())
+                    .body((Integer.valueOf(e.getResponseBodyAsString()))).getBody();
+        }
     }
 
     @Override
-    public ResponseEntity<String> addB(RelationRequest rr) {
-        ResponseEntity<String> rABu = wCu.post()
-                .uri("/block")
-                .body(Mono.just(rr),RelationRequest.class)
-                .retrieve()
-                .toEntity(String.class)
-                .block();
-        return rABu;
+    public Integer addB(RelationRequest rr) {
+        try {
+            ResponseEntity<Integer> rABu = wCu.post()
+                    .uri("/block")
+                    .body(Mono.just(rr),RelationRequest.class)
+                    .retrieve()
+                    .toEntity(Integer.class)
+                    .block();
+            return rABu.getBody();
+        }catch (WebClientResponseException e){
+            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+                return ResponseEntity.internalServerError().build().getStatusCodeValue();
+            }
+            return ResponseEntity
+                    .status(e.getStatusCode())
+                    .body((Integer.valueOf(e.getResponseBodyAsString()))).getBody();
+        }
     }
 
     @Override
-    public ResponseEntity<String> removeB(RelationRequest rr) {
-        ResponseEntity<String> rABu = wCu.delete()
-                .uri("/block",Mono.just(rr),RelationRequest.class)
-                .retrieve()
-                .toEntity(String.class)
-                .block();
-        return rABu;
+    public Integer removeB(RelationRequest rr) {
+        try{
+            ResponseEntity<Integer> rABu = wCu.put()
+                    .uri("/block")
+                    .body(Mono.just(rr),RelationRequest.class)
+                    .retrieve()
+                    .toEntity(Integer.class)
+                    .block();
+            return rABu.getBody();
+        }catch (WebClientResponseException e){
+            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+                return ResponseEntity.internalServerError().build().getStatusCodeValue();
+            }
+            return ResponseEntity
+                    .status(e.getStatusCode())
+                    .body((Integer.valueOf(e.getResponseBodyAsString()))).getBody();
+        }
     }
 }

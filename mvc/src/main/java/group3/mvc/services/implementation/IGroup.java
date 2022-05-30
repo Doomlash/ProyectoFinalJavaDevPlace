@@ -1,19 +1,24 @@
 package group3.mvc.services.implementation;
 
 import group3.mvc.model.Group;
-import group3.mvc.model.GroupMemberRequest;
+import group3.mvc.model.request.GroupMemberRequest;
+import group3.mvc.model.request.GroupRequest;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 public interface IGroup {
-    public ResponseEntity<String> createG(Group group);
+    public Integer createG(GroupRequest group);
 
-    public ResponseEntity<String> addM(GroupMemberRequest request);
-    public ResponseEntity<String> removeM(GroupMemberRequest request);
-    public ResponseEntity<Group[]> listAllG();
-    public ResponseEntity<Group> readG(Long id);
-    public ResponseEntity<String> updateG(Group group) throws NoSuchElementException;
-    public ResponseEntity<String> deleteG(Long id);
+    public Integer addM(GroupMemberRequest request);
+    public Integer removeM(GroupMemberRequest request);
+    public List<Group> listAllG();
+    public Optional<Group> readG(Long id);
+    public Integer updateG(Group group) throws NoSuchElementException;
+    public Integer deleteG(Long id);
+    public Object isAdmin(Long idG, Long idU);
+    public Object changeAdmin(Long idG, Long idU);
 
 }
