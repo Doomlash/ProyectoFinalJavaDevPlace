@@ -14,9 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import otakus_de_la_costa.grupo3.database.GroupMembersJPA;
+import otakus_de_la_costa.grupo3.database.MessageJPA;
 import otakus_de_la_costa.grupo3.database.MyUserJPA;
+import otakus_de_la_costa.grupo3.model.Message;
 import otakus_de_la_costa.grupo3.model.MyUser;
 import otakus_de_la_costa.grupo3.model.RelationRequest;
+import otakus_de_la_costa.grupo3.repositories.MessageRepository;
 import otakus_de_la_costa.grupo3.repositories.UserRepository;
 
 //CRUD DE USUARIOS FUNCIONES PRINCIPALES
@@ -24,8 +27,24 @@ import otakus_de_la_costa.grupo3.repositories.UserRepository;
 public class UserService implements IUserService{
 	@Autowired
 	private UserRepository uRepo;
+
+    @Autowired
+    private MessageRepository mRepo;
 	
-	private MyUser mapearMyUser(MyUserJPA myUserJPA) {
+	private Message mapMessageJPAToMessage(MessageJPA m){
+        return new Message(
+            m.getId(),
+            m.getContent(),
+            m.getLanguage(),
+            m.getCreationDate(),
+            m.getReceptionDate(),
+            m.getReadDate(),
+            m.getSender().getId(),
+            m.getReceiver().getId()
+        );
+    }
+    
+    private MyUser mapearMyUser(MyUserJPA myUserJPA) {
 		MyUser myUser = new MyUser();
 		myUser.setId(myUserJPA.getId());
 		myUser.setUsername(myUserJPA.getUsername());
@@ -43,6 +62,15 @@ public class UserService implements IUserService{
         }
         for(GroupMembersJPA g : myUserJPA.getGroups()){
             myUser.addGroup(g.getId().getGroupId());
+            for(MessageJPA m : mRepo.getMessageFromGroup(g.getId().getGroupId(),myUserJPA.getId())){
+                myUser.addReceived(mapMessageJPAToMessage(m));
+            }
+        }
+        for(MessageJPA m : myUserJPA.getSent()){
+            myUser.addSent(mapMessageJPAToMessage(m));
+        }
+        for(MessageJPA m : myUserJPA.getReceived()){
+            myUser.addReceived(mapMessageJPAToMessage(m));
         }
 		return myUser;
 	}
@@ -86,7 +114,7 @@ public class UserService implements IUserService{
 	public MyUser findUserById(Long id) {
 		Optional<MyUserJPA> myUserJPA= uRepo.findById(id);
 		if(myUserJPA.isPresent()) {
-		return mapearMyUser(myUserJPA.get());
+		    return mapearMyUser(myUserJPA.get());
 		}
 		return null;
 	}

@@ -16,9 +16,11 @@ import org.springframework.stereotype.Service;
 
 import otakus_de_la_costa.grupo3.database.GroupJPA;
 import otakus_de_la_costa.grupo3.database.GroupMembersJPA;
+import otakus_de_la_costa.grupo3.database.MessageJPA;
 import otakus_de_la_costa.grupo3.model.Group;
 import otakus_de_la_costa.grupo3.model.GroupMemberRequest;
 import otakus_de_la_costa.grupo3.model.GroupRequest;
+import otakus_de_la_costa.grupo3.model.Message;
 import otakus_de_la_costa.grupo3.repositories.GroupRepository;
 
 @Service
@@ -26,6 +28,19 @@ public class GroupService implements IGroupService{
 	@Autowired
 	private GroupRepository gRepo;
 	
+    private Message mapMessageJPAToMessage(MessageJPA m){
+        return new Message(
+            m.getId(),
+            m.getContent(),
+            m.getLanguage(),
+            m.getCreationDate(),
+            m.getReceptionDate(),
+            m.getReadDate(),
+            m.getSender().getId(),
+            m.getReceiver().getId()
+        );
+    }
+
     private Group mapearGroup(GroupJPA myGroupJPA) {
         Group group = new Group();
         group.setId(myGroupJPA.getId());
@@ -33,6 +48,12 @@ public class GroupService implements IGroupService{
         group.setDescription(myGroupJPA.getDescription());
         for ( GroupMembersJPA member: myGroupJPA.getMembers()) {
             group.addMember(member.getUser().getId(), member.getUser().getUsername(),member.isAdmin());
+        }
+        for(MessageJPA m : myGroupJPA.getSent()){
+            group.addSent(mapMessageJPAToMessage(m));
+        }
+        for(MessageJPA m : myGroupJPA.getReceived()){
+            group.addReceived(mapMessageJPAToMessage(m));
         }
         return group;
     }

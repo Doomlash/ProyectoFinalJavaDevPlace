@@ -19,4 +19,7 @@ public interface MessageRepository extends JpaRepository<MessageJPA, Long> {
     @Modifying
     void readMessage(@Param("id")Long id);
 
+    @Query(value = "SELECT * FROM messages WHERE sender != :user AND receiver = :group",nativeQuery = true)
+    public MessageJPA[] getMessageFromGroup(@Param("group") Long groupId, @Param("user") Long id);
+
 }
