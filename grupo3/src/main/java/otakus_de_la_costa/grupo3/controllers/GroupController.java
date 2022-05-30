@@ -54,23 +54,29 @@ public class GroupController {
 			gService.addMember(request);
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		} catch (JpaSystemException e){
+
 			if (e.getRootCause().getClass()==SQLException.class) {
 				return new ResponseEntity<>(Integer.valueOf(((SQLException) e.getRootCause()).getSQLState()),HttpStatus.BAD_REQUEST);
 			}
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}catch(DataIntegrityViolationException e){
+			return new ResponseEntity<>(((SQLException) e.getRootCause()).getErrorCode(), HttpStatus.BAD_REQUEST);
 		}
+
 	}
 
 	@PutMapping("/member")
-	public ResponseEntity<String> removeMember(@RequestBody GroupMemberRequest request){
+	public ResponseEntity<Integer> removeMember(@RequestBody GroupMemberRequest request){
 		try{
 			gService.deleteMember(request);
-			return new ResponseEntity<>("member removed",HttpStatus.OK);
+			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (JpaSystemException e){
 			if (e.getRootCause().getClass()==SQLException.class) {
-				return new ResponseEntity<>(e.getRootCause().getMessage(),HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>(Integer.valueOf(((SQLException) e.getRootCause()).getSQLState()),HttpStatus.BAD_REQUEST);
 			}
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}catch(DataIntegrityViolationException e){
+			return new ResponseEntity<>(((SQLException) e.getRootCause()).getErrorCode(), HttpStatus.BAD_REQUEST);
 		}
 	}
 	//List groups
@@ -103,7 +109,7 @@ public class GroupController {
 
 	//DELETE Group
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String> deleteGroup(@PathVariable(value = "id")Long id){
+	public ResponseEntity<Integer> deleteGroup(@PathVariable(value = "id")Long id){
 		if(gService.deleteGroup(id)) {
 			return new ResponseEntity<>(HttpStatus.OK);
 		}

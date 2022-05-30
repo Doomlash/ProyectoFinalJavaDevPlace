@@ -33,7 +33,8 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-public class SpringSecurityConfig {
+public class SpringSecurityConfig{
+
     RSAPublicKey key;
 
     RSAPrivateKey priv;

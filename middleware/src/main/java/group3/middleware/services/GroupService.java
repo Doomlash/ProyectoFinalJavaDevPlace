@@ -8,6 +8,7 @@ import group3.middleware.services.implementation.IGroup;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
 
@@ -17,12 +18,18 @@ public class GroupService implements IGroup {
     private WebClient wCg = new Connection('g').getClient();
 
     public ResponseEntity<Integer> createG(GroupRequest group){
-        ResponseEntity<Integer> response = wCg.post()
-                .body(Mono.just(group),GroupRequest.class)
-                .retrieve()
-                .toEntity(Integer.class)
-                .block();
-        return response;
+        try {
+            ResponseEntity<Integer> response = wCg.post()
+                    .body(Mono.just(group),GroupRequest.class)
+                    .retrieve()
+                    .toEntity(Integer.class)
+                    .block();
+            return response;
+        }catch (WebClientResponseException e){
+            return ResponseEntity
+                    .status(e.getStatusCode())
+                    .body((Integer.valueOf(e.getResponseBodyAsString())));
+        }
     }
 
     public ResponseEntity<Group[]> listAllG(){
@@ -34,51 +41,80 @@ public class GroupService implements IGroup {
     }
 
     public ResponseEntity<Group> readG(Long id){
-        ResponseEntity<Group> rg = wCg.get()
-                .uri("/" + id)
-                .retrieve()
-                .toEntity(Group.class)
-                .block();
-        return rg;
+        try{
+            ResponseEntity<Group> rg = wCg.get()
+                    .uri("/" + id)
+                    .retrieve()
+                    .toEntity(Group.class)
+                    .block();
+            return rg;
+        }catch (WebClientResponseException e){
+            return ResponseEntity.notFound().build();
+        }
     }
 
     public ResponseEntity<Integer> updateG(Group group) {
-        ResponseEntity<Integer> ug = wCg.put()
-                .body(Mono.just(group),Group.class)
-                .retrieve()
-                .toEntity(Integer.class)
-                .block();
-        return ug;
+        try{
+            ResponseEntity<Integer> ug = wCg.put()
+                    .body(Mono.just(group),Group.class)
+                    .retrieve()
+                    .toEntity(Integer.class)
+                    .block();
+            return ug;
+        }catch (WebClientResponseException e){
+            return ResponseEntity
+                    .status(e.getStatusCode())
+                    .body((Integer.valueOf(e.getResponseBodyAsString())));
+        }
+
     }
 
     public ResponseEntity<Integer> deleteG(Long id){
-        ResponseEntity<Integer> dg = wCg.delete()
-                .uri("/"+id)
-                .retrieve()
-                .toEntity(Integer.class)
-                .block();
-        return dg;
+        try {
+            ResponseEntity<Integer> dg = wCg.delete()
+                    .uri("/"+id)
+                    .retrieve()
+                    .toEntity(Integer.class)
+                    .block();
+            return dg;
+        }catch (WebClientResponseException e){
+            return ResponseEntity
+                    .status(e.getStatusCode())
+                    .build();
+        }
     }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
     public ResponseEntity<Integer> addM(GroupMemberRequest gmr){
-        ResponseEntity<Integer> response = wCg.post()
-                .uri("/member")
-                .body(Mono.just(gmr),GroupMemberRequest.class)
-                .retrieve()
-                .toEntity(Integer.class)
-                .block();
-        return response;
+        try {
+            ResponseEntity<Integer> response = wCg.post()
+                    .uri("/member")
+                    .body(Mono.just(gmr),GroupMemberRequest.class)
+                    .retrieve()
+                    .toEntity(Integer.class)
+                    .block();
+            return response;
+        }catch (WebClientResponseException e){
+            return ResponseEntity
+                    .status(e.getStatusCode())
+                    .body((Integer.valueOf(e.getResponseBodyAsString())));
+        }
     }
 
     public ResponseEntity<Integer> removeM(GroupMemberRequest gmr){
-        ResponseEntity<Integer> response = wCg.put()
-                .uri("/member")
-                .body(Mono.just(gmr),GroupMemberRequest.class)
-                .retrieve()
-                .toEntity(Integer.class)
-                .block();
-        return response;
+        try {
+            ResponseEntity<Integer> response = wCg.put()
+                    .uri("/member")
+                    .body(Mono.just(gmr),GroupMemberRequest.class)
+                    .retrieve()
+                    .toEntity(Integer.class)
+                    .block();
+            return response;
+        }catch (WebClientResponseException e){
+        return ResponseEntity
+                .status(e.getStatusCode())
+                .body((Integer.valueOf(e.getResponseBodyAsString())));
+        }
     }
 }

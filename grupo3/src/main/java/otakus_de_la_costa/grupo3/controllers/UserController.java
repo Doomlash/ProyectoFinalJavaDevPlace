@@ -11,6 +11,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,9 +39,9 @@ public class UserController {
 		user.setId(null);
 		int response = uService.createUser(user);
 		if(response == OK){
-			return new ResponseEntity<>(HttpStatus.CREATED);
+			return new ResponseEntity<Integer>(HttpStatus.CREATED);
 		}else{
-			return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Integer>(response,HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -120,13 +121,18 @@ public class UserController {
 
 	//DELETE USER
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String> deleteUser(@PathVariable(value = "id")Long id){
-		try{
-			uService.deleteUser(id);
-			return new ResponseEntity<>(HttpStatus.OK);
-		} catch (EmptyResultDataAccessException e){
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+	public ResponseEntity<Integer> deleteUser(@PathVariable(value = "id")Long id){
+			try{
+				uService.deleteUser(id);
+				return new ResponseEntity<>(HttpStatus.OK);
+			}  catch (JpaSystemException e){
+				if (e.getRootCause().getClass()==SQLException.class) {
+					return new ResponseEntity<>(Integer.valueOf(((SQLException) e.getRootCause()).getSQLState()),HttpStatus.BAD_REQUEST);
+				}
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			}catch(DataIntegrityViolationException e){
+				return new ResponseEntity<>(((SQLException) e.getRootCause()).getErrorCode(), HttpStatus.BAD_REQUEST);
+			}
 	}
 
 }

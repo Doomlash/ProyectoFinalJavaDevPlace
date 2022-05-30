@@ -21,71 +21,39 @@ public class GroupController {
 
     @GetMapping()
     public ResponseEntity<Group[]> listAll(){
+        System.out.println();
         return iG.listAllG();
     }
 
     @PostMapping()
     public ResponseEntity<Integer> create(@RequestBody GroupRequest group){
-        try {
-            if(group.getUserId()==null){
-                return new ResponseEntity<>(NULL_ID, HttpStatus.BAD_REQUEST);
-            }
-            iG.createG(group);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        return iG.createG(group);
     }
 
     @GetMapping("/{idG}")
     public ResponseEntity<Group> get(@PathVariable("idG") Long idG){
-        Group group = iG.readG(idG).getBody();
-        if(group!=null) {return  ResponseEntity.ok(group);}
-        return ResponseEntity.notFound().build();
+        return iG.readG(idG);
     }
 
     @PutMapping()
     public ResponseEntity<Integer> update(@RequestBody Group group){
-        if(group.getId()==null){
-            return ResponseEntity.badRequest().body(NULL_ID);
-        }
-        if(iG.updateG(group).getStatusCodeValue() == HttpStatus.OK.value()){
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-        else{
-            return new ResponseEntity<>(NOT_FOUND, HttpStatus.BAD_REQUEST);
-        }
+        return iG.updateG(group);
     }
 
     @DeleteMapping("/{idG}")
     public ResponseEntity<Integer> delete(@PathVariable("idG") Long idG){
-        if(iG.deleteG(idG).getStatusCodeValue() == HttpStatus.OK.value()){
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-        else{
-            return new ResponseEntity<>(NOT_FOUND, HttpStatus.BAD_REQUEST);
-        }
+       return iG.deleteG(idG);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////
     @PostMapping("/member")
     public ResponseEntity<Integer> addM(@RequestBody GroupMemberRequest gmr){
-        try{
-            iG.addM(gmr);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        } catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return iG.addM(gmr);
     }
 
     @PutMapping("/member")
-    public ResponseEntity<Integer> deleteM(@RequestBody GroupMemberRequest gmr){
-        try{
-            iG.removeM(gmr);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        } catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<Integer> removeM(@RequestBody GroupMemberRequest gmr){
+       return iG.removeM(gmr);
     }
 
 }

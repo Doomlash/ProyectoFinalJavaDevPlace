@@ -1,10 +1,10 @@
 package group3.middleware.model;
 
+import group3.middleware.model.request.SimpleMemberResponse;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import otakus_de_la_costa.grupo3.model.request.SimpleMemberResponse;
 
 import java.util.HashSet;
 import java.util.Set;

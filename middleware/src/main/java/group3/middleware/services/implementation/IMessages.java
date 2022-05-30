@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 
 
 public interface IMessages {
-     public ResponseEntity<Message> createMessage(MessageRequest message);
+     public ResponseEntity<Integer> createMessage(MessageRequest message);
      public ResponseEntity<Message[]> listAllMessages();
      public ResponseEntity<Integer> receiveMessage(Long id);
      public ResponseEntity<Integer> readMessage(Long id);
