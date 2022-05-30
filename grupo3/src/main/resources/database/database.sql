@@ -134,6 +134,23 @@ BEGIN
 	END IF;
 END$
 
+DROP TRIGGER IF EXISTS group_members_update$
+CREATE TRIGGER group_members_update BEFORE UPDATE ON group_members FOR EACH ROW 
+BEGIN
+	DECLARE members integer;
+    IF OLD.is_admin = TRUE AND NEW.is_admin = FALSE THEN
+		SET members := (SELECT COUNT(*) 
+							FROM group_members 
+							WHERE group_id = OLD.group_id 
+								AND group_member != OLD.group_member 
+								AND is_admin = true);
+		IF members = 0 THEN
+			SIGNAL SQLSTATE '99998' 
+				SET MESSAGE_TEXT = 'the group must have another admin before deletion';
+		END IF;
+	END IF;
+END$
+
 DROP TRIGGER IF EXISTS group_members_delete$
 CREATE TRIGGER group_members_delete BEFORE DELETE ON group_members FOR EACH ROW 
 BEGIN
@@ -192,6 +209,17 @@ BEGIN
 	UPDATE messages 
 		SET read_date = NOW()
 		WHERE id = var_message;
+END$
+
+
+DROP PROCEDURE IF EXISTS change_admin_status$
+CREATE PROCEDURE change_admin_status(IN var_group BIGINT UNSIGNED, IN var_member BIGINT UNSIGNED)
+BEGIN
+	DECLARE var_is_admin BOOLEAN;
+    SET var_is_admin := (SELECT is_admin FROM group_members WHERE group_id = var_group AND group_member = var_member);
+	UPDATE group_members 
+		SET is_admin = NOT var_is_admin
+		WHERE group_id = var_group AND group_member = var_member;
 END$
 DELIMITER ;
 

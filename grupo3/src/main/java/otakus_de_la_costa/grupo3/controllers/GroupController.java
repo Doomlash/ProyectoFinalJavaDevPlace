@@ -1,10 +1,14 @@
 package otakus_de_la_costa.grupo3.controllers;
 
+import static otakus_de_la_costa.grupo3.model.Constants.IDS_NOT_FOUND;
 import static otakus_de_la_costa.grupo3.model.Constants.NOT_FOUND;
+import static otakus_de_la_costa.grupo3.model.Constants.NOT_MEMBER;
 import static otakus_de_la_costa.grupo3.model.Constants.NULL_ID;
+import static otakus_de_la_costa.grupo3.model.Constants.OK;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -62,13 +66,13 @@ public class GroupController {
     }
 
     @PutMapping("/member")
-    public ResponseEntity<String> removeMember(@RequestBody GroupMemberRequest request){
+    public ResponseEntity<Integer> removeMember(@RequestBody GroupMemberRequest request){
         try{
             gService.deleteMember(request);
-            return new ResponseEntity<>("member removed",HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (JpaSystemException e){
             if (e.getRootCause().getClass()==SQLException.class) {
-                return new ResponseEntity<>(e.getRootCause().getMessage(),HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(Integer.valueOf(((SQLException) e.getRootCause()).getSQLState()),HttpStatus.BAD_REQUEST);
             }
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -102,12 +106,42 @@ public class GroupController {
 		
     //DELETE Group
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteGroup(@PathVariable(value = "id")Long id){
+    public ResponseEntity<Integer> deleteGroup(@PathVariable(value = "id")Long id){
         if(gService.deleteGroup(id)) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return ResponseEntity.notFound().build();
     }
 
-    
+    @GetMapping("/{group}/isAdmin/{user}")
+    public ResponseEntity<Object> isAdmin(@PathVariable(value = "group")Long group,@PathVariable(value = "user")Long user){
+        try{
+            Boolean response = gService.isAdmin(group,user);
+            if (response!=null) {
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(NOT_MEMBER,HttpStatus.BAD_REQUEST);
+            }
+        }catch(NoSuchElementException e){
+            return new ResponseEntity<>(IDS_NOT_FOUND,HttpStatus.BAD_REQUEST);
+        }               
+    }
+
+    @PutMapping("/{group}/changeAdmin/{user}")
+    public ResponseEntity<Object> changeAdmin(@PathVariable(value = "group")Long group,@PathVariable(value = "user")Long user){
+        try{
+            Integer response = gService.changeAdmin(group,user);
+            if (response==OK) {
+                return new ResponseEntity<>(HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+            }
+        }catch (JpaSystemException e){
+            if (e.getRootCause().getClass()==SQLException.class) {
+                return new ResponseEntity<>(Integer.valueOf(((SQLException) e.getRootCause()).getSQLState()),HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    } 
+
 }

@@ -15,4 +15,6 @@ public interface IGroupService {
 	public boolean deleteGroup(Long id);
     public void addMember(GroupMemberRequest request);
     public void deleteMember(GroupMemberRequest request);
+    public Boolean isAdmin(Long group, Long user);
+    public Integer changeAdmin(Long group, Long user);
 }

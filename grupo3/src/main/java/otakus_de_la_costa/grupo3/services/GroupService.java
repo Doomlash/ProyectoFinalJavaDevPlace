@@ -1,6 +1,11 @@
 package otakus_de_la_costa.grupo3.services;
 
+import static otakus_de_la_costa.grupo3.model.Constants.IDS_NOT_FOUND;
+import static otakus_de_la_costa.grupo3.model.Constants.NOT_MEMBER;
+import static otakus_de_la_costa.grupo3.model.Constants.OK;
+
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -85,10 +90,9 @@ public class GroupService implements IGroupService{
     @Override
     @Transactional
     public boolean deleteGroup(Long id) {
-        Optional<GroupJPA> group=gRepo.findById(id);
-        if(group.isPresent())
+        if(gRepo.findById(id).isPresent())
         {
-            gRepo.delete(group.get());
+            gRepo.deleteById(id);
             return true;
         }
         return false;
@@ -106,5 +110,28 @@ public class GroupService implements IGroupService{
     @Transactional
     public void deleteMember(GroupMemberRequest request) {
         gRepo.deleteMember(request.getGroup(), request.getUser());
+    }
+
+    @Override
+    public Boolean isAdmin(Long group, Long user) {
+        if(gRepo.findById(group).isEmpty()){
+            throw new NoSuchElementException();
+        } else{
+            Boolean result = gRepo.isAdmin(group, user);
+            return result;
+        }
+    }
+
+    @Override
+    @Transactional
+    public Integer changeAdmin(Long group, Long user) {
+        if(gRepo.findById(group).isEmpty()){
+            return IDS_NOT_FOUND;
+        } 
+        if(gRepo.isAdmin(group, user)==null){
+            return NOT_MEMBER;
+        }
+        gRepo.changeAdmin(group, user);
+        return OK;
     }
 }
