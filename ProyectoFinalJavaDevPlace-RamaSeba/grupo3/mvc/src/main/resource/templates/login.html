@@ -19,25 +19,28 @@
   <section>
     <h1 class="title text-white fst-italic fw-semibold fs-1 text-start p-4">Another messenger </h1>
     <div class="container-text col-6  container-fluid align-items-center text-center pt-5  ">
-      <form class="col-12 mb-3  ">
+      <form class="col-12 mb-3  " action="post">
         <div class="mb-6 col-6 ">
-          <label for="exampleInputEmail1" class="form-label text-white fst-italic fw-semibold fs-3">Usuario</label>
-          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+          <label for="exampleInputUsername" class="form-label text-white fst-italic fw-semibold fs-3">Usuario</label>
+          <input type="text" class="form-control" id="usernameID" >
         </div>
         <div class="mb-6 col-6">
           <label for="exampleInputPassword1"
             class="form-label mt-3 text-white fst-italic fw-semibold fs-3">Contraseña</label>
-          <input type="password" class="form-control" id="exampleInputPassword1">
+          <input type="password" class="form-control mb-3" id="passwordID">
           
         </div>
+        <div class="col-4 mx-5 ">
+        <button type="submit" class="btn btn-primary mb-3 text-dark  mx-4  fst-italic fw-bold fs-5">Ingresar</button>
+      </div>
       </form>
 
     </div>
-    <div class="col-4 mx-auto ">
-      <button type="submit" class="btn btn-primary  text-dark  mx-4  fst-italic fw-bold fs-5">Ingresar</button>
+    
+     
 
 
-    </div>
+    
     <div class="col-5 mx-auto  ">
       <a class="text-blue fst-italic fw-semibold fs-5 mb-3 mx-4 mt-5  " href="#">¿Olvido su contraseña?</a>
     </div>
