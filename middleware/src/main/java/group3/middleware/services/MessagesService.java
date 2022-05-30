@@ -6,6 +6,7 @@ import group3.middleware.model.Message;
 import group3.middleware.model.request.MessageRequest;
 import group3.middleware.services.connection.Connection;
 import group3.middleware.services.implementation.IMessages;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -28,11 +29,13 @@ public class MessagesService implements IMessages{
                     .block();
             return rCm;
         }catch (WebClientResponseException e){
+            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+                return ResponseEntity.internalServerError().build();
+            }
             return ResponseEntity
                     .status(e.getStatusCode())
                     .body((Integer.valueOf(e.getResponseBodyAsString())));
         }
-
     }
 
     public ResponseEntity<Message[]> listAllMessages(){
@@ -52,8 +55,8 @@ public class MessagesService implements IMessages{
                     .block();
             return rRCm;
         }catch (WebClientResponseException e){
-            if(e.getResponseBodyAsString() == null){
-                return ResponseEntity.status(e.getStatusCode()).build();
+            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+                return ResponseEntity.internalServerError().build();
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -71,8 +74,8 @@ public class MessagesService implements IMessages{
                     .block();
             return rRDm;
         }catch (WebClientResponseException e){
-            if(e.getResponseBodyAsString() == null){
-                return ResponseEntity.status(e.getStatusCode()).build();
+            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+                return ResponseEntity.internalServerError().build();
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -83,15 +86,16 @@ public class MessagesService implements IMessages{
 
 ////////////////////////////////////////////////////////////////////////////////////
 
-    public Message translate(Message m){
+    public void translate(Message m,String lanU){
         ResponseEntity<String> response = wCT.get()
-                .uri("/?lang=" + m.getLanguage() + "&text=" + m.getContent())
+                .uri("/?lang=" + lanU + "&text=" + m.getContent())
                 .header("X-RapidAPI-Host", "just-translated.p.rapidapi.com")
                 .header("X-RapidAPI-Key", "3461aac04fmsh4c595f383655f5fp170ef8jsnb5b197c8a5f0")
                 .retrieve()
                 .toEntity(String.class)
                 .block();
         m.setContent(response.getBody());
+        m.setLanguage(lanU);
 
         try {
             JsonNode rootNode = mapper.readValue(response.getBody(), JsonNode.class);
@@ -100,6 +104,5 @@ public class MessagesService implements IMessages{
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return m;
     }
 }

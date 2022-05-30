@@ -5,6 +5,7 @@ import group3.middleware.model.request.GroupRequest;
 import group3.middleware.services.connection.Connection;
 import group3.middleware.model.Group;
 import group3.middleware.services.implementation.IGroup;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -26,6 +27,9 @@ public class GroupService implements IGroup {
                     .block();
             return response;
         }catch (WebClientResponseException e){
+            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+                return ResponseEntity.internalServerError().build();
+            }
             return ResponseEntity
                     .status(e.getStatusCode())
                     .body((Integer.valueOf(e.getResponseBodyAsString())));
@@ -62,6 +66,9 @@ public class GroupService implements IGroup {
                     .block();
             return ug;
         }catch (WebClientResponseException e){
+            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+                return ResponseEntity.internalServerError().build();
+            }
             return ResponseEntity
                     .status(e.getStatusCode())
                     .body((Integer.valueOf(e.getResponseBodyAsString())));
@@ -78,9 +85,12 @@ public class GroupService implements IGroup {
                     .block();
             return dg;
         }catch (WebClientResponseException e){
+            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+                return ResponseEntity.internalServerError().build();
+            }
             return ResponseEntity
                     .status(e.getStatusCode())
-                    .build();
+                    .body((Integer.valueOf(e.getResponseBodyAsString())));
         }
     }
 
@@ -96,25 +106,31 @@ public class GroupService implements IGroup {
                     .block();
             return response;
         }catch (WebClientResponseException e){
+            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+                return ResponseEntity.internalServerError().build();
+            }
             return ResponseEntity
                     .status(e.getStatusCode())
                     .body((Integer.valueOf(e.getResponseBodyAsString())));
         }
     }
 
-    public ResponseEntity<Integer> removeM(GroupMemberRequest gmr){
+    public ResponseEntity<Integer> removeM(GroupMemberRequest gmr) {
         try {
             ResponseEntity<Integer> response = wCg.put()
                     .uri("/member")
-                    .body(Mono.just(gmr),GroupMemberRequest.class)
+                    .body(Mono.just(gmr), GroupMemberRequest.class)
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
             return response;
-        }catch (WebClientResponseException e){
-        return ResponseEntity
-                .status(e.getStatusCode())
-                .body((Integer.valueOf(e.getResponseBodyAsString())));
+        } catch (WebClientResponseException e) {
+            if (e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
+                return ResponseEntity.internalServerError().build();
+            }
+            return ResponseEntity
+                    .status(e.getStatusCode())
+                    .body((Integer.valueOf(e.getResponseBodyAsString())));
         }
     }
 }

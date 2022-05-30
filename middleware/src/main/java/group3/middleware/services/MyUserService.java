@@ -25,10 +25,12 @@ public class MyUserService implements IMyUser {
                     .block();
             return rCu;
         }catch (WebClientResponseException e){
-            ResponseEntity<Integer> rCu = ResponseEntity
+            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+                return ResponseEntity.internalServerError().build();
+            }
+            return ResponseEntity
                     .status(e.getStatusCode())
                     .body((Integer.valueOf(e.getResponseBodyAsString())));
-            return rCu;
         }
 
     }
@@ -66,6 +68,9 @@ public class MyUserService implements IMyUser {
                     .block();
             return rUu;
         }catch (WebClientResponseException e){
+            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+                return ResponseEntity.internalServerError().build();
+            }
             return ResponseEntity
                     .status(e.getStatusCode())
                     .body((Integer.valueOf(e.getResponseBodyAsString())));
@@ -82,6 +87,9 @@ public class MyUserService implements IMyUser {
                     .block();
             return rDu;
         }catch (WebClientResponseException e){
+            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+                return ResponseEntity.internalServerError().build();
+            }
             return ResponseEntity
                     .status(e.getStatusCode())
                     .body((Integer.valueOf(e.getResponseBodyAsString())));
@@ -101,6 +109,9 @@ public class MyUserService implements IMyUser {
                     .block();
             return rACu;
         }catch (WebClientResponseException e){
+            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+                return ResponseEntity.internalServerError().build();
+            }
             return ResponseEntity
                     .status(e.getStatusCode())
                     .body((Integer.valueOf(e.getResponseBodyAsString())));
@@ -118,6 +129,9 @@ public class MyUserService implements IMyUser {
                     .block();
             return rRCu;
         }catch (WebClientResponseException e){
+            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+                return ResponseEntity.internalServerError().build();
+            }
             return ResponseEntity
                     .status(e.getStatusCode())
                     .body((Integer.valueOf(e.getResponseBodyAsString())));
@@ -135,6 +149,9 @@ public class MyUserService implements IMyUser {
                     .block();
             return rABu;
         }catch (WebClientResponseException e){
+            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+                return ResponseEntity.internalServerError().build();
+            }
             return ResponseEntity
                     .status(e.getStatusCode())
                     .body((Integer.valueOf(e.getResponseBodyAsString())));
@@ -151,7 +168,10 @@ public class MyUserService implements IMyUser {
                 .toEntity(Integer.class)
                 .block();
         return rABu;
-    }catch (WebClientResponseException e){
+        }catch (WebClientResponseException e){
+            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+                return ResponseEntity.internalServerError().build();
+            }
             return ResponseEntity
                     .status(e.getStatusCode())
                     .body((Integer.valueOf(e.getResponseBodyAsString())));
