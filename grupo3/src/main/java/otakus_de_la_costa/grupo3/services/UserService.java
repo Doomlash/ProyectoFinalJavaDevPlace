@@ -1,5 +1,6 @@
 package otakus_de_la_costa.grupo3.services;
 
+import static otakus_de_la_costa.grupo3.model.Constants.IDS_NOT_FOUND;
 import static otakus_de_la_costa.grupo3.model.Constants.NOT_FOUND;
 import static otakus_de_la_costa.grupo3.model.Constants.OK;
 
@@ -145,7 +146,7 @@ public class UserService implements IUserService{
     @Transactional
     public int deleteContact(RelationRequest request) {
         if(uRepo.findById(request.getRelationOwner()).isEmpty() || uRepo.findById(request.getRelated()).isEmpty()){
-            return NOT_FOUND;
+            return IDS_NOT_FOUND;
         }
         uRepo.deleteContact(request.getRelationOwner(), request.getRelated());
         return OK;
@@ -163,7 +164,7 @@ public class UserService implements IUserService{
     public int deleteBlock(RelationRequest request) {
         
         if(uRepo.findById(request.getRelationOwner()).isEmpty() || uRepo.findById(request.getRelated()).isEmpty()){
-            return NOT_FOUND;
+            return IDS_NOT_FOUND;
         }
         uRepo.deleteBlock(request.getRelationOwner(), request.getRelated());
         return OK;
