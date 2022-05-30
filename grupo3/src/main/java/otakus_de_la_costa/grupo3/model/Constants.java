@@ -9,7 +9,6 @@ public class Constants{
     public static final int NOT_FOUND = 404;
     public static final int DUPLICATED_ENTRY = 1062;
     public static final int IDS_NOT_FOUND = 1452;
+    public static final int NOT_MEMBER = 5;
     public static final int SAME_SENDER_RECEIVER = 99997;
-    public static final int NO_ADMIN_REMAINING = 99998;
-    public static final int GROUP_NO_EXIST = 99999;
 }

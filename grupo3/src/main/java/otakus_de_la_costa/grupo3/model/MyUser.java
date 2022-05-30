@@ -7,7 +7,6 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import otakus_de_la_costa.grupo3.model.request.SimpleUserResponse;
 
 @Getter
 @Setter
@@ -21,22 +20,23 @@ public class MyUser extends Messenger{
 	private String profileImage;
 	private Date birthDate;
 
-	private Set<SimpleUserResponse> contacts = new HashSet<>();
-	private Set<SimpleUserResponse> blocks = new HashSet<>();
+    private Set<SimpleUserResponse> contacts = new HashSet<>();
+    private Set<SimpleUserResponse> blocks = new HashSet<>();
 
-	private Set<Long> groups = new HashSet<Long>();
+    private Set<Long> groups = new HashSet<Long>();
 
 
-	public void addContact(Long id, String username) {
-		contacts.add(new SimpleUserResponse(id,username));
-	}
+    public void addContact(Long id, String username) {
+        contacts.add(new SimpleUserResponse(id,username));
+    }
 
-	public void addBlock(Long id, String username){
-		blocks.add(new SimpleUserResponse(id,username));
-	}
+    public void addBlock(Long id, String username){
+        blocks.add(new SimpleUserResponse(id,username));
+    }
 
-	public void addGroup(Long groupId) {
-		groups.add(groupId);
-	}
-
+    public void addGroup(Long groupId) {
+        groups.add(groupId);
+    }
+    
 }
+

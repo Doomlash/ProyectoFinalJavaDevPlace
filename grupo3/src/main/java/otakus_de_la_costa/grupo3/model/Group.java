@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import otakus_de_la_costa.grupo3.model.request.SimpleMemberResponse;
 
 @Getter
 @Setter

@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Message  {
-
-	private Long id;
+    
+    private Long id;
 	private String content;
 	private String language;
 	private Date creationDate;
 	private Date receptionDate;
 	private Date readDate;
-	private Long senderId;
-	private Long receiverId;
+    private Long senderId;
+    private Long receiverId;
 }

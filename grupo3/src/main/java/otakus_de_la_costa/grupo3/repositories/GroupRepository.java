@@ -14,11 +14,19 @@ public interface GroupRepository extends JpaRepository<GroupJPA, Long> {
     @Query(value = "INSERT INTO group_members VALUES(:group_id,:group_member,:is_admin)", nativeQuery = true)
     @Modifying
     public void addMember(@Param("group_id")Long groupId,
-                          @Param("group_member") Long groupMember,
-                          @Param("is_admin")boolean isAdmin);
+                            @Param("group_member") Long groupMember,
+                            @Param("is_admin")boolean isAdmin);
 
-    @Query(value = "DELETE FROM group_members WHERE group_id = :group_id AND group_member = :group_member", nativeQuery = true)
+    @Query(value = "CALL delete_group_member(:group_id, :group_member)", nativeQuery = true)
     @Modifying
     public void deleteMember(@Param("group_id")Long groupId,@Param("group_member") Long groupMember);
+	
+    @Query(value = "SELECT is_admin FROM group_members WHERE group_id = :group_id AND group_member = :group_member", nativeQuery = true)
+    public Boolean isAdmin(@Param("group_id")Long groupId,
+                            @Param("group_member") Long groupMember);
 
+    @Query(value = "CALL change_admin_status(:group_id,:group_member)", nativeQuery = true)
+    @Modifying
+    public void changeAdmin(@Param("group_id")Long groupId,
+                                @Param("group_member") Long groupMember);
 }

@@ -17,24 +17,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/token")
 public class TokenController {
 
-    @Autowired
-    JwtEncoder encoder;
+	@Autowired
+	JwtEncoder encoder;
 
-    @PostMapping()
-    public String token(Authentication authentication) {
-        Instant now = Instant.now();
-        long expiry = 36000L;
-        String scope = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(" "));
-        JwtClaimsSet claims = JwtClaimsSet.builder()
-                .issuer("self")
-                .issuedAt(now)
-                .expiresAt(now.plusSeconds(expiry))
-                .subject(authentication.getName())
-                .claim("scope", scope)
-                .build();
-        return this.encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
-    }
+	@PostMapping()
+	public String token(Authentication authentication) {
+		Instant now = Instant.now();
+		long expiry = 36000L;
+		String scope = authentication.getAuthorities().stream()
+				.map(GrantedAuthority::getAuthority)
+				.collect(Collectors.joining(" "));
+		JwtClaimsSet claims = JwtClaimsSet.builder()
+				.issuer("self")
+				.issuedAt(now)
+				.expiresAt(now.plusSeconds(expiry))
+				.subject(authentication.getName())
+				.claim("scope", scope)
+				.build();
+		return this.encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+	}
 
 }

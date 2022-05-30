@@ -17,19 +17,23 @@ public interface UserRepository extends JpaRepository<MyUserJPA, Long> {
 	public Optional<MyUserJPA> findByUsernameOrMail(String username,String mail);
 
 
-	@Query(value = "INSERT INTO contacts VALUES(:contactOwner,:contacted)", nativeQuery = true)
-	@Modifying
-	public void addContact(@Param("contactOwner")Long contactOwner,@Param("contacted") Long contacted);
+    @Query(value = "INSERT INTO contacts VALUES(:contactOwner,:contacted)", nativeQuery = true)
+    @Modifying
+    public void addContact(@Param("contactOwner")Long contactOwner,@Param("contacted") Long contacted);
+    
+    @Query(value = "DELETE FROM contacts WHERE contact_owner = :contactOwner AND contacted = :contacted", nativeQuery = true)
+    @Modifying
+    public void deleteContact(@Param("contactOwner")Long contactOwner,@Param("contacted") Long contacted);
+    
+    @Query(value = "INSERT INTO blocks VALUES(:blockOwner,:blocked)", nativeQuery = true)
+    @Modifying
+    public void addBlock(@Param("blockOwner")Long blockOwner,@Param("blocked") Long blocked);
 
-	@Query(value = "DELETE FROM contacts WHERE contact_owner = :contactOwner AND contacted = :contacted", nativeQuery = true)
-	@Modifying
-	public void deleteContact(@Param("contactOwner")Long contactOwner,@Param("contacted") Long contacted);
+    @Query(value = "DELETE FROM blovalcks WHERE block_owner = :blockOwner AND blocked = :blocked", nativeQuery = true)
+    @Modifying
+    public void deleteBlock(@Param("blockOwner")Long blockOwner,@Param("blocked") Long blocked);
 
-	@Query(value = "INSERT INTO blocks VALUES(:blockOwner,:blocked)", nativeQuery = true)
-	@Modifying
-	public void addBlock(@Param("blockOwner")Long blockOwner,@Param("blocked") Long blocked);
-
-	@Query(value = "DELETE FROM blocks WHERE block_owner = :blockOwner AND blocked = :blocked", nativeQuery = true)
-	@Modifying
-	public void deleteBlock(@Param("blockOwner")Long blockOwner,@Param("blocked") Long blocked);
+    
+	
+    
 }

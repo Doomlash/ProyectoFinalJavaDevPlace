@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import otakus_de_la_costa.grupo3.model.MyUser;
-import otakus_de_la_costa.grupo3.model.request.RelationRequest;
-import otakus_de_la_costa.grupo3.services.implementation.IUserService;
+import otakus_de_la_costa.grupo3.model.RelationRequest;
+import otakus_de_la_costa.grupo3.services.IUserService;
 
 
 @RestController
@@ -30,18 +30,18 @@ import otakus_de_la_costa.grupo3.services.implementation.IUserService;
 public class UserController {
 	@Autowired
 	private IUserService uService;
-
-
+	
+	
 	//CREATE ONE USER
 	@PostMapping()
 	public ResponseEntity<Integer> createUser(@RequestBody MyUser user){
-		user.setId(null);
-		int response = uService.createUser(user);
-		if(response == OK){
-			return new ResponseEntity<Integer>(HttpStatus.CREATED);
-		}else{
-			return new ResponseEntity<Integer>(response,HttpStatus.BAD_REQUEST);
-		}
+        user.setId(null);
+        int response = uService.createUser(user);
+        if(response == OK){
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }else{
+            return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+        }
 	}
 
 	//List users
@@ -50,49 +50,49 @@ public class UserController {
 		return uService.listAllUsers();
 	}
 
-	//add a contact
-	@PostMapping("/contact")
-	public ResponseEntity<Integer> addContact(@RequestBody RelationRequest request){
-		try{
-			uService.addContact(request);
-			return new ResponseEntity<>(HttpStatus.CREATED);
-		} catch(DataIntegrityViolationException e){
-			return new ResponseEntity<>(((SQLException) e.getRootCause()).getErrorCode(), HttpStatus.BAD_REQUEST);
-		}
-	}
+    //add a contact
+    @PostMapping("/contact")
+    public ResponseEntity<Integer> addContact(@RequestBody RelationRequest request){
+        try{
+            uService.addContact(request);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch(DataIntegrityViolationException e){
+            return new ResponseEntity<>(((SQLException) e.getRootCause()).getErrorCode(), HttpStatus.BAD_REQUEST);
+        }
+    }
 
-	//remove contact
-	@PutMapping("/contact")
-	public ResponseEntity<Integer> removeContact(@RequestBody RelationRequest request){
-		int response = uService.deleteContact(request);
-		if(response==OK){
-			return new ResponseEntity<>(HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
-		}
-	}
+    //remove contact
+    @PutMapping("/contact")
+    public ResponseEntity<Integer> removeContact(@RequestBody RelationRequest request){
+        int response = uService.deleteContact(request);
+        if(response==OK){
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+        }
+    }
 
-	//add block
-	@PostMapping("/block")
-	public ResponseEntity<Integer> addBlock(@RequestBody RelationRequest request){
-		try{
-			uService.addBlock(request);
-			return new ResponseEntity<>(HttpStatus.CREATED);
-		} catch(DataIntegrityViolationException e){
-			return new ResponseEntity<>(((SQLException) e.getRootCause()).getErrorCode(), HttpStatus.BAD_REQUEST);
-		}
-	}
+    //add block
+    @PostMapping("/block")
+    public ResponseEntity<Integer> addBlock(@RequestBody RelationRequest request){
+        try{
+            uService.addBlock(request);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch(DataIntegrityViolationException e){
+            return new ResponseEntity<>(((SQLException) e.getRootCause()).getErrorCode(), HttpStatus.BAD_REQUEST);
+        }
+    }
 
-	//remove block
-	@PutMapping("/block")
-	public ResponseEntity<Integer> removeBlock(@RequestBody RelationRequest request){
-		int response = uService.deleteBlock(request);
-		if(response==OK){
-			return new ResponseEntity<>(HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
-		}
-	}
+    //remove block
+    @PutMapping("/block")
+    public ResponseEntity<Integer> removeBlock(@RequestBody RelationRequest request){
+        int response = uService.deleteBlock(request);
+        if(response==OK){
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+        }
+    } 
 
 
 	//READ USER
@@ -102,36 +102,43 @@ public class UserController {
 		if(myuser!=null) {return  ResponseEntity.ok(uService.findUserById(id));}
 		return ResponseEntity.notFound().build();
 	}
-
+	
 	//UPDATE USER
 	@PutMapping()
 	public ResponseEntity<Integer> updateUser(@RequestBody MyUser myUser){
 		if(myUser.getId()==null){
-			return ResponseEntity.badRequest().body(NULL_ID);
-		}
-		int response = uService.updateMyUser(myUser);
-		if(response == 0){
-			return new ResponseEntity<>(HttpStatus.OK);
-		}
-		else{
-			return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
-		}
+            return ResponseEntity.badRequest().body(NULL_ID);
+        }
+        int response = uService.updateMyUser(myUser);
+        if(response == 0){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+        }
 	}
-
+	
 	//DELETE USER
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Integer> deleteUser(@PathVariable(value = "id")Long id){
-			try{
-				uService.deleteUser(id);
-				return new ResponseEntity<>(HttpStatus.OK);
-			}  catch (JpaSystemException e){
-				if (e.getRootCause().getClass()==SQLException.class) {
-					return new ResponseEntity<>(Integer.valueOf(((SQLException) e.getRootCause()).getSQLState()),HttpStatus.BAD_REQUEST);
-				}
-				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-			}catch(DataIntegrityViolationException e){
-				return new ResponseEntity<>(((SQLException) e.getRootCause()).getErrorCode(), HttpStatus.BAD_REQUEST);
-			}
-	}
+    public ResponseEntity<Integer> deleteUser(@PathVariable(value = "id")Long id){
+            try{
+                uService.deleteUser(id);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }  catch (JpaSystemException e){
+                if (e.getRootCause().getClass()==SQLException.class) {
+                    return new ResponseEntity<>(Integer.valueOf(((SQLException) e.getRootCause()).getSQLState()),HttpStatus.BAD_REQUEST);
+                }
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }catch(DataIntegrityViolationException e){
+                return new ResponseEntity<>(((SQLException) e.getRootCause()).getErrorCode(), HttpStatus.BAD_REQUEST);
+            }
+    }
+	
+	
+	
+	
+	
 
+	
+	
 }

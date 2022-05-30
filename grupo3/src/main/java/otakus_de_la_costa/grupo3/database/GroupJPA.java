@@ -26,5 +26,4 @@ public class GroupJPA extends MessengerJPA{
 
     @OneToMany(mappedBy = "group")
     private List<GroupMembersJPA> members;
-
 }
