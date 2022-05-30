@@ -31,6 +31,9 @@ body{
     padding-left: 40px;
 
 }
+.ex{
+    background-color: aqua;
+}
 .container-img{
     flex-basis: 50%;
     position: absolute;
@@ -39,6 +42,17 @@ body{
     left: 50%;
     text-align: center;
     overflow: hidden;
+}
+.imageContact{
+    width: 40%;
+    position:absolute;
+    left: 65%;
+}
+.imageGroup{
+    width: 40%;
+    position:relative;
+    left: 65%;
+    
 }
 
 .image{
