@@ -20,18 +20,15 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.SecurityFilterChain;    
+import org.springframework.security.web.SecurityFilterChain;
+
+import otakus_de_la_costa.grupo3.services.MyUserDetailsService;    
 
 @Configuration
 public class SpringSecurityConfig {
@@ -43,7 +40,6 @@ public class SpringSecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
             .authorizeHttpRequests((authorize) -> authorize
-                
                 .anyRequest().permitAll()
             )
             .csrf((csrf) -> csrf.disable())
@@ -58,15 +54,9 @@ public class SpringSecurityConfig {
 	}
 
 	@Bean
-	public UserDetailsService users() {
-		return new InMemoryUserDetailsManager(
-			User.withUsername("middle")
-				.password("group3")
-                .passwordEncoder(bCryptPasswordEncoder()::encode)
-				.authorities("MIDDLE")
-				.build()
-		);
-	}
+    public MyUserDetailsService customUserDetailsService() {
+        return new MyUserDetailsService();
+    }
 
     private void generateKeys(){
         if(key==null){
@@ -98,8 +88,5 @@ public class SpringSecurityConfig {
         return encoder;
 	}
 
-    @Bean
-    public PasswordEncoder bCryptPasswordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
+    
 }

@@ -62,6 +62,8 @@ public class GroupController {
                 return new ResponseEntity<>(Integer.valueOf(((SQLException) e.getRootCause()).getSQLState()),HttpStatus.BAD_REQUEST);
             }
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }catch (DataIntegrityViolationException e) {
+            return new ResponseEntity<>(((SQLException) e.getRootCause()).getErrorCode(), HttpStatus.BAD_REQUEST);
         }
     }
 

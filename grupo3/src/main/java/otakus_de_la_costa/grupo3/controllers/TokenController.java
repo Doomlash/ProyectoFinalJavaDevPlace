@@ -20,8 +20,17 @@ public class TokenController {
 	@Autowired
 	JwtEncoder encoder;
 
+    // @Autowired
+    // MyUserDetailsService userDetailsService;
+
+    // @Autowired
+    // PasswordEncoder passwordEncoder;
+
+    // static boolean init = false;
+
 	@PostMapping()
 	public String token(Authentication authentication) {
+        // userDetailsService.createUser(new User("user",passwordEncoder.encode("password"),new LinkedList()));
 		Instant now = Instant.now();
 		long expiry = 36000L;
 		String scope = authentication.getAuthorities().stream()
