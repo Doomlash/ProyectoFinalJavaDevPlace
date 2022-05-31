@@ -1,4 +1,4 @@
-package group3.middleware.services.connections;
+package group3.middleware.services.connection;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

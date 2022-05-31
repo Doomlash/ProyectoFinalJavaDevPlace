@@ -47,7 +47,7 @@ public class TokenController {
 	public String token(Authentication authentication) {
         // userDetailsService.createUser(new User("user",passwordEncoder.encode("password"),new LinkedList()));
 		Instant now = Instant.now();
-		long expiry = 36000L;
+		long expiry = 3600L;
 		String scope = authentication.getAuthorities().stream()
 				.map(GrantedAuthority::getAuthority)
 				.collect(Collectors.joining(" "));

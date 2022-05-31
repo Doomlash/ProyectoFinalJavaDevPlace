@@ -12,6 +12,6 @@ public class EmptyController {
     
     @GetMapping
     public ResponseEntity<Object> ping(){
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<Object>(HttpStatus.OK);
     }
 }

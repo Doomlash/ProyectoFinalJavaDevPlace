@@ -2,7 +2,8 @@ package group3.middleware.services;
 
 import org.springframework.stereotype.Service;
 
-import group3.middleware.services.connections.TenorConnection;
+import group3.middleware.services.connection.TenorConnection;
+
 
 @Service
 public class TenorService {
