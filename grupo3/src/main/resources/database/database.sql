@@ -201,6 +201,7 @@ BEGIN
     DELETE FROM contacts WHERE contact_owner = OLD.id OR contacted = OLD.id;
     DELETE FROM blocks WHERE block_owner = OLD.id OR blocked = OLD.id;
     DELETE FROM messages WHERE sender = OLD.id OR receiver = OLD.id;
+    DELETE FROM user_autentications WHERE username = OLD.username;
 END$
 
 DROP TRIGGER IF EXISTS user_group_delete$

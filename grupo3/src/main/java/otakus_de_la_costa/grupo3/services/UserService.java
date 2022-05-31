@@ -197,6 +197,11 @@ public class UserService implements IUserService{
         uRepo.deleteBlock(request.getRelationOwner(), request.getRelated());
         return OK;
     }
+
+    @Override
+    public MyUser findByUsername(String username) {
+        return findByUsername(username);
+    }
 	
 
 	
