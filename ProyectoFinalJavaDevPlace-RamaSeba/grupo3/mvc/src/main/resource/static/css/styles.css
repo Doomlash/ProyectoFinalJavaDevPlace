@@ -34,6 +34,12 @@ body{
 .ex{
     background-color: aqua;
 }
+.ex1{
+    background-color: red;
+}
+.ex2{
+    background-color: white;
+}
 .container-img{
     flex-basis: 50%;
     position: absolute;
@@ -50,8 +56,7 @@ body{
 }
 .imageGroup{
     width: 40%;
-    position:relative;
-    left: 65%;
+
     
 }
 
@@ -94,4 +99,23 @@ body{
 .file {
     visibility: hidden;
     position: absolute;
-    }
+}
+
+.card {
+    opacity: .95;
+}
+
+.card-body {
+    background-color: #d1d3d6;
+    box-shadow: 0px 0px 3px #848484;
+}
+
+
+
+.nav-tabs .nav-item a:not(.active) {
+    background-color: #d1d3d6;
+}
+
+.nav-tabs {
+    border-bottom: 0px;
+}
