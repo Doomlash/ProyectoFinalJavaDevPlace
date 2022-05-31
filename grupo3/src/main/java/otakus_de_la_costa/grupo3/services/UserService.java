@@ -200,7 +200,12 @@ public class UserService implements IUserService{
 
     @Override
     public MyUser findByUsername(String username) {
-        return findByUsername(username);
+        Optional<MyUserJPA> optional = uRepo.findByUsername(username);
+        if(optional.isPresent()){
+            return mapearMyUser(optional.get());
+        }
+        return null;
+
     }
 	
 
