@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import group3.middleware.services.TenorService;
 
 @RestController
+
 public class TenorController {
     @Autowired
     private TenorService ts;
