@@ -11,7 +11,8 @@ import java.util.Optional;
 public interface IMyUser {
     public Integer createU(MyUser myUser);
     public List<MyUser> listAllUsers();
-    public MyUser readU(Long id);
+    public MyUser readUById(Long id);
+    public MyUser readUByUsername(String username);
     public Integer updateMyUser(MyUser myUser);
     public Integer deleteU(Long id);
     public Integer addC(RelationRequest rr);

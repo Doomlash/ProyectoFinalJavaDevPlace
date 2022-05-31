@@ -6,10 +6,10 @@ import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Data
-public class Connection{
+public class ApiConnection {
     private WebClient client;
 
-    public Connection(char conn){
+    public ApiConnection(char conn){
         this.client = this.getConnection(conn);
     }
 
@@ -26,6 +26,10 @@ public class Connection{
                 case 'g':
                     connection = this.createConection("http://localhost:8080/api/groups");
                     break;
+                case 'a':
+                    connection = this.createConection("http://localhost:8080/api/token");
+                    break;
+
                 case 't':
                     connection = this.createConection("https://just-translated.p.rapidapi.com/");
                     break;
@@ -40,6 +44,7 @@ public class Connection{
     public WebClient createConection(String url) {
         return WebClient.builder().baseUrl(url)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE).build();
+                .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
+                .build();
     }
 }

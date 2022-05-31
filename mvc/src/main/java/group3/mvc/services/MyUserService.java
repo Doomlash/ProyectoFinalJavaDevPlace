@@ -3,6 +3,7 @@ package group3.mvc.services;
 import group3.mvc.model.MyUser;
 import group3.mvc.model.request.RelationRequest;
 import group3.mvc.services.connection.Connection;
+import group3.mvc.services.connection.SecurityConnection;
 import group3.mvc.services.implementation.IMyUser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ public class MyUserService implements IMyUser {
     public Integer createU(MyUser myUser) {
         try{
             ResponseEntity<Integer> rCu = wCu.post()
+                    .header("Authorization", SecurityConnection.getToken())
                     .body(Mono.just(myUser),MyUser.class)
                     .retrieve()
                     .toEntity(Integer.class)
@@ -43,6 +45,7 @@ public class MyUserService implements IMyUser {
     @Override
     public List<MyUser> listAllUsers() {
         ResponseEntity<MyUser[]> rLAu = wCu.get()
+                .header("Authorization",SecurityConnection.getToken())
                 .retrieve()
                 .toEntity(MyUser[].class)
                 .block();
@@ -51,10 +54,26 @@ public class MyUserService implements IMyUser {
     }
 
     @Override
-    public MyUser readU(Long idU) {
+    public MyUser readUById(Long idU) {
         try{
             ResponseEntity<MyUser> rRu = wCu.get()
                     .uri("/"+idU)
+                    .header("Authorization",SecurityConnection.getToken())
+                    .retrieve()
+                    .toEntity(MyUser.class)
+                    .block();
+            return rRu.getBody();
+        }catch (WebClientResponseException e){
+            return new MyUser();
+        }
+    }
+
+    @Override
+    public MyUser readUByUsername(String username) {
+        try{
+            ResponseEntity<MyUser> rRu = wCu.get()
+                    .uri("/byUsername/"+username)
+                    .header("Authorization",SecurityConnection.getToken())
                     .retrieve()
                     .toEntity(MyUser.class)
                     .block();
@@ -68,6 +87,7 @@ public class MyUserService implements IMyUser {
     public Integer updateMyUser(MyUser myUser) {
         try {
             ResponseEntity<Integer> rUu = wCu.put()
+                    .header("Authorization",SecurityConnection.getToken())
                     .body(Mono.just(myUser),MyUser.class)
                     .retrieve()
                     .toEntity(Integer.class)
@@ -88,6 +108,7 @@ public class MyUserService implements IMyUser {
         try {
             ResponseEntity<Integer> rDu = wCu.delete()
                     .uri("/"+ idU)
+                    .header("Authorization",SecurityConnection.getToken())
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
@@ -116,6 +137,7 @@ public class MyUserService implements IMyUser {
         try {
             ResponseEntity<Integer> rACu = wCu.post()
                     .uri("/contact")
+                    .header("Authorization",SecurityConnection.getToken())
                     .body(Mono.just(rr),RelationRequest.class)
                     .retrieve()
                     .toEntity(Integer.class)
@@ -136,6 +158,7 @@ public class MyUserService implements IMyUser {
         try {
             ResponseEntity<Integer> rRCu = wCu.put()
                     .uri("/contact")
+                    .header("Authorization",SecurityConnection.getToken())
                     .body(Mono.just(rr),RelationRequest.class)
                     .retrieve()
                     .toEntity(Integer.class)
@@ -156,6 +179,7 @@ public class MyUserService implements IMyUser {
         try {
             ResponseEntity<Integer> rABu = wCu.post()
                     .uri("/block")
+                    .header("Authorization",SecurityConnection.getToken())
                     .body(Mono.just(rr),RelationRequest.class)
                     .retrieve()
                     .toEntity(Integer.class)
@@ -176,6 +200,7 @@ public class MyUserService implements IMyUser {
         try{
             ResponseEntity<Integer> rABu = wCu.put()
                     .uri("/block")
+                    .header("Authorization",SecurityConnection.getToken())
                     .body(Mono.just(rr),RelationRequest.class)
                     .retrieve()
                     .toEntity(Integer.class)

@@ -1,4 +1,4 @@
-package group3.middleware.services.implementation;
+package group3.middleware.services.interfaces;
 
 import group3.middleware.model.MyUser;
 import group3.middleware.model.request.RelationRequest;
@@ -6,9 +6,9 @@ import org.springframework.http.ResponseEntity;
 
 
 public interface IMyUser {
-    public ResponseEntity<Integer> createU(MyUser myUser);
     public ResponseEntity<MyUser[]> listAllUsers();
-    public ResponseEntity<MyUser> readU(Long id);
+    public ResponseEntity<MyUser> readUById(Long id);
+    public ResponseEntity<MyUser> readUByUsername(String username);
     public ResponseEntity<Integer> updateMyUser(MyUser myUser);
     public ResponseEntity<Integer> deleteU(Long id);
     public ResponseEntity<Integer> addC(RelationRequest rr);

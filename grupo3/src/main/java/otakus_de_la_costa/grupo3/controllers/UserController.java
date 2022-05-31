@@ -127,11 +127,4 @@ public class UserController {
                 return new ResponseEntity<>(((SQLException) e.getRootCause()).getErrorCode(), HttpStatus.BAD_REQUEST);
             }
     }
-	
-	
-	
-	
-
-	
-	
 }

@@ -88,6 +88,7 @@ public class GroupController {
     public ResponseEntity<List<Group>> listGroups(){
         return ResponseEntity.ok(gService.listAllGroups());
     }
+
     //READ Group
     @GetMapping("/{id}")
     public ResponseEntity<Group> readgroup(@PathVariable (value = "id") Long id){

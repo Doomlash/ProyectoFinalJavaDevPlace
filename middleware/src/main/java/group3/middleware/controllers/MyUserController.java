@@ -2,13 +2,10 @@ package group3.middleware.controllers;
 
 import group3.middleware.model.MyUser;
 import group3.middleware.model.request.RelationRequest;
-import group3.middleware.services.implementation.IMyUser;
+import group3.middleware.services.interfaces.IMyUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import static group3.middleware.model.Constants.NULL_ID;
 
 @RequestMapping("/middle/users")
 @RestController
@@ -21,16 +18,14 @@ public class MyUserController {
         return iMU.listAllUsers();
     }
 
-    @PostMapping
-    public ResponseEntity<Integer> create(@RequestBody MyUser user){
-        return iMU.createU(user);
+    @GetMapping("/{idU}")
+    public ResponseEntity<MyUser> getById(@PathVariable("idU") Long idU){
+        return iMU.readUById(idU);
     }
 
-
-
-    @GetMapping("/{idU}")
-    public ResponseEntity<MyUser> get(@PathVariable("idU") Long idU){
-        return iMU.readU(idU);
+    @GetMapping("/byUsername/{username}")
+    public ResponseEntity<MyUser> getByUsername(@PathVariable("username") String username){
+        return iMU.readUByUsername(username);
     }
 
     @PutMapping()

@@ -3,14 +3,10 @@ package group3.middleware.controllers;
 import group3.middleware.model.Group;
 import group3.middleware.model.request.GroupMemberRequest;
 import group3.middleware.model.request.GroupRequest;
-import group3.middleware.services.implementation.IGroup;
+import group3.middleware.services.interfaces.IGroup;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import static group3.middleware.model.Constants.NOT_FOUND;
-import static group3.middleware.model.Constants.NULL_ID;
 
 
 @RequestMapping("/middle/groups")

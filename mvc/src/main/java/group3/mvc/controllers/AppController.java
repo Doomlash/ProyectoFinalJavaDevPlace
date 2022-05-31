@@ -55,9 +55,8 @@ public class AppController {
     }
 
     @GetMapping("/search")
-    public String search(@RequestParam("id") long id, Model model){
-        //List<MyUser> userList = iMU.readU(id).stream().collect(Collectors.toList());
-        MyUser user = iMU.readU(id);
+    public String search(@RequestParam("username") String username, Model model){
+        MyUser user = iMU.readUByUsername(username);
         RelationRequest rr = new RelationRequest();
         model.addAttribute("users",user);
         model.addAttribute("relation",rr);

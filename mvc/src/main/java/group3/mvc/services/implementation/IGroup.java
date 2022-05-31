@@ -15,7 +15,7 @@ public interface IGroup {
     public Integer addM(GroupMemberRequest request);
     public Integer removeM(GroupMemberRequest request);
     public List<Group> listAllG();
-    public Optional<Group> readG(Long id);
+    public Group readG(Long id);
     public Integer updateG(Group group) throws NoSuchElementException;
     public Integer deleteG(Long id);
     public Object isAdmin(Long idG, Long idU);

@@ -4,8 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import group3.middleware.model.Message;
 import group3.middleware.model.request.MessageRequest;
-import group3.middleware.services.connection.Connection;
-import group3.middleware.services.implementation.IMessages;
+import group3.middleware.services.connection.ApiConnection;
+import group3.middleware.services.connection.SecurityConnection;
+import group3.middleware.services.interfaces.IMessages;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -16,13 +17,14 @@ import reactor.core.publisher.Mono;
 @Service
 public class MessagesService implements IMessages{
     private ObjectMapper mapper = new ObjectMapper();
-    private WebClient wCs = new Connection('m').getClient();
-    private WebClient wCT = new Connection('t').getClient();
+    private WebClient wCs = new ApiConnection('m').getClient();
+    private WebClient wCT = new ApiConnection('t').getClient();
 
 
     public ResponseEntity<Integer> createMessage(MessageRequest mr){
         try {
             ResponseEntity<Integer> rCm = wCs.post()
+                    .header("Authorization",SecurityConnection.getToken())
                     .body(Mono.just(mr), MessageRequest.class)
                     .retrieve()
                     .toEntity(Integer.class)
@@ -32,6 +34,9 @@ public class MessagesService implements IMessages{
             if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
                 return ResponseEntity.internalServerError().build();
             }
+            if(e.getStatusCode() == HttpStatus.UNAUTHORIZED){
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
             return ResponseEntity
                     .status(e.getStatusCode())
                     .body((Integer.valueOf(e.getResponseBodyAsString())));
@@ -39,17 +44,26 @@ public class MessagesService implements IMessages{
     }
 
     public ResponseEntity<Message[]> listAllMessages(){
-        ResponseEntity<Message[]> rLAm = wCs.get()
-                .retrieve()
-                .toEntity(Message[].class)
-                .block();
-        return rLAm;
+        try{
+            ResponseEntity<Message[]> rLAm = wCs.get()
+                    .header("Authorization",SecurityConnection.getToken())
+                    .retrieve()
+                    .toEntity(Message[].class)
+                    .block();
+            return rLAm;
+        }catch (WebClientResponseException e){
+            if(e.getStatusCode() == HttpStatus.UNAUTHORIZED){
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+                return ResponseEntity.internalServerError().build();
+        }
     }
 
     public ResponseEntity<Integer> receiveMessage(Long idM){
         try {
             ResponseEntity<Integer> rRCm = wCs.put()
                     .uri("/receive/"+ idM)
+                    .header("Authorization",SecurityConnection.getToken())
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
@@ -57,6 +71,9 @@ public class MessagesService implements IMessages{
         }catch (WebClientResponseException e){
             if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
                 return ResponseEntity.internalServerError().build();
+            }
+            if(e.getStatusCode() == HttpStatus.UNAUTHORIZED){
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -69,6 +86,7 @@ public class MessagesService implements IMessages{
         try {
             ResponseEntity<Integer> rRDm = wCs.put()
                     .uri("/read/"+ idM)
+                    .header("Authorization",SecurityConnection.getToken())
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
@@ -76,6 +94,9 @@ public class MessagesService implements IMessages{
         }catch (WebClientResponseException e){
             if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
                 return ResponseEntity.internalServerError().build();
+            }
+            if(e.getStatusCode() == HttpStatus.UNAUTHORIZED){
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
             return ResponseEntity
                     .status(e.getStatusCode())

@@ -4,6 +4,7 @@ import group3.mvc.model.MyUser;
 import group3.mvc.model.request.RelationRequest;
 import group3.mvc.services.implementation.IMyUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,8 +29,14 @@ public class MyUserController {
 
     @GetMapping("/{idU}")
     public MyUser get(@PathVariable("idU") Long idU){
-        return iMU.readU(idU);
+        return iMU.readUById(idU);
     }
+
+    @GetMapping("/byUsername/{username}")
+    public MyUser getByUsername(@PathVariable("username") String username){
+        return iMU.readUByUsername(username);
+    }
+
 
     @PutMapping()
     public Integer update(@RequestBody MyUser user){

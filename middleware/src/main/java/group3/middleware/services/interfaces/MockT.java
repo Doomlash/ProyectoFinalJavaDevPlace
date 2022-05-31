@@ -1,4 +1,4 @@
-package group3.middleware.services.implementation;
+package group3.middleware.services.interfaces;
 
 import group3.middleware.model.Message;
 import group3.middleware.services.MessagesService;

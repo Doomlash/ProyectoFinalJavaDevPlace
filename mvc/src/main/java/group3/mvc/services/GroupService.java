@@ -4,6 +4,7 @@ import group3.mvc.model.Group;
 import group3.mvc.model.request.GroupMemberRequest;
 import group3.mvc.model.request.GroupRequest;
 import group3.mvc.services.connection.Connection;
+import group3.mvc.services.connection.SecurityConnection;
 import group3.mvc.services.implementation.IGroup;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ public class GroupService implements IGroup {
     public Integer createG(GroupRequest group){
         try {
             ResponseEntity<Integer> response = wCg.post()
+                    .header("Authorization", SecurityConnection.getToken())
                     .body(Mono.just(group),GroupRequest.class)
                     .retrieve()
                     .toEntity(Integer.class)
@@ -44,6 +46,7 @@ public class GroupService implements IGroup {
 
     public List<Group> listAllG(){
         ResponseEntity<Group[]> rLAg = wCg.get()
+                .header("Authorization", SecurityConnection.getToken())
                 .retrieve()
                 .toEntity(Group[].class)
                 .block();
@@ -51,22 +54,24 @@ public class GroupService implements IGroup {
         return rLAgl;
     }
 
-    public Optional<Group> readG(Long id){
+    public Group readG(Long id){
         try{
-            ResponseEntity<Optional> rg = wCg.get()
+            ResponseEntity<Group> rg = wCg.get()
                     .uri("/" + id)
+                    .header("Authorization", SecurityConnection.getToken())
                     .retrieve()
-                    .toEntity(Optional.class)
+                    .toEntity(Group.class)
                     .block();
             return rg.getBody();
         }catch (WebClientResponseException e){
-            return Optional.empty();
+            return new Group();
         }
     }
 
     public Integer updateG(Group group) {
         try{
             ResponseEntity<Integer> ug = wCg.put()
+                    .header("Authorization", SecurityConnection.getToken())
                     .body(Mono.just(group),Group.class)
                     .retrieve()
                     .toEntity(Integer.class)
@@ -87,6 +92,7 @@ public class GroupService implements IGroup {
         try {
             ResponseEntity<Integer> dg = wCg.delete()
                     .uri("/"+id)
+                    .header("Authorization", SecurityConnection.getToken())
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
@@ -101,6 +107,7 @@ public class GroupService implements IGroup {
         try {
             ResponseEntity<Object> response = wCg.get()
                     .uri("/"+idG+"/isAdmin/"+idU)
+                    .header("Authorization", SecurityConnection.getToken())
                     .retrieve()
                     .toEntity(Object.class)
                     .block();
@@ -119,6 +126,7 @@ public class GroupService implements IGroup {
         try {
             ResponseEntity<Object> response = wCg.put()
                     .uri("/"+idG+"/changeAdmin/"+idU)
+                    .header("Authorization", SecurityConnection.getToken())
                     .retrieve()
                     .toEntity(Object.class)
                     .block();
@@ -139,6 +147,7 @@ public class GroupService implements IGroup {
         try {
             ResponseEntity<Integer> response = wCg.post()
                     .uri("/member")
+                    .header("Authorization", SecurityConnection.getToken())
                     .body(Mono.just(gmr),GroupMemberRequest.class)
                     .retrieve()
                     .toEntity(Integer.class)
@@ -158,6 +167,7 @@ public class GroupService implements IGroup {
         try {
             ResponseEntity<Integer> response = wCg.put()
                     .uri("/member")
+                    .header("Authorization", SecurityConnection.getToken())
                     .body(Mono.just(gmr), GroupMemberRequest.class)
                     .retrieve()
                     .toEntity(Integer.class)

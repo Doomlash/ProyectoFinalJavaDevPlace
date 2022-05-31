@@ -30,7 +30,7 @@ public class GroupController {
     }
 
     @GetMapping("/{idG}")
-    public Optional<Group> get(@PathVariable("idG") Long idG){
+    public Group get(@PathVariable("idG") Long idG){
         return iG.readG(idG);
     }
 
