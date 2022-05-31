@@ -28,7 +28,7 @@ import otakus_de_la_costa.grupo3.services.UserService;
 
 @RestController
 @RequestMapping("/api/security")
-public class TokenController {
+public class SecurityController {
 
 	@Autowired
 	JwtEncoder encoder;
