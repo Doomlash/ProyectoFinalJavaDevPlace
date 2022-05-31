@@ -40,7 +40,7 @@ public class SpringSecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
             .authorizeHttpRequests((authorize) -> authorize
-                .antMatchers("/api/token/register").permitAll()
+                .antMatchers("/api/security/register").permitAll()
                 .anyRequest().authenticated()
             )
             .csrf((csrf) -> csrf.disable())

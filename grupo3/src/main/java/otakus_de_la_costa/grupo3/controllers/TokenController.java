@@ -20,13 +20,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import otakus_de_la_costa.grupo3.model.LoginResponse;
 import otakus_de_la_costa.grupo3.model.MyUser;
 import otakus_de_la_costa.grupo3.model.RegisterRequest;
 import otakus_de_la_costa.grupo3.services.MyUserDetailsService;
 import otakus_de_la_costa.grupo3.services.UserService;
 
 @RestController
-@RequestMapping("/api/token")
+@RequestMapping("/api/security")
 public class TokenController {
 
 	@Autowired
@@ -43,10 +44,8 @@ public class TokenController {
 
     // static boolean init = false;
 
-	@PostMapping()
-	public String token(Authentication authentication) {
-        // userDetailsService.createUser(new User("user",passwordEncoder.encode("password"),new LinkedList()));
-		Instant now = Instant.now();
+    private String generateToken(Authentication authentication){
+        Instant now = Instant.now();
 		long expiry = 3600L;
 		String scope = authentication.getAuthorities().stream()
 				.map(GrantedAuthority::getAuthority)
@@ -58,8 +57,22 @@ public class TokenController {
 				.subject(authentication.getName())
 				.claim("scope", scope)
 				.build();
-		return this.encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+        return this.encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+    }
+
+	@PostMapping("/login")
+	public LoginResponse login(Authentication authentication) {
+		String token = generateToken(authentication);
+        LoginResponse response = new LoginResponse();
+        response.setToken(token);
+        response.setUser(userService.findByUsername(authentication.getName()));
+		return response;
 	}
+
+    @PostMapping("/token")
+    public String getToken(Authentication authentication){
+        return generateToken(authentication);
+    }
 
     @PostMapping("/register")
     public ResponseEntity<Integer> register(@RequestBody RegisterRequest request){
@@ -83,8 +96,6 @@ public class TokenController {
         else{
             return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
         }
-
-
     }
 
 }

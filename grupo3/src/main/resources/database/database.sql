@@ -104,13 +104,13 @@ CREATE TABLE roles(
     CONSTRAINT PK_roles PRIMARY KEY(id)
 )ENGINE=InnoDB;
 
-DROP TABLE IF EXISTS user_autentications;
-CREATE TABLE user_autentications(
+DROP TABLE IF EXISTS user_authentications;
+CREATE TABLE user_authentications(
 	username VARCHAR(64) NOT NULL,
 	password VARCHAR(256) NOT NULL,
     role INTEGER UNSIGNED NOT NULL,
     
-    CONSTRAINT PK_userAutentication PRIMARY KEY(username),
+    CONSTRAINT PK_userAuthentication PRIMARY KEY(username),
     
     CONSTRAINT FK_username
 		FOREIGN KEY (username) REFERENCES my_users(username),
@@ -156,22 +156,6 @@ BEGIN
 	END IF;
 END$
 
--- DROP TRIGGER IF EXISTS group_members_delete$
--- CREATE TRIGGER group_members_delete BEFORE DELETE ON group_members FOR EACH ROW 
--- BEGIN
--- 	DECLARE members integer;
---     IF OLD.is_admin=true THEN
--- 		SET members := (SELECT COUNT(*) 
--- 							FROM group_members 
--- 							WHERE group_id = OLD.group_id 
--- 								AND group_member != OLD.group_member 
--- 								AND is_admin = true);
--- 		IF members = 0 THEN
--- 			SIGNAL SQLSTATE '99998' 
--- 				SET MESSAGE_TEXT = 'the group must have another admin before deletion';
--- 		END IF;
--- 	END IF;
--- END$
 
 DROP TRIGGER IF EXISTS messages_create$
 CREATE TRIGGER messages_Create BEFORE INSERT ON messages FOR EACH ROW 
@@ -201,7 +185,7 @@ BEGIN
     DELETE FROM contacts WHERE contact_owner = OLD.id OR contacted = OLD.id;
     DELETE FROM blocks WHERE block_owner = OLD.id OR blocked = OLD.id;
     DELETE FROM messages WHERE sender = OLD.id OR receiver = OLD.id;
-    DELETE FROM user_autentications WHERE username = OLD.username;
+    DELETE FROM user_authentications WHERE username = OLD.username;
 END$
 
 DROP TRIGGER IF EXISTS user_group_delete$
@@ -283,7 +267,7 @@ CREATE PROCEDURE change_password(IN var_username VARCHAR(64),
                                     IN var_new_password VARCHAR(256))
 BEGIN
 	DECLARE old_password VARCHAR(256);
-	SET old_password := (SELECT password FROM user_autentications WHERE username = var_username);
+	SET old_password := (SELECT password FROM user_authentications WHERE username = var_username);
     IF old_password = var_new_password THEN
 		UPDATE user_authentications
 			SET password = var_new_password
