@@ -25,7 +25,6 @@ public class GroupController {
 
     @GetMapping()
     public ResponseEntity<Group[]> listAll(){
-        System.out.println();
         return iG.listAllG();
     }
 

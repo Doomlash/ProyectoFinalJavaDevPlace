@@ -1,9 +1,10 @@
 package group3.middleware.services.connection;
 
-import lombok.Data;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import lombok.Data;
 
 @Data
 public class Connection{
@@ -17,6 +18,9 @@ public class Connection{
         WebClient connection = null;
         try {
             switch (conn) {
+                case 'a':
+                    connection = this.createConection("http://localhost:8080/api");
+                    break;
                 case 'u':
                     connection = this.createConection("http://localhost:8080/api/users");
                     break;
