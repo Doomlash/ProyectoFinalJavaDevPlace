@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    
+    <title>Add Contact</title>
+</head>
+
+<body>
+    <main class="container">
+        <div class="row row-cols-2 ">
+            <div class="container-fluid col-12 mt-4 ">
+                <h1 class="mx-5 text-white fst-italic fw-semibold">User:"nombre usuario"</h1>
+                <h2 class="mx-5 text-white fst-italic fw-semibold ">Add Contact</h2>
+            </div>
+            <div class="container-fluid  col-md-6  ">
+                <div class="col-12 mx-5">
+                    <form th:action="@{/search}">
+                    <div class="col-12 mx-5 text-start">
+                        <label for="validationCustom01" class="form-label text-center text-white fst-italic fw-bold fs-4  ">Search
+                            by Username or Mail</label>
+                    </div>
+
+                    <div class="col-12 text-end mx-5 d-flex md-3">
+                            <input type="text" class="form-control mx-3  " id="validationCustom01" th:name ="id" placeholder="id: ">
+                            <input class="btn btn-outline-dark" type="submit" value="Find"/>
+                    </div>
+                    </form>
+                    <div class="table-responsive col-12 mt-3">
+                         <!-- Conectar thymeleaf-->
+                        <table  id="listaUsuarios" class="table table-dark table-striped">
+                            <thead>
+                                <tr>
+                                  <th scope="col">#ID</th>
+                                  <th scope="col">UserName</th>
+                                  <th scope="col">Mail</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr th:object ="${relation}" th:each="user : ${users}">
+                                  <th scope="row"></th>
+                                  <td th:text="${user.id}"></td>
+                                  <td th:text="${user.username}"></td>
+                                  <td th:text="${user.mail}"></td>
+                                    <td>
+<!--                                     <a class="btn btn-primary text-center text-dark fst-italic fw-bold fs-8 mx-3 mt-3 " th:action="@{/mvc/users/contact/1/{idC} (idC = ${user.id})}" method="post" role="button">Add Contact</a>-->
+                                        <label for=""></label>
+                                    </td>
+                                </tr>
+                                
+                              </tbody>
+                        </table>
+                    </div>
+                    <div class="col-3 col-sm-12 text-end mx-5 d-flex md-5">
+                        <!-- Conectar thymeleaf-->
+<!--                        <a class="btn btn-primary text-center text-dark fst-italic fw-bold fs-8 mx-3 mt-3 " th:href="{/mvc/users/contact/1/}" role="button">Add Contact</a>-->
+					
+                    </div>
+                    
+                </div>
+                
+
+            </div>
+            <div class="container-fluid col-3 mt-4 mx-5 ">
+                <img th:src="@{/img/contact.svg}" alt="" class="image imageContact">
+            </div>
+            <div class="container-fluid col-3 mt-4 ">
+            <a class="btn btn-primary   text-end text-dark fst-italic fw-bold fs-8 mx-2  " href="chatRoom.html" role="button">ChatRoom</a>
+            </div>
+        </div>
+        
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

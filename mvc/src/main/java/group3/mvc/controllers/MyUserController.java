@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequestMapping("/mvc/users")
 @RestController
@@ -28,7 +27,7 @@ public class MyUserController {
 
 
     @GetMapping("/{idU}")
-    public Optional<MyUser> get(@PathVariable("idU") Long idU){
+    public MyUser get(@PathVariable("idU") Long idU){
         return iMU.readU(idU);
     }
 

@@ -6,6 +6,9 @@ import group3.mvc.services.connection.Connection;
 import group3.mvc.services.implementation.IMyUser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -48,16 +51,16 @@ public class MyUserService implements IMyUser {
     }
 
     @Override
-    public Optional<MyUser> readU(Long idU) {
+    public MyUser readU(Long idU) {
         try{
-            ResponseEntity<Optional> rRu = wCu.get()
+            ResponseEntity<MyUser> rRu = wCu.get()
                     .uri("/"+idU)
                     .retrieve()
-                    .toEntity(Optional.class)
+                    .toEntity(MyUser.class)
                     .block();
             return rRu.getBody();
         }catch (WebClientResponseException e){
-            return Optional.empty();
+            return new MyUser();
         }
     }
 
@@ -103,6 +106,13 @@ public class MyUserService implements IMyUser {
 
     @Override
     public Integer addC(RelationRequest rr) {
+//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        UserDetails userDetails = null;
+//        if (principal instanceof UserDetails) {
+//            userDetails = (UserDetails) principal;
+//        }
+//        MyUser user = readU(userDetails.getUsername());
+//        RelationRequest rr = new RelationRequest(user.getId(),idC);
         try {
             ResponseEntity<Integer> rACu = wCu.post()
                     .uri("/contact")
