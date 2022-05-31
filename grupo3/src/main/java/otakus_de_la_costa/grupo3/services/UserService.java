@@ -197,6 +197,16 @@ public class UserService implements IUserService{
         uRepo.deleteBlock(request.getRelationOwner(), request.getRelated());
         return OK;
     }
+
+    @Override
+    public MyUser findByUsername(String username) {
+        Optional<MyUserJPA> optional = uRepo.findByUsername(username);
+        if(optional.isPresent()){
+            return mapearMyUser(optional.get());
+        }
+        return null;
+
+    }
 	
 
 	

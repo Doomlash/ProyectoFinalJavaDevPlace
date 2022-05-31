@@ -98,7 +98,7 @@ CREATE TABLE group_members(
 
 DROP TABLE IF EXISTS roles;
 CREATE TABLE roles(
-	id TINYINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
 	name VARCHAR(32) NOT NULL,
     
     CONSTRAINT PK_roles PRIMARY KEY(id)
@@ -108,7 +108,7 @@ DROP TABLE IF EXISTS user_autentications;
 CREATE TABLE user_autentications(
 	username VARCHAR(64) NOT NULL,
 	password VARCHAR(256) NOT NULL,
-    role TINYINT UNSIGNED NOT NULL,
+    role INTEGER UNSIGNED NOT NULL,
     
     CONSTRAINT PK_userAutentication PRIMARY KEY(username),
     
@@ -201,6 +201,7 @@ BEGIN
     DELETE FROM contacts WHERE contact_owner = OLD.id OR contacted = OLD.id;
     DELETE FROM blocks WHERE block_owner = OLD.id OR blocked = OLD.id;
     DELETE FROM messages WHERE sender = OLD.id OR receiver = OLD.id;
+    DELETE FROM user_autentications WHERE username = OLD.username;
 END$
 
 DROP TRIGGER IF EXISTS user_group_delete$
@@ -276,7 +277,23 @@ BEGIN
 
 END$
 
+DROP PROCEDURE IF EXISTS change_password$
+CREATE PROCEDURE change_password(IN var_username VARCHAR(64), 
+									IN var_old_password VARCHAR(256), 
+                                    IN var_new_password VARCHAR(256))
+BEGIN
+	DECLARE old_password VARCHAR(256);
+	SET old_password := (SELECT password FROM user_autentications WHERE username = var_username);
+    IF old_password = var_new_password THEN
+		UPDATE user_authentications
+			SET password = var_new_password
+            WHERE username = var_username;
+	END IF;
+END$
+
 DELIMITER ;
 
+INSERT INTO roles(name) VALUES ("ADMIN");
+INSERT INTO roles(name) VALUES ("USER");
 
 

@@ -31,18 +31,6 @@ public class UserController {
 	@Autowired
 	private IUserService uService;
 	
-	
-	//CREATE ONE USER
-	@PostMapping()
-	public ResponseEntity<Integer> createUser(@RequestBody MyUser user){
-        user.setId(null);
-        int response = uService.createUser(user);
-        if(response == OK){
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        }else{
-            return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
-        }
-	}
 
 	//List users
 	@GetMapping()
@@ -94,14 +82,20 @@ public class UserController {
         }
     } 
 
-
 	//READ USER
 	@GetMapping("/{id}")
 	public ResponseEntity<MyUser> readUser(@PathVariable (value = "id") Long id){
-		MyUser myuser=uService.findUserById(id);
-		if(myuser!=null) {return  ResponseEntity.ok(uService.findUserById(id));}
+		MyUser myUser=uService.findUserById(id);
+		if(myUser!=null) {return  ResponseEntity.ok(myUser);}
 		return ResponseEntity.notFound().build();
 	}
+
+    @GetMapping("/byUsername/{username}")
+    public ResponseEntity<MyUser> getByUsername(@PathVariable (value = "username")String username){
+        MyUser myUser=uService.findByUsername(username);
+        if(myUser!=null) {return  ResponseEntity.ok(myUser);}
+		return ResponseEntity.notFound().build();
+    }
 	
 	//UPDATE USER
 	@PutMapping()
@@ -133,7 +127,6 @@ public class UserController {
                 return new ResponseEntity<>(((SQLException) e.getRootCause()).getErrorCode(), HttpStatus.BAD_REQUEST);
             }
     }
-	
 	
 	
 	

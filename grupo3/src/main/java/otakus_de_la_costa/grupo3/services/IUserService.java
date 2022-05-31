@@ -15,4 +15,5 @@ public interface IUserService {
     public int deleteContact(RelationRequest request);
     public void addBlock(RelationRequest request);
     public int deleteBlock(RelationRequest request);
+    public MyUser findByUsername(String username);
 }
