@@ -19,6 +19,8 @@ import otakus_de_la_costa.grupo3.database.MyUserJPA;
 import otakus_de_la_costa.grupo3.model.Message;
 import otakus_de_la_costa.grupo3.model.MyUser;
 import otakus_de_la_costa.grupo3.model.RelationRequest;
+import otakus_de_la_costa.grupo3.model.SimpleGroupResponse;
+import otakus_de_la_costa.grupo3.model.SimpleUserResponse;
 import otakus_de_la_costa.grupo3.repositories.MessageRepository;
 import otakus_de_la_costa.grupo3.repositories.UserRepository;
 
@@ -55,13 +57,13 @@ public class UserService implements IUserService{
 		myUser.setProfileImage(myUserJPA.getProfileImage());
 		myUser.setBirthDate(myUserJPA.getBirthDate());
         for (MyUserJPA u : myUserJPA.getContacts()) {
-            myUser.addContact(u.getId(),u.getUsername());
+            myUser.addContact(new SimpleUserResponse(u.getId(), u.getUsername(), u.getProfileImage()));
         }
         for (MyUserJPA u : myUserJPA.getBlocks()) {
-            myUser.addBlock(u.getId(),u.getUsername());
+            myUser.addBlock(new SimpleUserResponse(u.getId(), u.getUsername(), u.getProfileImage()));
         }
         for(GroupMembersJPA g : myUserJPA.getGroups()){
-            myUser.addGroup(g.getId().getGroupId());
+            myUser.addGroup(new SimpleGroupResponse(g.getId().getGroupId(),g.getGroup().getName(),g.getGroup().getDescription()));
             for(MessageJPA m : mRepo.getMessageFromGroup(g.getId().getGroupId(),myUserJPA.getId())){
                 myUser.addReceived(mapMessageJPAToMessage(m));
             }

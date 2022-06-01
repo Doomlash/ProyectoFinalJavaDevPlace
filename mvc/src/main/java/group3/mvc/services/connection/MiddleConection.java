@@ -1,4 +1,4 @@
-package group3.mvc.services;
+package group3.mvc.services.connection;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;

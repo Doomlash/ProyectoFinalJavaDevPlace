@@ -1,19 +1,19 @@
 package group3.mvc.services;
 
-import group3.mvc.model.Message;
-import group3.mvc.model.request.MessageRequest;
-import group3.mvc.services.connection.Connection;
-import group3.mvc.services.connection.SecurityConnection;
-import group3.mvc.services.implementation.IMessages;
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
-import reactor.core.publisher.Mono;
 
-import java.util.Arrays;
-import java.util.List;
+import group3.mvc.model.Message;
+import group3.mvc.model.request.MessageRequest;
+import group3.mvc.services.connection.Connection;
+import group3.mvc.services.implementation.IMessages;
+import reactor.core.publisher.Mono;
 
 @Service
 public class MessagesService implements IMessages{
@@ -22,7 +22,6 @@ public class MessagesService implements IMessages{
     public Integer createMessage(MessageRequest mr){
         try {
             ResponseEntity<Integer> rCm = wCs.post()
-                    .header("Authorization", SecurityConnection.getToken())
                     .body(Mono.just(mr), MessageRequest.class)
                     .retrieve()
                     .toEntity(Integer.class)
@@ -40,7 +39,6 @@ public class MessagesService implements IMessages{
 
     public List<Message> listAllMessages(){
         ResponseEntity<Message[]> rLAm = wCs.get()
-                .header("Authorization", SecurityConnection.getToken())
                 .retrieve()
                 .toEntity(Message[].class)
                 .block();
@@ -52,7 +50,6 @@ public class MessagesService implements IMessages{
         try{
             ResponseEntity<Integer> rRCm = wCs.put()
                     .uri("/receive/"+ idM)
-                    .header("Authorization", SecurityConnection.getToken())
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
@@ -72,7 +69,6 @@ public class MessagesService implements IMessages{
         try{
             ResponseEntity<Integer> rRDm = wCs.put()
                     .uri("/read/"+ idM)
-                    .header("Authorization", SecurityConnection.getToken())
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
@@ -90,7 +86,6 @@ public class MessagesService implements IMessages{
     public Message translate(Message message, String langU){
             ResponseEntity<Message> rTm = wCs.post()
                     .uri("/translate/"+langU)
-                    .header("Authorization", SecurityConnection.getToken())
                     .body(Mono.just(message),Message.class)
                     .retrieve()
                     .toEntity(Message.class)

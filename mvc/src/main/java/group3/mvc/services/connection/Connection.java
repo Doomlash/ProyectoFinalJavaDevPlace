@@ -1,13 +1,19 @@
 package group3.mvc.services.connection;
 
-import lombok.Data;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import group3.mvc.model.LoginResponse;
+import group3.mvc.model.UserHolder;
+import lombok.Data;
 
 @Data
 public class Connection{
     private WebClient client;
+
+    private static String token;
 
     public Connection(char conn){
         this.client = this.getConnection(conn);
@@ -17,6 +23,9 @@ public class Connection{
         WebClient connection = null;
         try {
             switch (conn) {
+                case 'a':
+                    connection = this.createConection("http://localhost:8081/middle");
+                    break;
                 case 'u':
                     connection = this.createConection("http://localhost:8081/middle/users");
                     break;
@@ -40,4 +49,27 @@ public class Connection{
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .build();
     }
+
+    public static String getToken(){
+        return token;
+    }
+
+    public static String generateToken(){
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        LoginResponse response = webClient.post()
+                    .uri("/security/token/")
+                    .headers(headers -> headers.setBasicAuth("admin", "admin_otaku"))
+                    .retrieve()
+                    .bodyToMono(LoginResponse.class)
+                    .block();
+        UserHolder.setCurrentUser(response.getUser());
+        Connection.setToken(response.getToken());
+        return token;
+    }
+
+    public static void setToken(String newToken){
+        token = newToken;
+    }   
+
+
 }

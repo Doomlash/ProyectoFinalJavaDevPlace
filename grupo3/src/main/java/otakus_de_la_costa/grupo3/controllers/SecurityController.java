@@ -11,10 +11,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,12 +63,12 @@ public class SecurityController {
         return this.encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
 
-	@PostMapping("/login")
-	public LoginResponse login(Authentication authentication) {
+	@PostMapping("/login/{username}")
+	public LoginResponse login(@PathVariable("username") String username, Authentication authentication) {
 		String token = generateToken(authentication);
         LoginResponse response = new LoginResponse();
         response.setToken(token);
-        response.setUser(userService.findByUsername(authentication.getName()));
+        response.setUser(userService.findByUsername(username));
 		return response;
 	}
 
@@ -88,13 +91,22 @@ public class SecurityController {
         if(response == OK){
             userDetailsService.createUser(User.builder()
                                             .username(request.getUsername())
-                                            .password(passwordEncoder.encode(request.getPassword()))
+                                            .password(request.getPassword())
                                             .authorities("USER")
                                             .build());
             return new ResponseEntity<>(HttpStatus.OK);
         }
         else{
             return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/credentials/{username}")
+    public ResponseEntity<Object> getCredentials(@PathVariable("username") String username){
+        try{
+            return new ResponseEntity<>(userDetailsService.loadUserByUsername(username),HttpStatus.OK);
+        } catch (UsernameNotFoundException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 

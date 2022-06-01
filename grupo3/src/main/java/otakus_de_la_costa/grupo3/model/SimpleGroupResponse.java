@@ -5,10 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class SimpleUserResponse {
+@NoArgsConstructor
+public class SimpleGroupResponse {
     private Long id;
-    private String username;
-    private String profileImage;
+    private String name;
+    private String description;
 }

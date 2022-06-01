@@ -112,8 +112,6 @@ CREATE TABLE user_authentications(
     
     CONSTRAINT PK_userAuthentication PRIMARY KEY(username),
     
-    CONSTRAINT FK_username
-		FOREIGN KEY (username) REFERENCES my_users(username),
 	CONSTRAINT FK_role 
 		FOREIGN KEY (role) REFERENCES roles(id)
 )ENGINE=InnoDB;
@@ -277,7 +275,10 @@ END$
 
 DELIMITER ;
 
-INSERT INTO roles(name) VALUES ("ADMIN");
 INSERT INTO roles(name) VALUES ("USER");
+INSERT INTO roles(name) VALUES ("ADMIN");
+INSERT INTO user_authentications VALUES ("admin","$2a$10$V5u9CbvNzMnjpyskTKnwDOvuPT542BqowBYgNHSiQx3VChM1fHBze",2)
+
+
 
 
