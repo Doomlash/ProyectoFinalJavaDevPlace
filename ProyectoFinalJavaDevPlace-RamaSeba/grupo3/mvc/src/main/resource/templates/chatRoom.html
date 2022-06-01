@@ -35,6 +35,9 @@
     <div class="container">
         <div class="row col-12">
             <h1 class="text-white fst-italic fw-semibold ">Chat Room</h1>
+            <div class="col-2">
+            <a type="text" href="login.html" class="btn btn-secondary" value="Back">Logout</a>
+            </div>
 
             <div class="mx-auto col-sm-8 mt-5 " id="myTab" role="tablist">
                 <ul class="nav nav-tabs justify-content-end">
@@ -51,6 +54,7 @@
                             href="#chatList" role="tab" aria-controls="chatList" aria-selected="false">Chat Room</a>
                     </li>
                 </ul>
+                <!-- Tab de Contacto -->
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show " th:classappend=" ${listTab}" id="list" role="tabpanel"
                         aria-labelledby="list-tab">
@@ -60,7 +64,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="clientList" class="table  table-hover table-striped w-75">
+                                    <table id="contactList" class="table  table-hover table-striped w-75">
                                         <thead class="thead-light">
                                             <tr>
 
@@ -69,31 +73,42 @@
                                         <tbody>
                                             <tr th:each="(objeto contactos del usuario)">
                                                 <td><img th:src="SE APLICA EL TH DE LA IMG/ICON"
-                                                        src="/grupo3/src/main/resources/img/icons/1.png" width="48px"
+                                                        src="/grupo3/src/main/resources/img/icons/1.png" width="28px"
                                                         alt="">
 
                                                 </td>
-                                                <td class="fst-italic fw-bold fs-4" th:text="(contacto_nombre)">nombre
+                                                <td class="fst-italic fw-bold fs-6" th:text="(contacto_nombre)">nombre
                                                 </td>
 
                                                 <td class="text-end">
                                                     <a href="#chatList"><i class="fas fa-comment"></i></a>|
-
-                                                    <a href="#" th:href="(mapeo de eliminar grupo)"><i
-                                                            class="fas fa-user-times"></i></a>
+                                                    <!-- link trigger modal add member into group-->
+                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal3"><i
+                                                            class="fas fa-user-group"></i></a>|
+                                                    <a href="#" th:href="(mapeo de eliminar contacto)"><i
+                                                            class="fas fa-user-times"></i></a>|
+                                                    <a href="#" th:href="(mapeo de bloquear contacto)"><i
+                                                            class="fas fa-ban"></i></a>
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
                                 <div class="col-lg-12 text-center">
-                                    <a type="text" href="login.html" class="btn btn-secondary" value="Back">Logout</a>
+                                    
                                     <a type="text" href="addContact.html" class="btn btn-primary" value="Contact">New
                                         Contact</a>
+                                    <!-- Button trigger modal list block -->
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal4">
+                                        Block List
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <!--Fin Tab de contacto -->
+                    <!-- Tab de grupo -->
                     <div class="tab-pane fade show " th:classappend=" ${groupTab}" id="groupList" role="tabpanel"
                         aria-labelledby="group-tab">
                         <div class="card">
@@ -117,8 +132,8 @@
                                                 <td class="text-end">
                                                     <a href="#chatList" th:href="(mapeo de agregar un grupo)"><i
                                                             class="fas fa-comment"></i></a>|
-                                                    <a href="#form" th:href="(mapeo de editar un grupo)"><i
-                                                            class="fas fa-edit"></i></a>|
+                                                    <!-- link trigger modal edit group -->
+                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal2"><i class="fas fa-edit"></i></a>|
                                                     <a href="#" th:href="(mapeo de eliminar un grupo)"><i
                                                             class="fas fa-user-times"></i></a>
                                                 </td>
@@ -127,19 +142,21 @@
                                     </table>
                                 </div>
                                 <div class="col-lg-12 text-center">
-                                    <a type="text" href="login.html" class="btn btn-secondary" value="Back">Logout</a>
-                                    <!-- Button trigger modal -->
+                                    
+                                    <!-- Button trigger modal new group -->
                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                         data-bs-target="#exampleModal">
                                         New group
                                     </button>
 
-                                    <!-- Modal -->
                                     
+
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <!--Fin  Tab de grupo -->
+                    <!-- Tab de chat -->
                     <div class="tab-pane fade show " th:classappend=" ${chatTab}" id="chatList" role="tabpanel"
                         aria-labelledby="chat-tab">
                         <div class="card">
@@ -168,31 +185,25 @@
 
                                                     <a href="#" th:href="(mapeo de traducir un mensaje)"><i
                                                             class="fas fa-language"></i></a>
-                                                    <a href="#" th:href="(mapeo de eliminar un mensaje)"><i
-                                                            class="fas fa-trash-can"></i></a>
+    
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
                                 <form action="post" class="mt-3">
-                                    <div class="d-flex mb-3">
-                                        <input class="form-control mb-3 mx-1 col-10 fst-italic fw-bold fs-7 "
-                                            type="text" th:field="(mensaje_campo)" placeholder="Send you menssage"
-                                            aria-placeholder="Send you menssage">
-                                        <button type="submit" class="btn btn-primary col-1 mx-1"><i
+                                    
+                                            <div class="form-floating col-12 mb-3">
+                                                <textarea class="form-control" style="height: 100px" placeholder="Send message..." id="floatingTextarea"></textarea>
+                                                <label for="floatingTextarea"></label>
+                                            </div>
+                                            <div class=" text-center">
+                                        <button type="submit" class="btn btn-primary  text-end"><i
                                                 class="fas fa-paper-plane fs-4"></i></button>
-                                        <button type="submit" class="btn btn-primary col-1 mx-1"><i
-                                                class="fas fa-face-grin fs-4"></i></button>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-lg-12 text-center">
-                                            <input type="reset" class="btn btn-secondary" value="Cancel">
-                                            <a type="text" href="login.html" class="btn btn-primary"
-                                                value="Back">Logout</a>
-
-                                        </div>
-                                    </div>
+                                            </div>
+                                       
+                                    
+                                   
                                 </form>
 
 
@@ -201,36 +212,155 @@
                         </div>
 
                     </div>
+                    <!--Fin Tab de chat -->
                 </div>
 
             </div>
         </div>
-        <div class="modal fade color-primary" id="exampleModal" tabindex="-1"
-                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <form action="">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">New Group</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                        
-                                                        <label for="newName" class="form-label">Insert name</label>
-                                                        <input class="form-control mb-3 mx-1 col-10 fst-italic fw-bold fs-7 " id="newName" type="text" th:field="(campo_nombreGrupo)"
-                                                            >
-                                        
-                                        
-                                        
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                        <button type="button" class="btn btn-primary">Save changes</button>
-                                                    </div>
-                                                </div>
-                                            </form>
+        <!-- Modal de new group-->
+        <div class="modal fade color-primary" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <form action="">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">New Group</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+
+                            <label for="newName" class="form-label">Insert name</label>
+                            <input class="form-control mb-3 mx-1 col-10 fst-italic fw-bold fs-7 " id="newName"
+                                type="text" th:field="(campo_nombreGrupo)">
+
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- Fin Modal de new group-->
+        <!-- Modal de edit group-->
+        <div class="modal fade color-primary" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <form action="">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel2">Edit Group</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+
+                            <label for="newName" class="form-label fst-italic fw-bold">Insert name</label>
+                            <input class="form-control mb-3 mx-1 col-10 fst-italic  fs-7 " id="newName" type="text"
+                                th:field="(campo_nombreGrupo)">
+                            
+                            <label for="newDescription" class="form-label fst-italic fw-bold">Description</label>
+                            <input class="form-control mb-3 mx-1 col-10 fst-italic  fs-7 " id="newDescription" type="text"
+                                th:field="(campo_descriptionGrupo)">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!--Fin Modal de edit group-->
+        <!-- Modal de agregar miembro grupo-->
+        <div class="modal fade color-primary" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel3"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel3">Add member</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form action="">
+                            <div class="modal-body">
+                                <form action="">
+                                    
+                                        <div>
+                                            <label for="groupName" class="form-label fst-italic ">Insert name group</label>
                                         </div>
-                                    </div>
+                                        <div>
+                                            <input class="form-control mb-3 mx-1 col-10 fst-italic fw-bold fs-7 " id="groupName" type="text"
+                                                th:field="(campo_nombreGrupo)">
+                                        </div>
+                                        <div>
+                                            <button type="submit" class="btn btn-primary"><i class="fas fa-magnifying-glass"></i></button>
+                                        
+                                        </div>
+                                </form>
+                                <div class="mt-3">
+                                    <label id="groupSearched" class="form-label fst-italic fw-bold">ejemplo grupo encontrado</label>
+                                </div>
+                        
+                            </div>
+                        
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </form>
+                    </div>
+                
+            </div>
+        </div>
+        <!--Fin Modal de agregar miembro al group-->
+        <!-- Modal de lista contactos bloqueados-->
+        <div class="modal fade color-primary" id="exampleModal4" tabindex="-1" aria-labelledby="exampleModalLabel4"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <form action="">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel4">Bloqued contacts</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <table id="blockList" class="table  table-hover table-striped w-75">
+                                <thead class="thead-light">
+                                    <tr>
+                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="(objeto lista contactos bloqueados del usuario)">
+                                        <td><img th:src="SE APLICA EL TH DE LA IMG/ICON" src="/grupo3/src/main/resources/img/icons/1.png"
+                                                width="28px" alt="">
+                        
+                                        </td>
+                                        <td class="fst-italic fw-bold fs-6" th:text="(contacto_nombre)">nombre
+                                        </td>
+                        
+                                        <td class="text-end">
+                                            <a href="#chatList"><i class="fas fa-thumbs-up"></i></a>
+                                            
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!--Fin Modal de lista contactos bloqueados-->
     </div>
     </div>
 
