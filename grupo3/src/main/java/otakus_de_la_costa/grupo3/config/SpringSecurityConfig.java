@@ -88,6 +88,4 @@ public class SpringSecurityConfig {
         NimbusJwtEncoder encoder = new NimbusJwtEncoder(jwks);
         return encoder;
 	}
-
-    
 }

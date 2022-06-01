@@ -22,13 +22,13 @@ public class SecurityController {
         return securityService.register(request);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(){
-
-    }
-
-    @PostMapping("/token")
-    public ResponseEntity<String> getToken(){
-
-    }
+//    @PostMapping("/login")
+//    public ResponseEntity<LoginResponse> login(){
+//
+//    }
+//
+//    @PostMapping("/token")
+//    public ResponseEntity<String> getToken(){
+//
+//    }
 }
