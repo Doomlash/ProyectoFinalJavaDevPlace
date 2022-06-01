@@ -45,10 +45,10 @@ public class GroupController {
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////
-    @PostMapping("/member")
-    public Integer addM(@RequestBody GroupMemberRequest gmr){
-        return iG.addM(gmr);
-    }
+//    @PostMapping("/member")
+//    public Integer addM(@RequestBody GroupMemberRequest gmr){
+//        return iG.addM(gmr);
+//    }
 
     @PutMapping("/member")
     public Integer removeM(@RequestBody GroupMemberRequest gmr){

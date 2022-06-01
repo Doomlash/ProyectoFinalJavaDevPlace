@@ -1,5 +1,6 @@
 package group3.middleware.services;
 
+import group3.middleware.services.connection.ApiConnection;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -7,14 +8,13 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 
 import group3.middleware.model.LoginResponse;
 import group3.middleware.model.request.RegisterRequest;
-import group3.middleware.services.connection.Connection;
 import group3.middleware.services.connection.SecurityConnection;
 import reactor.core.publisher.Mono;
 
 @Service
 public class SecurityService {
 
-    private WebClient webClient = new Connection('a').getClient();
+    private WebClient webClient = new ApiConnection('p').getClient();
 
 
     public ResponseEntity<Integer> register(RegisterRequest request) {

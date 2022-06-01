@@ -15,8 +15,8 @@ public interface IMyUser {
     public MyUser readUByUsername(String username);
     public Integer updateMyUser(MyUser myUser);
     public Integer deleteU(Long id);
-    public Integer addC(RelationRequest rr);
-    public Integer removeC(RelationRequest rr);
-    public Integer addB(RelationRequest rr);
-    public Integer removeB(RelationRequest rr);
+    public Integer addC(Long idC);
+    public Integer removeC(Long idC);
+    public Integer addB(Long idC);
+    public Integer removeB(Long idC);
 }

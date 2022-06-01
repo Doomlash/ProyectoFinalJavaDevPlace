@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8">
@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/grupo3/src/main/resources/css/styles.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     
@@ -24,14 +24,17 @@
             </div>
             <div class="container-fluid  col-md-6 mt-4 ">
                 <div class="col-12 mx-5">
-                    <div class="col-12 mx-5 text-start">
-                        <label for="validationCustom01" class="form-label text-center text-white fst-italic fw-bold fs-4  ">Search
-                            by Username or Mail</label>
-                    </div>
-                    <div class="col-6 text-end mx-5 d-flex md-3">
-                        <input type="text" class="form-control mx-3 " id="validationCustom01">
-                        <button type="button" class="btn btn-primary text-dark fw-bold fs-5 ">Search</button>
-                    </div>
+                    <form th:action="@{/searchG}">
+                        <div class="col-12 mx-5 text-start">
+                            <label for="validationCustom01" class="form-label text-center text-white fst-italic fw-bold fs-4  ">Search
+                                by Username or Mail</label>
+                        </div>
+
+                        <div class="col-12 text-end mx-5 d-flex md-3">
+                            <input type="text" class="form-control mx-3  " id="validationCustom01" th:name ="username" placeholder="username: ">
+                            <input class="btn btn-outline-dark" type="submit" value="Find"/>
+                        </div>
+                    </form>
                     <div class="table-responsive col-md-6 mt-3">
                          <!-- Conectar thymeleaf-->
                         <table id="listaUsuarios" class="table table-dark table-striped">
@@ -43,10 +46,16 @@
                                 </tr>
                               </thead>
                               <tbody>
-                                <tr>
+                                <tr th:each="user : ${users}">
                                   <th scope="row"></th>
-                                  <td></td>
-                                  <td></td>
+                                    <td th:text="${user.id}"></td>
+                                    <td th:text="${user.username}"></td>
+                                    <td th:text="${user.mail}"></td>
+                                    <td>
+                                        <form method="POST" th:action="@{/4/group/{idC} (idC = ${user.id})}">
+                                            <button type="submit" name="submit" value="value" class="link-button">AddContact</button>
+                                        </form>
+                                    </td>
                                 </tr>
                                 
                               </tbody>
@@ -54,8 +63,6 @@
                     </div>
                     <div class="col-3 text-end mx-5 d-flex ">
                         <!-- Conectar thymeleaf-->
-                        <a class="btn btn-primary text-center text-dark fst-italic fw-bold fs-8 mx-3 mt-3 " href="#" role="button">Add Contact</a>
-					
                     </div>
                     
                 </div>
@@ -63,7 +70,7 @@
 
             </div>
             <div class="container-fluid col-3 mt-4  ">
-                <img src="/grupo3/src/main/resources/img/group.svg" alt="" class="image imagGroup ">
+                <img th:src="@{/img/group.svg}" alt="" class="image imagGroup ">
             </div>
             <div class="container-fluid col-3 ">
             <a class="btn btn-primary   text-end text-dark fst-italic fw-bold fs-8 mx-2  " href="chatRoom.html" role="button">ChatRoom</a>

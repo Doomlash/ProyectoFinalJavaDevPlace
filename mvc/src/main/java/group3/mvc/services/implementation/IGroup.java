@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface IGroup {
     public Integer createG(GroupRequest group);
 
-    public Integer addM(GroupMemberRequest request);
+    public Integer addM(Long idG,Long idC);
     public Integer removeM(GroupMemberRequest request);
     public List<Group> listAllG();
     public Group readG(Long id);

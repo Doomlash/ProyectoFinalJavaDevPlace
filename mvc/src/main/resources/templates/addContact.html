@@ -31,7 +31,7 @@
                     </div>
 
                     <div class="col-12 text-end mx-5 d-flex md-3">
-                            <input type="text" class="form-control mx-3  " id="validationCustom01" th:name ="id" placeholder="id: ">
+                            <input type="text" class="form-control mx-3  " id="validationCustom01" th:name ="username" placeholder="username: ">
                             <input class="btn btn-outline-dark" type="submit" value="Find"/>
                     </div>
                     </form>
@@ -46,13 +46,15 @@
                                 </tr>
                               </thead>
                               <tbody>
-                                <tr th:object ="${relation}" th:each="user : ${users}">
+                                <tr th:each="user : ${users}">
                                   <th scope="row"></th>
                                   <td th:text="${user.id}"></td>
                                   <td th:text="${user.username}"></td>
                                   <td th:text="${user.mail}"></td>
                                     <td>
-<!--                                     <a class="btn btn-primary text-center text-dark fst-italic fw-bold fs-8 mx-3 mt-3 " th:action="@{/mvc/users/contact/1/{idC} (idC = ${user.id})}" method="post" role="button">Add Contact</a>-->
+                                        <form method="POST" th:action="@{/contact/{idC} (idC = ${user.id})}">
+                                            <button type="submit" name="submit" value="value" class="link-button">AddContact</button>
+                                        </form>
                                     </td>
                                 </tr>
                                 
@@ -61,7 +63,7 @@
                     </div>
                     <div class="col-3 col-sm-12 text-end mx-5 d-flex md-5">
                         <!-- Conectar thymeleaf-->
-                        <a class="btn btn-primary text-center text-dark fst-italic fw-bold fs-8 mx-3 mt-3 " th:href="{/mvc/users/contact/1/}" role="button">Add Contact</a>
+<!--                        <a class="btn btn-primary text-center text-dark fst-italic fw-bold fs-8 mx-3 mt-3 " th:href="{/mvc/users/contact/1/}" role="button">Add Contact</a>-->
 					
                     </div>
                     

@@ -50,23 +50,23 @@ public class MyUserController {
 
     /////////////////////////////////////////////////////////////////////////////
 
-    @PostMapping("/contact")
-    public Integer addContact(@RequestBody RelationRequest rr){
-        return iMU.addC(rr);
-    }
-
-    @PutMapping("/contact")
-    public Integer delContact(@RequestBody RelationRequest rr){
-        return iMU.removeC(rr);
-    }
-
-    @PostMapping("/block")
-    public Integer addBlock(@RequestBody RelationRequest rr){
-        return iMU.addB(rr);
-    }
-
-    @PutMapping("/block")
-    public Integer delBlock(@RequestBody RelationRequest rr){
-        return iMU.removeB(rr);
-    }
+////    @PostMapping("/contact")
+////    public Integer addContact(@RequestBody RelationRequest rr){
+////        return iMU.addC(rr);
+////    }
+//
+//    @PutMapping("/contact")
+//    public Integer delContact(@RequestBody RelationRequest rr){
+//        return iMU.removeC(rr);
+//    }
+//
+//    @PostMapping("/block")
+//    public Integer addBlock(@RequestBody RelationRequest rr){
+//        return iMU.addB(rr);
+//    }
+//
+//    @PutMapping("/block")
+//    public Integer delBlock(@RequestBody RelationRequest rr){
+//        return iMU.removeB(rr);
+//    }
 }

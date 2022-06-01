@@ -39,4 +39,19 @@ public class MyUser extends Messenger{
 		groups.add(groupId);
 	}
 
+	@Override
+	public String toString() {
+		return "MyUser{" +
+				"username='" + username + '\'' +
+				", mail='" + mail + '\'' +
+				", firstName='" + firstName + '\'' +
+				", lastName='" + lastName + '\'' +
+				", language='" + language + '\'' +
+				", profileImage='" + profileImage + '\'' +
+				", birthDate=" + birthDate +
+				", contacts=" + contacts +
+				", blocks=" + blocks +
+				", groups=" + groups +
+				'}';
+	}
 }

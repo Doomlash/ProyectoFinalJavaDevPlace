@@ -1,6 +1,7 @@
 package group3.mvc.services;
 
 import group3.mvc.model.MyUser;
+import group3.mvc.model.UserHolder;
 import group3.mvc.model.request.RelationRequest;
 import group3.mvc.services.connection.Connection;
 import group3.mvc.services.connection.SecurityConnection;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -126,14 +128,8 @@ public class MyUserService implements IMyUser {
     ////////////////////////////////////////////////////////////////
 
     @Override
-    public Integer addC(RelationRequest rr) {
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        UserDetails userDetails = null;
-//        if (principal instanceof UserDetails) {
-//            userDetails = (UserDetails) principal;
-//        }
-//        MyUser user = readU(userDetails.getUsername());
-//        RelationRequest rr = new RelationRequest(user.getId(),idC);
+    public Integer addC(Long idC) {
+        RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), idC);
         try {
             ResponseEntity<Integer> rACu = wCu.post()
                     .uri("/contact")
@@ -142,6 +138,11 @@ public class MyUserService implements IMyUser {
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
+
+            MyUser contact = this.readUById(idC);
+            UserHolder.getCurrentUser().addContact(contact.getId(), contact.getUsername());
+            System.out.println(UserHolder.getCurrentUser().toString());
+
             return rACu.getBody();
         }catch (WebClientResponseException e){
             if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
@@ -154,7 +155,8 @@ public class MyUserService implements IMyUser {
     }
 
     @Override
-    public Integer removeC(RelationRequest rr) {
+    public Integer removeC(Long idC) {
+        RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), idC);
         try {
             ResponseEntity<Integer> rRCu = wCu.put()
                     .uri("/contact")
@@ -163,6 +165,10 @@ public class MyUserService implements IMyUser {
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
+
+            UserHolder.getCurrentUser().getContacts().remove(idC);
+            System.out.println(UserHolder.getCurrentUser().toString());
+
             return rRCu.getBody();
         }catch (WebClientResponseException e){
             if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
@@ -175,7 +181,8 @@ public class MyUserService implements IMyUser {
     }
 
     @Override
-    public Integer addB(RelationRequest rr) {
+    public Integer addB(Long idC) {
+        RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), idC);
         try {
             ResponseEntity<Integer> rABu = wCu.post()
                     .uri("/block")
@@ -184,6 +191,10 @@ public class MyUserService implements IMyUser {
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
+            MyUser contact = this.readUById(idC);
+            UserHolder.getCurrentUser().addBlock(contact.getId(), contact.getUsername());
+            System.out.println(UserHolder.getCurrentUser().toString());
+
             return rABu.getBody();
         }catch (WebClientResponseException e){
             if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
@@ -196,7 +207,8 @@ public class MyUserService implements IMyUser {
     }
 
     @Override
-    public Integer removeB(RelationRequest rr) {
+    public Integer removeB(Long idC) {
+        RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), idC);
         try{
             ResponseEntity<Integer> rABu = wCu.put()
                     .uri("/block")
@@ -205,6 +217,9 @@ public class MyUserService implements IMyUser {
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
+            UserHolder.getCurrentUser().getContacts().remove(idC);
+            System.out.println(UserHolder.getCurrentUser().toString());
+
             return rABu.getBody();
         }catch (WebClientResponseException e){
             if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){

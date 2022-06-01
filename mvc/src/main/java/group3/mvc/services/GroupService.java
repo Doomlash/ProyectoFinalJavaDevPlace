@@ -143,7 +143,8 @@ public class GroupService implements IGroup {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-    public Integer addM(GroupMemberRequest gmr){
+    public Integer addM(Long idG,Long idC){
+        GroupMemberRequest gmr = new GroupMemberRequest(idG,idC,false);
         try {
             ResponseEntity<Integer> response = wCg.post()
                     .uri("/member")

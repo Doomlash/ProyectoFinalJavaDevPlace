@@ -18,7 +18,7 @@ public class ApiConnection {
         WebClient connection = null;
         try {
             switch (conn) {
-                case 'a':
+                case 'p':
                     connection = this.createConection("http://localhost:8080/api");
                     break;
                 case 'u':
