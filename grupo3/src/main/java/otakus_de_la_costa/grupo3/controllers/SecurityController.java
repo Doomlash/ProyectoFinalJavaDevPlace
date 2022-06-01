@@ -63,12 +63,12 @@ public class SecurityController {
         return this.encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
 
-	@PostMapping("/login")
-	public LoginResponse login(Authentication authentication) {
+	@PostMapping("/login/{username}")
+	public LoginResponse login(@PathVariable("username") String username, Authentication authentication) {
 		String token = generateToken(authentication);
         LoginResponse response = new LoginResponse();
         response.setToken(token);
-        response.setUser(userService.findByUsername(authentication.getName()));
+        response.setUser(userService.findByUsername(username));
 		return response;
 	}
 

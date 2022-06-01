@@ -10,7 +10,7 @@ import lombok.Data;
 public class Connection{
     private WebClient client;
 
-    private String token;
+    private static String token;
 
     public Connection(char conn){
         this.client = this.getConnection(conn);
@@ -46,13 +46,17 @@ public class Connection{
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE).build();
     }
 
-    public String getToken(){
+    public static String getToken(){
         return token;
     }
 
-    public String generateToken(){
+    public static String generateToken(){
         return token;
     }
+
+    public static void setToken(String newToken){
+        token = newToken;
+    }   
 
 
 }

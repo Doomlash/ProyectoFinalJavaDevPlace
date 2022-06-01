@@ -25,9 +25,9 @@ public class SecurityController {
         return securityService.register(request);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<Object> login(){
-        return new ResponseEntity<>(securityService.login(),HttpStatus.OK);
+    @PostMapping("/login/{username}")
+    public ResponseEntity<Object> login(@PathVariable("username") String username){
+        return new ResponseEntity<>(securityService.login(username),HttpStatus.OK);
     }
 
     @PostMapping("/token")

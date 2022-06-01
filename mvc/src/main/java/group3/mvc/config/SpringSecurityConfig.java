@@ -20,8 +20,8 @@ public class SpringSecurityConfig {
             )
             .formLogin(
                 form -> form
-                .loginPage("/login")
-                .permitAll()
+                .loginPage("/login").permitAll()
+                .defaultSuccessUrl("/loginSuccess")
             )
             .csrf((csrf) -> csrf.disable());
 		return http.build();

@@ -1,13 +1,13 @@
 package group3.mvc.model;
 
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
 import group3.mvc.model.request.SimpleUserResponse;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -38,5 +38,14 @@ public class MyUser extends Messenger{
 	public void addGroup(Long groupId) {
 		groups.add(groupId);
 	}
+
+    @Override
+    public String toString() {
+        return "MyUser [birthDate=" + birthDate + ", blocks=" + blocks + ", contacts=" + contacts + ", firstName="
+                + firstName + ", groups=" + groups + ", language=" + language + ", lastName=" + lastName + ", mail="
+                + mail + ", profileImage=" + profileImage + ", username=" + username + "]";
+    }
+
+    
 
 }

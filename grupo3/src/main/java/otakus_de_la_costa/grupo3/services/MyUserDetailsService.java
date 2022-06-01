@@ -24,7 +24,7 @@ public class MyUserDetailsService implements UserDetailsManager, UserDetailsPass
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<AuthenticationJPA> optional = lr.findById(username);
-        if(optional.isEmpty()){
+        if(optional.isEmpty()){ 
             throw new UsernameNotFoundException("Username not found");
         }
         AuthenticationJPA auth = optional.get();

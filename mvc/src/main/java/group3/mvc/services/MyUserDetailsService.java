@@ -23,16 +23,14 @@ public class MyUserDetailsService implements UserDetailsService{
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         try {
-            String response = webClient.post()
-            .uri("/security/credentials")
+            String response = webClient.get()
+            .uri("/security/credentials/"+username)
             .retrieve()
             .bodyToMono(String.class)
             .block();
             JsonNode rootNode = mapper.readValue(response, JsonNode.class);
             List<SimpleGrantedAuthority> l = new ArrayList<>();
             l.add(new SimpleGrantedAuthority("USER"));
-            System.out.println(username);
-            System.out.println(rootNode.get("password").asText());
             return new User(username, rootNode.get("password").asText(), l);
         } catch (WebClientResponseException e) {
             throw new UsernameNotFoundException("Username not found");

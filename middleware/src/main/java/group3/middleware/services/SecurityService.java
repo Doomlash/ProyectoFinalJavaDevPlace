@@ -33,10 +33,10 @@ public class SecurityService {
     }
 
 
-    public Object login() {
+    public Object login(String username) {
         try{
             ResponseEntity<LoginResponse> rCu = webClient.post()
-                    .uri("/security/login")
+                    .uri("/security/login/"+username)
                     .header("Authorization", SecurityConnection.getToken())
                     .retrieve()
                     .toEntity(LoginResponse.class)
