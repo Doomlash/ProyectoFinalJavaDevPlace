@@ -15,7 +15,7 @@ public interface IMyUser {
     public MyUser readUByUsername(String username);
     public Integer updateMyUser(MyUser myUser);
     public Integer deleteU(Long id);
-    public Integer addC(Long idC);
+    public Integer addC(MyUser user);
     public Integer removeC(Long idC);
     public Integer addB(Long idC);
     public Integer removeB(Long idC);

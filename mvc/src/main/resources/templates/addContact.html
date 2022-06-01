@@ -24,19 +24,17 @@
             </div>
             <div class="container-fluid  col-md-6  ">
                 <div class="col-12 mx-5">
-                    <form th:action="@{/search}">
+                    <form th:action="@{/addContact}">
                     <div class="col-12 mx-5 text-start">
                         <label for="validationCustom01" class="form-label text-center text-white fst-italic fw-bold fs-4  ">Search
                             by Username or Mail</label>
                     </div>
-
                     <div class="col-12 text-end mx-5 d-flex md-3">
                             <input type="text" class="form-control mx-3  " id="validationCustom01" th:name ="username" placeholder="username: ">
                             <input class="btn btn-outline-dark" type="submit" value="Find"/>
                     </div>
                     </form>
-                    <div class="table-responsive col-12 mt-3">
-                         <!-- Conectar thymeleaf-->
+                    <div th:if="${users}" class="table-responsive col-12 mt-3">
                         <table  id="listaUsuarios" class="table table-dark table-striped">
                             <thead>
                                 <tr>
@@ -46,13 +44,14 @@
                                 </tr>
                               </thead>
                               <tbody>
-                                <tr th:each="user : ${users}">
+                                <tr>
                                   <th scope="row"></th>
-                                  <td th:text="${user.id}"></td>
-                                  <td th:text="${user.username}"></td>
-                                  <td th:text="${user.mail}"></td>
+                                  <td th:text="${users.id}"></td>
+                                  <td th:text="${users.username}"></td>
+                                  <td th:text="${users.mail}"></td>
                                     <td>
-                                        <form method="POST" th:action="@{/contact/{idC} (idC = ${user.id})}">
+                                        <form th:object="${users}" method="POST" th:action="@{/contact}">
+                                            <input type="hidden" th:field="*{id}"/>
                                             <button type="submit" name="submit" value="value" class="link-button">AddContact</button>
                                         </form>
                                     </td>
@@ -62,14 +61,8 @@
                         </table>
                     </div>
                     <div class="col-3 col-sm-12 text-end mx-5 d-flex md-5">
-                        <!-- Conectar thymeleaf-->
-<!--                        <a class="btn btn-primary text-center text-dark fst-italic fw-bold fs-8 mx-3 mt-3 " th:href="{/mvc/users/contact/1/}" role="button">Add Contact</a>-->
-					
                     </div>
-                    
                 </div>
-                
-
             </div>
             <div class="container-fluid col-3 mt-4 mx-5 ">
                 <img th:src="@{/img/contact.svg}" alt="" class="image imageContact">

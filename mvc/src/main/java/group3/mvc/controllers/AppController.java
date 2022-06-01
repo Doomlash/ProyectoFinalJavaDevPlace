@@ -2,14 +2,9 @@ package group3.mvc.controllers;
 
 import group3.mvc.model.MyUser;
 import group3.mvc.model.UserHolder;
-import group3.mvc.model.request.RelationRequest;
 import group3.mvc.services.implementation.IGroup;
 import group3.mvc.services.implementation.IMyUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +12,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import group3.mvc.model.FormRequest;
 import group3.mvc.services.MiddleService;
-import org.thymeleaf.Thymeleaf;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Controller
@@ -34,7 +26,7 @@ public class AppController {
     private IMyUser iMU;
 
     @Autowired
-    private IGroup iMG;
+    private IGroup iG;
 
     @GetMapping("/home")
     public String home(Model model){
@@ -61,20 +53,18 @@ public class AppController {
 
     ////ADDCONTACT////////////
     @GetMapping("/addContact")
-    public String indexAddC(){
+    public String indexAddC(@RequestParam(required = false,name = "username") String username,Model model){
+        if(username != null) {
+            MyUser user = iMU.readUByUsername(username);
+            model.addAttribute("users", user);
+        }
         return "addContact";
     }
 
-    @GetMapping("/search")
-    public String search(@RequestParam("username") String username, Model model){
-        model.addAttribute("users",iMU.readUByUsername(username));
-        return "addContact";
-    }
-
-    @PostMapping("/contact/{idC}")
-    public String addContact(@PathVariable("idC") Long idC){
+    @PostMapping("/contact")
+    public String addContact(@ModelAttribute("users") MyUser user, Model model){
         UserHolder.setCurrentUser(iMU.readUByUsername("pataPollo"));
-        Integer rta = iMU.addC(idC);
+        Integer rta = iMU.addC(user);
         return "redirect:/addContact";
     }
 
@@ -92,8 +82,62 @@ public class AppController {
 
     @PostMapping("/{idG}/group/{idC}")//////("{idGroup}/addGroup/{idC}")
     public String addGroup(@PathVariable("idG") Long idG,@PathVariable("idC") Long idC){
-        Integer rta = iMG.addM(idG,idC);
+        Integer rta = iG.addM(idG,idC);
         return "redirect:/addGroup";
     }
+
+
+    //////Chat room
+    @GetMapping("/chatRoom")
+    public String chatRoom(){
+        return "chatRoom";
+    }
+
+    @PostMapping("/contact/removeC/{idC}")
+    public String removeContact(@PathVariable("idC")Long idC){
+        Integer rta = iMU.removeC(idC);
+        return "redirect:/chatRoom";
+    }
+
+    @PostMapping("/contact/addB/{idC}")
+    public String addBlock(@PathVariable("idC")Long idC){
+        Integer rta = iMU.addB(idC);
+        return "redirect:/chatRoom";
+    }
+
+
+
+    @PostMapping("/group/delete/{idG}")
+    public String delGroup(@PathVariable("idG")Long idG){
+        Integer rta = iG.deleteG(idG);
+        return "redirect:/chatRoom";
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //////DEMAS
+    @GetMapping("/login")
+    public String login(){
+        return "login";
+    }
+
+    @GetMapping("/register")
+    public String register(){
+        return "registerForm";
+    }
+
 
 }

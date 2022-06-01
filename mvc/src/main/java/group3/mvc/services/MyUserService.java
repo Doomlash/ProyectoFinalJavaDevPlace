@@ -3,6 +3,7 @@ package group3.mvc.services;
 import group3.mvc.model.MyUser;
 import group3.mvc.model.UserHolder;
 import group3.mvc.model.request.RelationRequest;
+import group3.mvc.model.request.SimpleUserResponse;
 import group3.mvc.services.connection.Connection;
 import group3.mvc.services.connection.SecurityConnection;
 import group3.mvc.services.implementation.IMyUser;
@@ -128,8 +129,8 @@ public class MyUserService implements IMyUser {
     ////////////////////////////////////////////////////////////////
 
     @Override
-    public Integer addC(Long idC) {
-        RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), idC);
+    public Integer addC(MyUser user) {
+        RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), user.getId());
         try {
             ResponseEntity<Integer> rACu = wCu.post()
                     .uri("/contact")
@@ -139,8 +140,8 @@ public class MyUserService implements IMyUser {
                     .toEntity(Integer.class)
                     .block();
 
-            MyUser contact = this.readUById(idC);
-            UserHolder.getCurrentUser().addContact(contact.getId(), contact.getUsername());
+            //MyUser contact = this.readUById(idC);
+            UserHolder.getCurrentUser().addContact(user.getId(), user.getUsername());
             System.out.println(UserHolder.getCurrentUser().toString());
 
             return rACu.getBody();
