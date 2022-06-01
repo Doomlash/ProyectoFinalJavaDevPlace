@@ -29,17 +29,12 @@
                         <label for="validationCustom01"
                             class="form-label text-center text-white fst-italic fw-bold fs-4">Username</label>
                         <input type="text" class="form-control" id="validationCustom01" required th:field="*{username}">
-                        <div class="valid-tooltip">
-                            Looks good!
-                        </div>
+                        <div class="text-white" th:if="${#fields.hasErrors('username')}">Username taken</div>
                     </div>
                     <div class="col-md-6 mb-3 d-grid gap-2">
                         <label for="passwordCustom"
                             class="form-label text-center text-white fst-italic fw-bold fs-4">Password</label>
                         <input type="password" class="form-control" id="passwordCustom" required th:field="*{password}">
-                        <div class="valid-tooltip">
-                            Looks good!
-                        </div>
                     </div>
                     <div class="col-md-6 mb-3 d-grid gap-2">
                         <label for="validationCustom02"
@@ -61,9 +56,7 @@
                         <label for="validationCustom04"
                             class="form-label text-center text-white fst-italic fw-bold fs-4">Mail</label>
                         <input type="text" class="form-control" id="validationCustom04" required th:field="*{mail}">
-                        <div class="valid-tooltip">
-                            Looks good!
-                        </div>
+                        <p th:if="${#fields.hasErrors('mail')}">Mail taken</p>
                     </div>
                     <div class="col-md-6 mb-3 d-grid gap-2">
                         <label for="validationCustom06"

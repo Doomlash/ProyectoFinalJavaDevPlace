@@ -8,7 +8,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -36,19 +37,22 @@ public class SecurityController {
     }
 
     @PostMapping("/register")
-    public String register(RegisterRequest registerRequest, BindingResult result, Model model){
+    public String register(@Validated RegisterRequest registerRequest, BindingResult result, Model model){
         registerRequest.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         Integer response = udService.createUser(registerRequest);
+        System.out.println(response);
         if(response!=0){
             if(response==1||response==3){
-                result.addError(new ObjectError("username", "username taken"));
+                result.addError(new FieldError(result.getObjectName(), "username", "username taken"));
             }
             if(response==2||response==3){
-                result.addError(new ObjectError("mail", "mail taken"));
+                result.addError(new FieldError(result.getObjectName(), "mail", "mail taken"));
             }
+            System.out.println(result.hasFieldErrors("username"));
+            return "redirect:/register";
         }
         User user = (User)udService.loadUserByUsername(registerRequest.getUsername());
         SecurityContextHolder.getContext().setAuthentication(UsernamePasswordAuthenticationToken.authenticated(user.getUsername(), user.getPassword(), user.getAuthorities()));
-        return "redirect:/registerSuccess";
+        return "redirect:/mvc/registerSuccess";
     }
 }

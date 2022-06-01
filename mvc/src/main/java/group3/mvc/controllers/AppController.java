@@ -1,23 +1,28 @@
 package group3.mvc.controllers;
 
-import group3.mvc.model.MyUser;
-import group3.mvc.services.MyUserService;
-import group3.mvc.services.implementation.IGroup;
-import group3.mvc.services.implementation.IMessages;
-import group3.mvc.services.implementation.IMyUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import group3.mvc.model.FormRequest;
+import group3.mvc.model.MyUser;
 import group3.mvc.model.UserHolder;
 import group3.mvc.services.MiddleService;
+import group3.mvc.services.implementation.IGroup;
+import group3.mvc.services.implementation.IMessages;
+import group3.mvc.services.implementation.IMyUser;
 
 
 @Controller
+@RequestMapping("/mvc")
 public class AppController {
 
     @Autowired
@@ -40,19 +45,13 @@ public class AppController {
     @GetMapping("/loginSuccess")
     public String initLogin(){
         s.login();
-        return "redirect:/home";
+        return "redirect:/mvc/chatRoom";
     }
 
     @GetMapping("/registerSuccess")
     public String initRegister(){
         s.register();
-        return "redirect:/home";
-    }
-
-    @GetMapping("/home")
-    public String home(Model model){
-        model.addAttribute("text", UserHolder.getCurrentUser().toString());
-        return "home";
+        return "redirect:/mvc/chatRoom";
     }
 
     @PostMapping("/gif")
