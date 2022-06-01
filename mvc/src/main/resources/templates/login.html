@@ -21,7 +21,7 @@
     <div class="container-text col-6  container-fluid align-items-center text-center pt-5  ">
       <form class="col-12 mb-3" th:action="@{/login}" method="post">
         <div class="mb-6 col-6 ">
-            <div th:if="${param.error}">
+            <div th:if="${param.error}" >
                 Invalid username and password.</div>
             <div th:if="${param.logout}">
                 You have been logged out.</div>
