@@ -15,7 +15,7 @@ public class MiddleService {
 
     MiddleConection mc = new MiddleConection();
 
-    private WebClient webClient = new Connection('a').getClient();
+    private WebClient webClient = Connection.getClient();
 
     public Object getRatio(String id) {
         return mc.getRatio(id);

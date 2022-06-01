@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
 
 @Service
 public class MessagesService implements IMessages{
-    private WebClient wCs = new Connection('m').getClient();
+    private WebClient wCs = Connection.getClient();
 
     public Integer createMessage(MessageRequest mr){
         try {

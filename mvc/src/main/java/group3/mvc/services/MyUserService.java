@@ -2,8 +2,9 @@ package group3.mvc.services;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
+
+import group3.mvc.model.UserHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ import reactor.core.publisher.Mono;
 
 @Service
 public class MyUserService implements IMyUser {
-    private WebClient wCu = new Connection('u').getClient();
+    private WebClient wCu = Connection.getClient();
 
     @Override
     public Integer createU(MyUser myUser) {
@@ -51,16 +52,30 @@ public class MyUserService implements IMyUser {
     }
 
     @Override
-    public Optional<MyUser> readU(Long idU) {
+    public MyUser readUById(Long idU) {
         try{
-            ResponseEntity<Optional> rRu = wCu.get()
+            ResponseEntity<MyUser> rRu = wCu.get()
                     .uri("/"+idU)
                     .retrieve()
-                    .toEntity(Optional.class)
+                    .toEntity(MyUser.class)
                     .block();
             return rRu.getBody();
         }catch (WebClientResponseException e){
-            return Optional.empty();
+            return null;
+        }
+    }
+
+    @Override
+    public MyUser readUByUsername(String username) {
+        try{
+            ResponseEntity<MyUser> rRu = wCu.get()
+                    .uri("/byUsername"+username)
+                    .retrieve()
+                    .toEntity(MyUser.class)
+                    .block();
+            return rRu.getBody();
+        }catch (WebClientResponseException e){
+            return null;
         }
     }
 
@@ -105,7 +120,8 @@ public class MyUserService implements IMyUser {
     ////////////////////////////////////////////////////////////////
 
     @Override
-    public Integer addC(RelationRequest rr) {
+    public Integer addC(MyUser user) {
+        RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), user.getId());
         try {
             ResponseEntity<Integer> rACu = wCu.post()
                     .uri("/contact")
@@ -125,7 +141,8 @@ public class MyUserService implements IMyUser {
     }
 
     @Override
-    public Integer removeC(RelationRequest rr) {
+    public Integer removeC(Long idC) {
+        RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), idC);
         try {
             ResponseEntity<Integer> rRCu = wCu.put()
                     .uri("/contact")
@@ -145,7 +162,8 @@ public class MyUserService implements IMyUser {
     }
 
     @Override
-    public Integer addB(RelationRequest rr) {
+    public Integer addB(MyUser user) {
+        RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), user.getId());
         try {
             ResponseEntity<Integer> rABu = wCu.post()
                     .uri("/block")
@@ -165,7 +183,8 @@ public class MyUserService implements IMyUser {
     }
 
     @Override
-    public Integer removeB(RelationRequest rr) {
+    public Integer removeB(Long idB) {
+        RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), idB);
         try{
             ResponseEntity<Integer> rABu = wCu.put()
                     .uri("/block")

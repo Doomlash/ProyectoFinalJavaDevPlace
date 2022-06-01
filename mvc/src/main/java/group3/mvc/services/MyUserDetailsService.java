@@ -20,7 +20,7 @@ import group3.mvc.services.connection.Connection;
 import reactor.core.publisher.Mono;
 
 public class MyUserDetailsService implements UserDetailsService{ 
-    private WebClient webClient = new Connection('a').getClient();
+    private WebClient webClient = Connection.getClient();
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Override

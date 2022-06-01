@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 
     <head>
         <meta charset="UTF-8">
@@ -8,7 +8,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com/%22%3E">
         <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;600;800&display=swap" rel="stylesheet">
-        <link rel="stylesheet"  href="/mvc/src/main/resources/static/css/styles.css">
+        <link rel="stylesheet" th:href="@{/css/styles.css}"/>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
             integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
@@ -20,7 +20,7 @@
     <section>
         <div class="row">
             <div class="container-fluid col-12 mt-4 ">
-                <h1 class="mx-5 text-dark fst-italic fw-semibold">Register User</h1>
+                <h1 class="mx-5 text-white fst-italic fw-semibold">Register User</h1>
             </div>
         
                 <div class="container-fluid  col-12 col-lg-6 col-md-6  py-3 mt-3 bgDiv   ">
@@ -34,7 +34,7 @@
                         </div>
                     </div>
                     <div class="col-md-6 mb-3 d-grid gap-2">
-                        <label for="validationCustom01"
+                        <label for="passwordCustom"
                             class="form-label text-center text-white fst-italic fw-bold fs-4">Password</label>
                         <input type="password" class="form-control" id="passwordCustom" required th:field="*{password}">
                         <div class="valid-tooltip">
@@ -66,7 +66,7 @@
                         </div>
                     </div>
                     <div class="col-md-6 mb-3 d-grid gap-2">
-                        <label for="validationCustom05"
+                        <label for="validationCustom06"
                             class="form-label text-center text-white fst-italic fw-bold fs-4">Language</label>
                             <input type="text" class="form-control" id="validationCustom06" required th:field="*{language}">
                     
@@ -75,9 +75,9 @@
                         </div>
                     </div>
                     <div class="col-md-6 mb-3 d-grid gap-2">
-                        <label for="validationCustom06"
+                        <label for="validationCustom07"
                             class="form-label text-center text-white fst-italic fw-bold fs-4">Birth Day</label>
-                        <input type="text" class="form-control" id="validationCustom06" required th:field="*{birthDate}">
+                        <input type="text" class="form-control" id="validationCustom07" required th:field="*{birthDate}">
                         <div class="valid-tooltip">
                             Looks good!
                         </div>
@@ -85,17 +85,14 @@
                     <div class="col-md-6 mb-3 d-grid gap-2">
                         <label for="selectImg"
                             class="form-label text-center text-white fst-italic fw-bold fs-4">Avatar</label>
-                            
-
-                                <select id="selectImg " th:field="*{profileImage}">
-                                    <option value="/grupo3/src/main/resources/img/icons/1.png">default</option>
-                                    <option value="/grupo3/src/main/resources/img/icons/2.png">zanahoria </option>
-                                    <option value="/grupo3/src/main/resources/img/icons/3.png">pepino</option>
-                                    <option value="/grupo3/src/main/resources/img/icons/4.png">berenjena</option>
-                                    <option value="/grupo3/src/main/resources/img/icons/5.png">tomate</option>
-                                    <option value="/grupo3/src/main/resources/img/icons/6.png">zapallo</option>
-                                    </select>
-                                    <img class="pl-4" id="images" width="48px" src="/grupo3/src/main/resources/img/icons/1.png" />
+                        <select id="selectImg" th:field="*{profileImage}">
+                            <option value="@{/img/1.png}">panchito</option>
+                            <option value="@{/img/2.png}">zanahoria </option>
+                            <option value="@{/img/3.png}">pepino</option>
+                            <option value="@{/img/4.png}">berenjena</option>
+                            <option value="@{/img/5.png}">tomate</option>
+                            <option value="@{/img/6.png}">zapallo</option>
+                        </select>
                         <div class="valid-tooltip">
                             Looks good!
                         </div>
@@ -104,7 +101,7 @@
                     <div class="col-md-6 mb-3">
                         <button class="btn btn-primary text-dark fst-italic fw-bold d-grid gap-2 col-6 mx-auto mt-3 "
                             style="font-size: 1rem" type="submit">Register</button>
-                        <a class="btn btn-primary text-dark fst-italic fw-bold fs-5 mx-2 mt-3 " href="login.html" role="button">Go to Back</a>
+                        <a class="btn btn-primary text-dark fst-italic fw-bold fs-5 mx-2 mt-3 " th:href="@{/login}" role="button">I Have An Account</a>
                     </div>
                     </form>
                 </div>
@@ -127,14 +124,6 @@
             });
         });
     </script>
-
-<script>
-
-    selectImg.addEventListener("change",()=>{
-        images.setAttribute("src", selectImg.selectedOptions[0].value )
-      })
-    </script>
-    
 </body>
 
 </html>

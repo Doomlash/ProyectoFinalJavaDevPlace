@@ -41,6 +41,7 @@ public class SecurityService {
                     .retrieve()
                     .toEntity(LoginResponse.class)
                     .block();
+            System.out.println(rCu.getBody().getUser().toString());
             return rCu.getBody();
         }catch (WebClientResponseException e){
             return new ResponseEntity<>(Integer.parseInt(e.getResponseBodyAsString()),e.getStatusCode());

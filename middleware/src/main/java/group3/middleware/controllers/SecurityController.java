@@ -27,6 +27,7 @@ public class SecurityController {
 
     @PostMapping("/login/{username}")
     public ResponseEntity<Object> login(@PathVariable("username") String username){
+        System.out.println(username);
         return new ResponseEntity<>(securityService.login(username),HttpStatus.OK);
     }
 

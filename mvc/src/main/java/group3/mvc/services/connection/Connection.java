@@ -11,39 +11,27 @@ import lombok.Data;
 
 @Data
 public class Connection{
-    private WebClient client;
+    private static WebClient client;
 
     private static String token;
 
-    public Connection(char conn){
-        this.client = this.getConnection(conn);
-    }
 
-    private WebClient getConnection(char conn) {
-        WebClient connection = null;
+    private static void getConnection() {
         try {
-            switch (conn) {
-                case 'a':
-                    connection = this.createConection("http://localhost:8081/middle");
-                    break;
-                case 'u':
-                    connection = this.createConection("http://localhost:8081/middle/users");
-                    break;
-                case 'm':
-                    connection = this.createConection("http://localhost:8081/middle/messages");
-                    break;
-                case 'g':
-                    connection = this.createConection("http://localhost:8081/middle/groups");
-                    break;
-            }
+                    client = createConection("http://localhost:8081/middle");
         }catch (Exception e){
             System.out.println(e.getMessage());
-            return null;
         }
-        return connection;
     }
 
-    public WebClient createConection(String url) {
+    public static WebClient getClient(){
+        if(client == null){
+            getConnection();
+        }
+        return client;
+    }
+
+    public static WebClient createConection(String url) {
         return WebClient.builder().baseUrl(url)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
@@ -56,7 +44,7 @@ public class Connection{
 
     public static String generateToken(){
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        LoginResponse response = webClient.post()
+        LoginResponse response = getClient().post()
                     .uri("/security/token/")
                     .headers(headers -> headers.setBasicAuth("admin", "admin_otaku"))
                     .retrieve()

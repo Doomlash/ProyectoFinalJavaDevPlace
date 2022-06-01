@@ -22,7 +22,7 @@ import java.util.Optional;
 @Service
 public class GroupService implements IGroup {
 
-    private WebClient wCg = new Connection('g').getClient();
+    private WebClient wCg = Connection.getClient();
 
 
     public Integer createG(GroupRequest group){

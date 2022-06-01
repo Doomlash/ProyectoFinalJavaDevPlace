@@ -46,22 +46,4 @@ public class MyUser extends Messenger{
                 + firstName + ", groups=" + groups + ", language=" + language + ", lastName=" + lastName + ", mail="
                 + mail + ", profileImage=" + profileImage + ", username=" + username + "]";
     }
-
-    
-
-	@Override
-	public String toString() {
-		return "MyUser{" +
-				"username='" + username + '\'' +
-				", mail='" + mail + '\'' +
-				", firstName='" + firstName + '\'' +
-				", lastName='" + lastName + '\'' +
-				", language='" + language + '\'' +
-				", profileImage='" + profileImage + '\'' +
-				", birthDate=" + birthDate +
-				", contacts=" + contacts +
-				", blocks=" + blocks +
-				", groups=" + groups +
-				'}';
-	}
 }
