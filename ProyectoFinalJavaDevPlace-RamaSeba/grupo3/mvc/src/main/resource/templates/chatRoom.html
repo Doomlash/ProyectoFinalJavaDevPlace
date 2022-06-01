@@ -103,6 +103,11 @@
                                         data-bs-target="#exampleModal4">
                                         Block List
                                     </button>
+                                    <!-- Button trigger modal search contact -->
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal5">
+                                        <i class="fas fa-magnifying-glass"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -166,6 +171,7 @@
                             <div class="card-body">
 
                                 <div class="mb-3">
+                                    <h4 th:text="nombreContacto">ContactName</h4>
                                     <table id="sentMessages" class="table  table-hover table-striped  "
                                         style="width:100%">
                                         <thead class="thead-dark">
@@ -361,6 +367,76 @@
             </div>
         </div>
         <!--Fin Modal de lista contactos bloqueados-->
+        <!-- Modal de agregar miembro grupo-->
+        <div class="modal fade color-primary" id="exampleModal5" tabindex="-1" aria-labelledby="exampleModalLabel5"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel5">Find contact</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        
+                            <div class="modal-body">
+                                <form action="">
+                                    
+                                        <div>
+                                            <label for="seachContact" class="form-label fst-italic ">Insert username or email</label>
+                                        </div>
+                                        <div>
+                                            <input class="form-control mb-3 mx-1 col-10 fst-italic fw-bold fs-7 " id="seachContact" type="text"
+                                                th:field="(campo_nombreGrupo)">
+                                        </div>
+                                        <div>
+                                            <button type="submit" class="btn btn-primary"><i class="fas fa-magnifying-glass"></i></button>
+                                        
+                                        </div>
+                                </form>
+                                <div class="table-responsive mt-3">
+                                    <table id="findList" class="table  table-hover table-striped w-75">
+                                        <thead class="thead-light">
+                                            <tr>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="(objeto contactos buscados del usuario)">
+                                                <td><img th:src="SE APLICA EL TH DE LA IMG/ICON"
+                                                        src="/grupo3/src/main/resources/img/icons/1.png" width="28px"
+                                                        alt="">
+
+                                                </td>
+                                                <td class="fst-italic fw-bold fs-6" th:text="(contacto_nombre)">nombre
+                                                </td>
+
+                                                <td class="text-end">
+                                                    <a href="#chatList"><i class="fas fa-comment"></i></a>|
+                                                    <!-- link trigger modal add member into group-->
+                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal3"><i
+                                                            class="fas fa-user-group"></i></a>|
+                                                    <a href="#" th:href="(mapeo de eliminar contacto)"><i
+                                                            class="fas fa-user-times"></i></a>|
+                                                    <a href="#" th:href="(mapeo de bloquear contacto)"><i
+                                                            class="fas fa-ban"></i></a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                        
+                            </div>
+                        
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                
+                            </div>
+                        
+                    </div>
+                
+            </div>
+        </div>
+        <!--Fin Modal busqueda contacto-->
     </div>
     </div>
 
