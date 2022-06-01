@@ -1,6 +1,7 @@
 package group3.middleware.services;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -58,6 +59,21 @@ public class SecurityService {
             return rCu.getBody();
         } catch (WebClientResponseException e) {
             return new ResponseEntity<>(Integer.parseInt(e.getResponseBodyAsString()),e.getStatusCode());
+        }
+    }
+
+
+    public Object getCredentials(String username) {
+        try {
+            
+            String response = webClient.get()
+                    .uri("/security/credentials/"+username)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
+            return response;
+        } catch (WebClientResponseException e) {
+            throw new UsernameNotFoundException("UsernameNotFound");     
         }
     }
     

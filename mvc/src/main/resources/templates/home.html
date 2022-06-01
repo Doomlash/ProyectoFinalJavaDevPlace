@@ -1,16 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
-    <div th:if="${showGif}" th:insert="gif.html :: gif"></div>
-    <form th:object="${form}"
-          th:action="@{/gif}"
-          method="post"> 
-        <div>
-            <label for="text">Gif Link</label>
-            <input id="text" type="text"
-                   th:field="*{s}"> 
-        </div>
-        <button type="submit">Show Gif</button>
-    </form>
+    <span th:text="${text}"></span>
 </body>
 </html>

@@ -18,6 +18,12 @@ public class AppController {
     @Autowired
     MiddleService s;
 
+    @GetMapping()
+    public String init(){
+        
+        return "redirect:/home";
+    }
+
     @GetMapping("/home")
     public String home(Model model){
         model.addAttribute("showGif", false);

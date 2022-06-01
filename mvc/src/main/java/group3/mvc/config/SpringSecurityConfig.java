@@ -4,7 +4,9 @@ package group3.mvc.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.web.SecurityFilterChain;    
+import org.springframework.security.web.SecurityFilterChain;
+
+import group3.mvc.services.MyUserDetailsService;    
 
 @Configuration
 public class SpringSecurityConfig {
@@ -13,9 +15,20 @@ public class SpringSecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
             .authorizeHttpRequests((authorize) -> authorize
-                    .anyRequest().permitAll()
+                    .antMatchers("/login","/register").permitAll()
+                    .anyRequest().authenticated()
+            )
+            .formLogin(
+                form -> form
+                .loginPage("/login")
+                .permitAll()
             )
             .csrf((csrf) -> csrf.disable());
 		return http.build();
 	}
+
+    @Bean
+    public MyUserDetailsService customUserDetailsService() {
+        return new MyUserDetailsService();
+    }
 }

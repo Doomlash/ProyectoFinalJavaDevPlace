@@ -35,6 +35,7 @@ public class MyUserDetailsService implements UserDetailsManager, UserDetailsPass
                             .password(auth.getPassword())
                             .roles(auth.getRole().getName())
                             .build();
+        
         return user;
     }
 
@@ -50,7 +51,7 @@ public class MyUserDetailsService implements UserDetailsManager, UserDetailsPass
             AuthenticationJPA auth = new AuthenticationJPA();
             auth.setUsername(user.getUsername());
             auth.setPassword(user.getPassword());
-            auth.setRole(new RoleJPA(2));
+            auth.setRole(new RoleJPA(1));
             lr.save(auth);
         }
     }

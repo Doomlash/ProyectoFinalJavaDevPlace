@@ -41,6 +41,7 @@ public class SpringSecurityConfig {
 		http
             .authorizeHttpRequests((authorize) -> authorize
                 .antMatchers("/api/security/register").permitAll()
+                .antMatchers("/api/security/credentials/*").permitAll()
                 .anyRequest().authenticated()
             )
             .csrf((csrf) -> csrf.disable())

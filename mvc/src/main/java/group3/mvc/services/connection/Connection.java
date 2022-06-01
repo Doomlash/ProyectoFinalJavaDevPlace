@@ -1,13 +1,16 @@
 package group3.mvc.services.connection;
 
-import lombok.Data;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import lombok.Data;
+
 @Data
 public class Connection{
     private WebClient client;
+
+    private String token;
 
     public Connection(char conn){
         this.client = this.getConnection(conn);
@@ -17,6 +20,9 @@ public class Connection{
         WebClient connection = null;
         try {
             switch (conn) {
+                case 'a':
+                    connection = this.createConection("http://localhost:8081/middle");
+                    break;
                 case 'u':
                     connection = this.createConection("http://localhost:8081/middle/users");
                     break;
@@ -39,4 +45,14 @@ public class Connection{
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE).build();
     }
+
+    public String getToken(){
+        return token;
+    }
+
+    public String generateToken(){
+        return token;
+    }
+
+
 }

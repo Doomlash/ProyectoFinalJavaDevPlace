@@ -277,7 +277,18 @@ END$
 
 DELIMITER ;
 
-INSERT INTO roles(name) VALUES ("ADMIN");
+id BIGINT UNSIGNED NOT NULL,
+	username VARCHAR(64) NOT NULL UNIQUE,
+    mail VARCHAR(256) NOT NULL UNIQUE,
+    first_name VARCHAR(64) NOT NULL,
+	last_name VARCHAR(64) NOT NULL,
+    language VARCHAR(5) NOT NULL,
+    birth_date DATE NOT NULL,
+    profile_image VARCHAR(256) NOT NULL,
+
 INSERT INTO roles(name) VALUES ("USER");
+INSERT INTO roles(name) VALUES ("USER");
+
+
 
 
