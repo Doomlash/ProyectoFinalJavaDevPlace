@@ -91,7 +91,7 @@ public class SecurityController {
         if(response == OK){
             userDetailsService.createUser(User.builder()
                                             .username(request.getUsername())
-                                            .password(passwordEncoder.encode(request.getPassword()))
+                                            .password(request.getPassword())
                                             .authorities("USER")
                                             .build());
             return new ResponseEntity<>(HttpStatus.OK);

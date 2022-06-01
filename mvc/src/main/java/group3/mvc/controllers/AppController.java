@@ -24,8 +24,14 @@ public class AppController {
     PasswordEncoder pe;
 
     @GetMapping("/loginSuccess")
-    public String init(){
+    public String initLogin(){
         s.login();
+        return "redirect:/home";
+    }
+
+    @GetMapping("/registerSuccess")
+    public String initRegister(){
+        s.register();
         return "redirect:/home";
     }
 

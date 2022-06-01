@@ -1,17 +1,20 @@
 package group3.mvc.services;
 
-import group3.mvc.model.MyUser;
-import group3.mvc.model.request.RelationRequest;
-import group3.mvc.services.connection.Connection;
-import group3.mvc.services.implementation.IMyUser;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
-import reactor.core.publisher.Mono;
 
-import java.util.*;
+import group3.mvc.model.MyUser;
+import group3.mvc.model.request.RelationRequest;
+import group3.mvc.services.connection.Connection;
+import group3.mvc.services.implementation.IMyUser;
+import reactor.core.publisher.Mono;
 
 @Service
 public class MyUserService implements IMyUser {

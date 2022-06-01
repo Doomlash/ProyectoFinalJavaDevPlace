@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preconnect" href="https://fonts.googleapis.com/%22%3E">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;600;800&display=swap" rel="stylesheet">
+        <link rel="stylesheet"  href="/mvc/src/main/resources/static/css/styles.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    
+        <title>Register</title>
+    </head>
+
+<body class="sectionForm">
+    <section>
+        <div class="row">
+            <div class="container-fluid col-12 mt-4 ">
+                <h1 class="mx-5 text-dark fst-italic fw-semibold">Register User</h1>
+            </div>
+        
+                <div class="container-fluid  col-12 col-lg-6 col-md-6  py-3 mt-3 bgDiv   ">
+                    <form th:action="@{/register}" th:object="${request}" method="post">
+                    <div class="col-md-6 mb-3 d-grid gap-2">
+                        <label for="validationCustom01"
+                            class="form-label text-center text-white fst-italic fw-bold fs-4">Username</label>
+                        <input type="text" class="form-control" id="validationCustom01" required th:field="*{username}">
+                        <div class="valid-tooltip">
+                            Looks good!
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3 d-grid gap-2">
+                        <label for="validationCustom01"
+                            class="form-label text-center text-white fst-italic fw-bold fs-4">Password</label>
+                        <input type="password" class="form-control" id="passwordCustom" required th:field="*{password}">
+                        <div class="valid-tooltip">
+                            Looks good!
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3 d-grid gap-2">
+                        <label for="validationCustom02"
+                            class="form-label text-center  text-white fst-italic fw-bold fs-4">First Name</label>
+                        <input type="text" class="form-control" id="validationCustom02" required th:field="*{firstName}">
+                        <div class="valid-tooltip">
+                            Looks good!
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3 d-grid gap-2">
+                        <label for="validationCustom03"
+                            class="form-label text-center text-white fst-italic fw-bold fs-4">Last Name</label>
+                        <input type="text" class="form-control" id="validationCustom03" required th:field="*{lastName}"> 
+                        <div class="valid-tooltip">
+                            Looks good!
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3 d-grid gap-2">
+                        <label for="validationCustom04"
+                            class="form-label text-center text-white fst-italic fw-bold fs-4">Mail</label>
+                        <input type="text" class="form-control" id="validationCustom04" required th:field="*{mail}">
+                        <div class="valid-tooltip">
+                            Looks good!
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3 d-grid gap-2">
+                        <label for="validationCustom05"
+                            class="form-label text-center text-white fst-italic fw-bold fs-4">Language</label>
+                            <input type="text" class="form-control" id="validationCustom06" required th:field="*{language}">
+                    
+                        <div class="valid-tooltip">
+                            Looks good!
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3 d-grid gap-2">
+                        <label for="validationCustom06"
+                            class="form-label text-center text-white fst-italic fw-bold fs-4">Birth Day</label>
+                        <input type="text" class="form-control" id="validationCustom06" required th:field="*{birthDate}">
+                        <div class="valid-tooltip">
+                            Looks good!
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3 d-grid gap-2">
+                        <label for="selectImg"
+                            class="form-label text-center text-white fst-italic fw-bold fs-4">Avatar</label>
+                            
+
+                                <select id="selectImg " th:field="*{profileImage}">
+                                    <option value="/grupo3/src/main/resources/img/icons/1.png">default</option>
+                                    <option value="/grupo3/src/main/resources/img/icons/2.png">zanahoria </option>
+                                    <option value="/grupo3/src/main/resources/img/icons/3.png">pepino</option>
+                                    <option value="/grupo3/src/main/resources/img/icons/4.png">berenjena</option>
+                                    <option value="/grupo3/src/main/resources/img/icons/5.png">tomate</option>
+                                    <option value="/grupo3/src/main/resources/img/icons/6.png">zapallo</option>
+                                    </select>
+                                    <img class="pl-4" id="images" width="48px" src="/grupo3/src/main/resources/img/icons/1.png" />
+                        <div class="valid-tooltip">
+                            Looks good!
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <button class="btn btn-primary text-dark fst-italic fw-bold d-grid gap-2 col-6 mx-auto mt-3 "
+                            style="font-size: 1rem" type="submit">Register</button>
+                        <a class="btn btn-primary text-dark fst-italic fw-bold fs-5 mx-2 mt-3 " href="login.html" role="button">Go to Back</a>
+                    </div>
+                    </form>
+                </div>
+            
+        </div>
+    </section><br>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+        crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script>
+        $(function () {
+            $('input[name="birthDate"]').daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                minYear: 1901,
+                maxYear: parseInt(moment().format('YYYY'), 10)
+            });
+        });
+    </script>
+
+<script>
+
+    selectImg.addEventListener("change",()=>{
+        images.setAttribute("src", selectImg.selectedOptions[0].value )
+      })
+    </script>
+    
+</body>
+
+</html>

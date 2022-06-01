@@ -33,5 +33,17 @@ public class MiddleService {
         Connection.setToken(response.getToken());
         
     }
+
+    public void register() {
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        LoginResponse response = webClient.post()
+                    .uri("/security/login/"+username)
+                    .headers(headers -> headers.setBasicAuth("admin", "admin_otaku"))
+                    .retrieve()
+                    .bodyToMono(LoginResponse.class)
+                    .block();
+        UserHolder.setCurrentUser(response.getUser());
+        Connection.setToken(response.getToken());
+    }
     
 }
