@@ -5,7 +5,6 @@ import java.util.NoSuchElementException;
 
 import group3.mvc.model.Group;
 import group3.mvc.model.request.GroupMemberRequest;
-import group3.mvc.model.request.GroupRequest;
 
 public interface IGroup {
     public Integer createG(Group group);
