@@ -30,10 +30,10 @@ public class GroupController {
         return iG.listAllG();
     }
 
-    @PostMapping()
-    public Integer create(@RequestBody GroupRequest group){
-        return iG.createG(group);
-    }
+//    @PostMapping()
+//    public Integer create(@RequestBody GroupRequest group){
+//        return iG.createG(group);
+//    }
 
     @GetMapping("/{idG}")
     public Group get(@PathVariable("idG") Long idG){
@@ -56,10 +56,10 @@ public class GroupController {
 //        return iG.addM(gmr);
 //    }
 
-    @PutMapping("/member")
-    public Integer removeM(@RequestBody GroupMemberRequest gmr){
-        return iG.removeM(gmr);
-    }
+//    @PutMapping("/member")
+//    public Integer removeM(@RequestBody GroupMemberRequest gmr){
+//        return iG.removeM(gmr);
+//    }
 
     @GetMapping("/{idG}/isAdmin/{idU}")
     public Object isAdmin(@PathVariable("idG") Long idG,@PathVariable("idU") Long idU){

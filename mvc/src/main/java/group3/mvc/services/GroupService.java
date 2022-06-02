@@ -11,8 +11,13 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import group3.mvc.model.Group;
+import group3.mvc.model.Message;
+import group3.mvc.model.MyUser;
+import group3.mvc.model.UserHolder;
 import group3.mvc.model.request.GroupMemberRequest;
 import group3.mvc.model.request.GroupRequest;
+import group3.mvc.model.request.SimpleGroupResponse;
+import group3.mvc.model.request.SimpleUserResponse;
 import group3.mvc.services.connection.Connection;
 import group3.mvc.services.implementation.IGroup;
 import reactor.core.publisher.Mono;
@@ -24,15 +29,19 @@ public class GroupService implements IGroup {
     private WebClient wCg = Connection.getClient();
 
 
-    public Integer createG(GroupRequest group){
+    public Integer createG(Group group){
+        GroupRequest gr = new GroupRequest(group.getName(),group.getDescription(), UserHolder.getCurrentUser().getId());
         try {
             ResponseEntity<Integer> response = wCg.post()
                     .uri("/groups")
                     .header("Authorization", "Bearer "+ Connection.getToken())
-                    .body(Mono.just(group),GroupRequest.class)
+                    .body(Mono.just(gr),GroupRequest.class)
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
+
+            updateHolderGR(group,"crG");
+
             return response.getBody();
         }catch (WebClientResponseException e){
             if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
@@ -94,6 +103,8 @@ public class GroupService implements IGroup {
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
+
+            updateHolderGR(group,"updG");
             return ug.getBody();
         }catch (WebClientResponseException e){
             if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
@@ -228,4 +239,27 @@ public class GroupService implements IGroup {
                     .body((Integer.valueOf(e.getResponseBodyAsString()))).getBody();
         }
     }
+
+
+    public void updateHolderGR(Group group, String rta){
+        switch (rta){
+            case "crG":
+                UserHolder.getCurrentUser().addGroup(new SimpleGroupResponse(group.getId(),group.getName(),group.getDescription()));
+                break;
+            case "updG":
+                updateGroup(group);
+                break;
+        }
+    }
+
+    public void updateGroup(Group group){
+        for(SimpleGroupResponse groupr : UserHolder.getCurrentUser().getGroups()){
+            if (groupr.getId() == group.getId()) {
+                groupr.setId(group.getId());
+                groupr.setName(group.getName());
+                groupr.setDescription(group.getDescription());
+            }
+        }
+    }
+
 }

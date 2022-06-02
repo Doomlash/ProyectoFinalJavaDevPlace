@@ -3,15 +3,14 @@ package group3.mvc.services;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
+import group3.mvc.model.UserHolder;
+import group3.mvc.model.request.SimpleUserResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
-
-import group3.mvc.model.MyUser;
-import group3.mvc.model.UserHolder;
+import group3.mvc.model.MyUser;;
 import group3.mvc.model.request.RelationRequest;
 import group3.mvc.services.connection.Connection;
 import group3.mvc.services.implementation.IMyUser;
@@ -92,7 +91,9 @@ public class MyUserService implements IMyUser {
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
-            UserHolder.setCurrentUser(myUser);
+
+            updateHolderUS(myUser,"upd");
+
             return rUu.getBody();
         }catch (WebClientResponseException e){
             if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
@@ -136,8 +137,8 @@ public class MyUserService implements IMyUser {
     ////////////////////////////////////////////////////////////////
 
     @Override
-    public Integer addC(MyUser user) {
-        RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), user.getId());
+    public Integer addC(MyUser contact) {
+        RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), contact.getId());
         try {
             ResponseEntity<Integer> rACu = wCu.post()
                     .uri("/users/contact")
@@ -146,6 +147,9 @@ public class MyUserService implements IMyUser {
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
+
+            updateHolderUS(contact,"addC");
+
             return rACu.getBody();
         }catch (WebClientResponseException e){
             if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
@@ -153,7 +157,7 @@ public class MyUserService implements IMyUser {
             }
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-                return addC(user);
+                return addC(contact);
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -162,8 +166,8 @@ public class MyUserService implements IMyUser {
     }
 
     @Override
-    public Integer removeC(Long idC) {
-        RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), idC);
+    public Integer removeC(MyUser contact) {
+        RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), contact.getId());
         try {
             ResponseEntity<Integer> rRCu = wCu.put()
                     .uri("/users/contact")
@@ -172,14 +176,19 @@ public class MyUserService implements IMyUser {
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
+
+            updateHolderUS(contact,"delC");
+
             return rRCu.getBody();
+
+
         }catch (WebClientResponseException e){
             if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
                 return ResponseEntity.internalServerError().build().getStatusCodeValue();
             }
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-                return removeC(idC);
+                return removeC(contact);
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -188,8 +197,8 @@ public class MyUserService implements IMyUser {
     }
 
     @Override
-    public Integer addB(MyUser user) {
-        RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), user.getId());
+    public Integer addB(MyUser block) {
+        RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), block.getId());
         try {
             ResponseEntity<Integer> rABu = wCu.post()
                     .uri("/users/block")
@@ -198,6 +207,8 @@ public class MyUserService implements IMyUser {
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
+            updateHolderUS(block,"addB");
+
             return rABu.getBody();
         }catch (WebClientResponseException e){
             if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
@@ -205,7 +216,7 @@ public class MyUserService implements IMyUser {
             }
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-                return addB(user);
+                return addB(block);
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -214,8 +225,8 @@ public class MyUserService implements IMyUser {
     }
 
     @Override
-    public Integer removeB(Long idB) {
-        RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), idB);
+    public Integer removeB(MyUser block) {
+        RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), block.getId());
         try{
             ResponseEntity<Integer> rABu = wCu.put()
                     .uri("/users/block")
@@ -224,6 +235,9 @@ public class MyUserService implements IMyUser {
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
+
+            updateHolderUS(block,"delB");
+
             return rABu.getBody();
         }catch (WebClientResponseException e){
             if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
@@ -231,11 +245,44 @@ public class MyUserService implements IMyUser {
             }
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-                return removeB(idB);
+                return removeB(block);
             }
             return ResponseEntity
                     .status(e.getStatusCode())
                     .body((Integer.valueOf(e.getResponseBodyAsString()))).getBody();
+        }
+    }
+
+
+
+    //////////FUNCIONES AUXILIARES
+    public void updateHolderUS(MyUser user,String rta){
+        switch (rta){
+            case "upd":
+                UserHolder.setCurrentUser(user);
+                break;
+            case "addC":
+                UserHolder.getCurrentUser().addContact(
+                        new SimpleUserResponse(user.getId(),
+                                user.getUsername(),
+                                user.getProfileImage()));
+                break;
+            case "delC":
+                UserHolder.getCurrentUser().getContacts().remove(new SimpleUserResponse(user.getId(),
+                                user.getUsername(),
+                                user.getProfileImage()));
+                break;
+            case "addB":
+                UserHolder.getCurrentUser().addBlock(
+                        new SimpleUserResponse(user.getId(),
+                                user.getUsername(),
+                                user.getProfileImage()));
+                break;
+            case "delB":
+                UserHolder.getCurrentUser().getBlocks().remove(new SimpleUserResponse(user.getId(),
+                        user.getUsername(),
+                        user.getProfileImage()));
+                break;
         }
     }
 }

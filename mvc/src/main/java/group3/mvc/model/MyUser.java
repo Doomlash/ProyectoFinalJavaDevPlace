@@ -40,6 +40,8 @@ public class MyUser extends Messenger{
         groups.add(group);
     }
 
+    public void addMessage(Message message){this.getSent().add(message);}
+
     @Override
     public String toString() {
         return "MyUser [birthDate=" + birthDate + ", blocks=" + blocks + ", contacts=" + contacts + ", firstName="

@@ -8,10 +8,10 @@ import group3.mvc.model.request.GroupMemberRequest;
 import group3.mvc.model.request.GroupRequest;
 
 public interface IGroup {
-    public Integer createG(GroupRequest group);
+    public Integer createG(Group group);
 
     public Integer addM(Long idG,Long idC);
-    public Integer removeM(GroupMemberRequest request);
+    public Integer removeM(GroupMemberRequest member);
     public List<Group> listAllG();
     public Group readG(Long id);
     public Integer updateG(Group group) throws NoSuchElementException;
