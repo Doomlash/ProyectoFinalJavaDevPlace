@@ -2,6 +2,7 @@ package group3.mvc.controllers;
 
 import java.util.List;
 
+import group3.mvc.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -14,10 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import group3.mvc.model.FormRequest;
-import group3.mvc.model.Message;
-import group3.mvc.model.MyUser;
-import group3.mvc.model.UserHolder;
 import group3.mvc.services.MiddleService;
 import group3.mvc.services.implementation.IGroup;
 import group3.mvc.services.implementation.IMessages;
@@ -109,6 +106,9 @@ public class AppController {
         MyUser user = UserHolder.getCurrentUser();
         model.addAttribute("contacts", user.getContacts());
         model.addAttribute("blocks", user.getBlocks());
+        model.addAttribute("nGroup",new Group());
+        model.addAttribute("eGroup",new Group());
+        model.addAttribute("groups",user.getGroups());
         model.addAttribute("listTab", "active");
         return "chatRoom";
     }
@@ -120,6 +120,27 @@ public class AppController {
         model.addAttribute("messages", l);
         model.addAttribute("chatTab", "active");
         return "chatRoom";
+    }
+
+    @PostMapping("/createGroup")
+    public String createG(@ModelAttribute("nGroup") Group nGroup, Model model){
+        iG.createG(nGroup);
+        return "redirect:/mvc/chatRoom";
+    }
+
+    @GetMapping("/editGroup/{idG}")
+    public String editGget(@PathVariable("idG") Long idG,Model model){
+        Group group = iG.readG(idG);
+        model.addAttribute("eGroup",group);
+        return "redirect:/mvc/chatRoom";
+    }
+
+    @PostMapping("/editGroup/{idG}")
+    public String editG(@PathVariable("idG") Long idG,@ModelAttribute("eGroup") Group eGroup, Model model){
+        eGroup.setId(idG);
+        System.out.println(eGroup.toString());
+//        iG.updateG(eGroup);
+        return "redirect:/mvc/chatRoom";
     }
 
     // ////////ADDGROUP/////

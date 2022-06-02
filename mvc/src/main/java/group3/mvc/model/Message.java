@@ -10,7 +10,6 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Message  {
-
 	private Long id;
 	private String content;
 	private String language;

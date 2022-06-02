@@ -4,6 +4,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import group3.mvc.model.MyUser;
+import group3.mvc.services.implementation.IMyUser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,9 @@ import reactor.core.publisher.Mono;
 public class GroupService implements IGroup {
 
     private WebClient wCg = Connection.getClient();
+
+    @Autowired
+    IMyUser iMU;
 
 
     public Integer createG(Group group){
@@ -241,7 +247,7 @@ public class GroupService implements IGroup {
     public void updateHolderGR(Group group, String rta){
         switch (rta){
             case "crG":
-                UserHolder.getCurrentUser().addGroup(new SimpleGroupResponse(group.getId(),group.getName(),group.getDescription()));
+                UserHolder.getCurrentUser().addGroup(retrieveGroup(group.getName()));
                 break;
             case "updG":
                 updateGroup(group);
@@ -250,13 +256,23 @@ public class GroupService implements IGroup {
     }
 
     public void updateGroup(Group group){
-        for(SimpleGroupResponse groupr : UserHolder.getCurrentUser().getGroups()){
-            if (groupr.getId() == group.getId()) {
-                groupr.setId(group.getId());
-                groupr.setName(group.getName());
-                groupr.setDescription(group.getDescription());
+//       SimpleGroupResponse sgr = retrieveGroup(group.getName());
+       for(SimpleGroupResponse sgrE : UserHolder.getCurrentUser().getGroups()){
+           if(sgrE.getId() == group.getId()){
+               sgrE.setName(group.getName());
+               sgrE.setDescription(group.getDescription());
+           }
+       }
+    }
+
+    public SimpleGroupResponse retrieveGroup(String gName){
+        MyUser user = iMU.readUByUsername(UserHolder.getCurrentUser().getUsername());
+        for(SimpleGroupResponse sgr : user.getGroups()){
+            if(gName.compareTo(sgr.getName()) ==0){
+                return sgr;
             }
         }
+        return null;
     }
 
 }
