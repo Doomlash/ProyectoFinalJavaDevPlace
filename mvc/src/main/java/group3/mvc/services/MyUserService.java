@@ -3,8 +3,6 @@ package group3.mvc.services;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-
 import group3.mvc.model.UserHolder;
 import group3.mvc.model.request.SimpleUserResponse;
 import org.springframework.http.HttpStatus;
@@ -12,8 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
-
-import group3.mvc.model.MyUser;
+import group3.mvc.model.MyUser;;
 import group3.mvc.model.request.RelationRequest;
 import group3.mvc.services.connection.Connection;
 import group3.mvc.services.implementation.IMyUser;

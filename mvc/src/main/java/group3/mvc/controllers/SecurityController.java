@@ -49,6 +49,6 @@ public class SecurityController {
         }
         User user = (User)udService.loadUserByUsername(registerRequest.getUsername());
         SecurityContextHolder.getContext().setAuthentication(UsernamePasswordAuthenticationToken.authenticated(user.getUsername(), user.getPassword(), user.getAuthorities()));
-        return "redirect:/registerSuccess";
+        return "redirect:/mvc/registerSuccess";
     }
 }

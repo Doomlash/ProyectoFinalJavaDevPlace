@@ -1,13 +1,11 @@
 package group3.mvc.services.implementation;
 
+import java.util.List;
+import java.util.NoSuchElementException;
+
 import group3.mvc.model.Group;
 import group3.mvc.model.request.GroupMemberRequest;
 import group3.mvc.model.request.GroupRequest;
-import org.springframework.http.ResponseEntity;
-
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 public interface IGroup {
     public Integer createG(Group group);

@@ -1,11 +1,8 @@
 package group3.mvc.services.implementation;
 
-import group3.mvc.model.MyUser;
-import group3.mvc.model.request.RelationRequest;
-import org.springframework.http.ResponseEntity;
-
 import java.util.List;
-import java.util.Optional;
+
+import group3.mvc.model.MyUser;
 
 
 public interface IMyUser {

@@ -1,9 +1,9 @@
 package group3.mvc.services.implementation;
 
+import java.util.List;
+
 import group3.mvc.model.Message;
 import group3.mvc.model.request.MessageRequest;
-
-import java.util.List;
 
 
 public interface IMessages {

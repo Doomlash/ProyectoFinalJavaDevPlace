@@ -1,5 +1,15 @@
 package group3.mvc.services;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+
 import group3.mvc.model.Group;
 import group3.mvc.model.Message;
 import group3.mvc.model.MyUser;
@@ -10,17 +20,7 @@ import group3.mvc.model.request.SimpleGroupResponse;
 import group3.mvc.model.request.SimpleUserResponse;
 import group3.mvc.services.connection.Connection;
 import group3.mvc.services.implementation.IGroup;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
-
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 
 @Service
