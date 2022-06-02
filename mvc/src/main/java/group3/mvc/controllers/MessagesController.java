@@ -1,12 +1,10 @@
 package group3.mvc.controllers;
 
-import group3.mvc.model.Message;
-import group3.mvc.model.request.MessageRequest;
-import group3.mvc.services.implementation.IMessages;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import group3.mvc.services.implementation.IMessages;
 
 @RequestMapping("/mvc/messages")
 @RestController

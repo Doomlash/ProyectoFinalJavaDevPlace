@@ -2,6 +2,7 @@ package group3.mvc.services;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -170,6 +171,24 @@ public class MessagesService implements IMessages{
                 }
             }
         }
+    }
+
+    @Override
+    public List<Message> filterMessagesContact(Long id) {
+        List<Message> response = new LinkedList<>();
+        for (Message message : UserHolder.getCurrentUser().getSent()) {
+            System.out.println(message.toString());
+            if(message.getReceiverId()==id){
+                response.add(message);
+            }
+        }
+        for (Message message : UserHolder.getCurrentUser().getReceived()) {
+            System.out.println(message.toString());
+            if(message.getSenderId()==id){
+                response.add(message);
+            }
+        }
+        return response;
     }
 
 

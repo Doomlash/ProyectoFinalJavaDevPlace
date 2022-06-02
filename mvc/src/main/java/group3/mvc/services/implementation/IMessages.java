@@ -12,4 +12,5 @@ public interface IMessages {
      public Integer readMessage(Message ms);
 
      public Message translate(Message m,String lanU);
+    public List<Message> filterMessagesContact(Long id);
 }

@@ -1,7 +1,7 @@
 package group3.mvc.controllers;
 
-import group3.mvc.model.Group;
-import group3.mvc.services.connection.Connection;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import group3.mvc.model.FormRequest;
+import group3.mvc.model.Message;
 import group3.mvc.model.MyUser;
 import group3.mvc.model.UserHolder;
 import group3.mvc.services.MiddleService;
@@ -47,6 +48,7 @@ public class AppController {
     @GetMapping("/loginSuccess")
     public String initLogin(){
         s.login();
+        System.out.println(UserHolder.getCurrentUser().toString());
         return "redirect:/mvc/chatRoom";
     }
 
@@ -107,32 +109,17 @@ public class AppController {
         MyUser user = UserHolder.getCurrentUser();
         model.addAttribute("contacts", user.getContacts());
         model.addAttribute("blocks", user.getBlocks());
-        model.addAttribute("nGroup",new Group());
         model.addAttribute("listTab", "active");
         return "chatRoom";
     }
 
     @GetMapping("/chat/{id}")
     public String loadChat(@PathVariable("id") Long id, Model model){
-        model.addAttribute("listTab", "disable");
+        System.out.println(id);
+        List<Message> l = iM.filterMessagesContact(id);
+        model.addAttribute("messages", l);
         model.addAttribute("chatTab", "active");
         return "chatRoom";
-    }
-
-    @GetMapping("/chatRoom/tabGroup")
-    public String tabGroup(Model model){
-        model.addAttribute("listTab", "disable");
-        model.addAttribute("groupTab","active");
-        MyUser user = UserHolder.getCurrentUser();
-        model.addAttribute("groups", user.getGroups());
-        return "chatRoom";
-    }
-
-    @PostMapping("/createGroup")
-    public String createGroup(@ModelAttribute("nGroup") Group group, Model model){
-        System.out.println(group.toString());
-
-        return "redirect:/mvc/chatRoom";
     }
 
     // ////////ADDGROUP/////
