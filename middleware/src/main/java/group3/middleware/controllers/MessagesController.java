@@ -2,6 +2,7 @@ package group3.middleware.controllers;
 
 import group3.middleware.model.Message;
 import group3.middleware.model.request.MessageRequest;
+import group3.middleware.services.interfaces.IMessages;
 import group3.middleware.services.interfaces.MockT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class MessagesController {
     @Autowired
-    private MockT iM;
+    private IMessages iM;
 
 
     @PostMapping()
@@ -39,7 +40,6 @@ public class MessagesController {
 
     @PostMapping("/translate/{langU}")
     public ResponseEntity<Message> translate(@RequestBody Message message,@PathVariable("langU") String langU) {
-        iM.translate(message,langU);
-        return ResponseEntity.ok().body(message);
+        return ResponseEntity.ok().body(iM.translate(message,langU));
     }
 }

@@ -11,6 +11,6 @@ public interface IMessages {
      public ResponseEntity<Integer> receiveMessage(Long id);
      public ResponseEntity<Integer> readMessage(Long id);
 
-     public void translate(Message m,String lanU);
+     public Message translate(Message m,String lanU);
 
 }

@@ -151,6 +151,7 @@ public class MyUserService implements IMyUser {
                     .block();
 
             updateHolderUS(contact,"addC",0L);
+            System.out.println(UserHolder.getCurrentUser().toString());
 
             return rACu.getBody();
         }catch (WebClientResponseException e){
@@ -229,6 +230,7 @@ public class MyUserService implements IMyUser {
     @Override
     public Integer removeB(Long idB) {
         RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), idB);
+        System.out.println("ANTES DE BORRAR\n"+UserHolder.getCurrentUser().getContacts());
         try{
             ResponseEntity<Integer> rABu = wCu.put()
                     .uri("/users/block")
@@ -259,15 +261,15 @@ public class MyUserService implements IMyUser {
 
     //////////FUNCIONES AUXILIARES
     public void updateHolderUS(MyUser user,String rta,Long id){
+        System.out.println("USER Q LLEGA\n"+user.toString());
         switch (rta){
             case "upd":
                 UserHolder.setCurrentUser(user);
                 break;
             case "addC":
-                UserHolder.getCurrentUser().addContact(
-                        new SimpleUserResponse(user.getId(),
-                                user.getUsername(),
-                                user.getProfileImage()));
+                SimpleUserResponse simpleUserResponse = new SimpleUserResponse(user.getId(), user.getUsername(), user.getProfileImage());
+                UserHolder.getCurrentUser().addContact(simpleUserResponse);
+                System.out.println("DESPUES DE actualizar\n"+UserHolder.getCurrentUser().toString());
                 break;
             case "delC":
                updateCB(id,"delC");
@@ -298,6 +300,5 @@ public class MyUserService implements IMyUser {
                 break;
             }
         }
-
     }
 }

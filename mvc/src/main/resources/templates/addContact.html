@@ -50,6 +50,8 @@
                                     <td>
                                         <form th:object="${users}" method="POST" th:action="@{/mvc/contact}">
                                             <input type="hidden" th:field="*{id}"/>
+                                            <input type="hidden" th:field="*{username}"/>
+                                            <input type="hidden" th:field="*{profileImage}"/>
                                             <button type="submit" name="submit" value="value" class="link-button">AddContact</button>
                                         </form>
                                     </td>
