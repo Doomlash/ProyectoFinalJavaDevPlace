@@ -129,7 +129,7 @@ public class AppController {
 
     @PostMapping("/contact/addB/{idC}")
     public String addBlock(@ModelAttribute("block") MyUser block, Model model){
-        Integer rta = iMU.addB(block);
+        //Integer rta = iMU.addB(block);
         return "redirect:/mvc/chatRoom";
     }
 

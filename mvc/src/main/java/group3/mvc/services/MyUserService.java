@@ -163,8 +163,8 @@ public class MyUserService implements IMyUser {
     }
 
     @Override
-    public Integer removeC(MyUser contact) {
-        RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), contact.getId());
+    public Integer removeC(Long idC) {
+        RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), idC);
         try {
             ResponseEntity<Integer> rRCu = wCu.put()
                     .uri("/users/contact")
@@ -174,7 +174,7 @@ public class MyUserService implements IMyUser {
                     .toEntity(Integer.class)
                     .block();
 
-            updateHolderUS(contact,"delC");
+            //updateHolderUS(contact,"delC");
 
             return rRCu.getBody();
 
@@ -185,7 +185,7 @@ public class MyUserService implements IMyUser {
             }
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-                return removeC(contact);
+                return removeC(idC);
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -194,8 +194,8 @@ public class MyUserService implements IMyUser {
     }
 
     @Override
-    public Integer addB(MyUser block) {
-        RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), block.getId());
+    public Integer addB(Long idB) {
+        RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), idB);
         try {
             ResponseEntity<Integer> rABu = wCu.post()
                     .uri("/users/block")
@@ -204,7 +204,7 @@ public class MyUserService implements IMyUser {
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
-            updateHolderUS(block,"addB");
+            /*updateHolderUS(block,"addB");*/
 
             return rABu.getBody();
         }catch (WebClientResponseException e){
@@ -213,7 +213,7 @@ public class MyUserService implements IMyUser {
             }
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-                return addB(block);
+                return addB(idB);
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -222,8 +222,8 @@ public class MyUserService implements IMyUser {
     }
 
     @Override
-    public Integer removeB(MyUser block) {
-        RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), block.getId());
+    public Integer removeB(Long idB) {
+        RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), idB);
         try{
             ResponseEntity<Integer> rABu = wCu.put()
                     .uri("/users/block")
@@ -233,7 +233,7 @@ public class MyUserService implements IMyUser {
                     .toEntity(Integer.class)
                     .block();
 
-            updateHolderUS(block,"delB");
+            //updateHolderUS(block,"delB");
 
             return rABu.getBody();
         }catch (WebClientResponseException e){
@@ -242,7 +242,7 @@ public class MyUserService implements IMyUser {
             }
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-                return removeB(block);
+                return removeB(idB);
             }
             return ResponseEntity
                     .status(e.getStatusCode())

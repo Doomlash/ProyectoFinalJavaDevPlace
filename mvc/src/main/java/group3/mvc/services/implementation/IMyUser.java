@@ -12,7 +12,7 @@ public interface IMyUser {
     public Integer updateMyUser(MyUser myUser);
     public Integer deleteU(Long id);
     public Integer addC(MyUser user);
-    public Integer removeC(MyUser myUse);
-    public Integer addB(MyUser user);
-    public Integer removeB(MyUser myUse);
+    public Integer removeC(Long idB);
+    public Integer addB(Long idB);
+    public Integer removeB(Long idB);
 }
