@@ -172,19 +172,30 @@
                                         </thead>
                                         <tbody>
                                             <tr th:each="message: ${messages}">
-                                                <td class="width:90%  text-start">
-                                                    <a style="color:black" th:href="@{/mvc/traducir}"><span th:text="${message.content}"></span></a>
-                                                </td>
-                                                <td class="width:5%  text-end">
-                                                    <a style="color:black"
-                                                        th:href="@{/mvc/traducir}"><span th:text="${message.receptionDate}"></span></a>
-                                                </td>
-                                                <td class="width:5% text-end">
-
-                                                    <a href="#" th:href="@{/mvc/traducir}"><i
-                                                            class="fas fa-language"></i></a>
-    
-                                                </td>
+                                                <div th:if="${message.senderId == userId}">
+                                                    <td class="width:30%  text-start">
+                                                    </td>
+                                                    <td class="width:5%  text-start">
+                                                        <a style="color:black"><span th:text="${message.creationDate}"></span></a>
+                                                    </td>
+                                                    <td class="width:65%  text-start">
+                                                        <a style="color:black"><span th:text="${message.content}"></span></a>
+                                                    </td>
+                                                    
+                                                </div>
+                                                <div th:if="${message.senderId != userId}">
+                                                    <td class="width:65%  text-start">
+                                                        <a style="color:black" th:href="@{/mvc/traducir}"><span th:text="${message.content}"></span></a>
+                                                    </td>
+                                                    <td class="width:5%  text-end">
+                                                        <a style="color:black"><span th:text="${message.receptionDate}"></span></a>
+                                                    </td>
+                                                    <td class="width:30% text-end">
+                                                        <a href="#" th:href="@{/mvc/traducir}"><i
+                                                                class="fas fa-language"></i></a>
+                                                    </td>
+                                                </div>
+                                                
                                             </tr>
                                         </tbody>
                                     </table>

@@ -111,6 +111,7 @@ public class AppController {
         model.addAttribute("contacts", user.getContacts());
         model.addAttribute("blocks", user.getBlocks());
         model.addAttribute("listTab", "active");
+        model.addAttribute("userId",user.getId());
         if(chatId.length()!=0){
             System.out.println("asd");
             System.out.println(chatId.length());
@@ -129,8 +130,10 @@ public class AppController {
     }
 
     @GetMapping("/translate/{id}")
-    public String translateMessage(Model model, RedirectAttributes ra){
-        ra.addFlashAttribute("chatId", 0);
+    public String translateMessage(@PathVariable("id") Long messageId, Model model, RedirectAttributes ra){
+        
+        Message m = iM.translate(iM.getMessage(messageId), "en");
+        ra.addFlashAttribute("chatId", m.getSenderId());
         return "redirect:/mvc/chatRoom";
  
     }
