@@ -30,7 +30,6 @@ public class MiddleService {
                     .bodyToMono(LoginResponse.class)
                     .block();
         UserHolder.setCurrentUser(response.getUser());
-        //System.out.println(response.getToken());
         Connection.setToken(response.getToken());
     }
 

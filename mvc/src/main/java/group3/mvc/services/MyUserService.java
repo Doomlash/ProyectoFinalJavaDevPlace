@@ -94,7 +94,7 @@ public class MyUserService implements IMyUser {
                     .toEntity(Integer.class)
                     .block();
 
-            updateHolderUS(myUser,"upd");
+            updateHolderUS(myUser,"upd",0L);
 
             return rUu.getBody();
         }catch (WebClientResponseException e){
@@ -150,7 +150,7 @@ public class MyUserService implements IMyUser {
                     .toEntity(Integer.class)
                     .block();
 
-            updateHolderUS(contact,"addC");
+            updateHolderUS(contact,"addC",0L);
 
             return rACu.getBody();
         }catch (WebClientResponseException e){
@@ -179,7 +179,7 @@ public class MyUserService implements IMyUser {
                     .toEntity(Integer.class)
                     .block();
 
-            //updateHolderUS(contact,"delC");
+            updateHolderUS(new MyUser(),"delC",idC);
 
             return rRCu.getBody();
 
@@ -209,7 +209,7 @@ public class MyUserService implements IMyUser {
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
-            /*updateHolderUS(block,"addB");*/
+            updateHolderUS(new MyUser(),"addB",idB);
 
             return rABu.getBody();
         }catch (WebClientResponseException e){
@@ -238,7 +238,7 @@ public class MyUserService implements IMyUser {
                     .toEntity(Integer.class)
                     .block();
 
-            //updateHolderUS(block,"delB");
+            updateHolderUS(new MyUser(),"addB",idB);
 
             return rABu.getBody();
         }catch (WebClientResponseException e){
@@ -258,7 +258,7 @@ public class MyUserService implements IMyUser {
 
 
     //////////FUNCIONES AUXILIARES
-    public void updateHolderUS(MyUser user,String rta){
+    public void updateHolderUS(MyUser user,String rta,Long id){
         switch (rta){
             case "upd":
                 UserHolder.setCurrentUser(user);
@@ -270,21 +270,34 @@ public class MyUserService implements IMyUser {
                                 user.getProfileImage()));
                 break;
             case "delC":
-                UserHolder.getCurrentUser().getContacts().remove(new SimpleUserResponse(user.getId(),
-                                user.getUsername(),
-                                user.getProfileImage()));
+               updateCB(id,"delC");
                 break;
             case "addB":
-                UserHolder.getCurrentUser().addBlock(
-                        new SimpleUserResponse(user.getId(),
-                                user.getUsername(),
-                                user.getProfileImage()));
+                updateCB(id,"addB");
                 break;
             case "delB":
-                UserHolder.getCurrentUser().getBlocks().remove(new SimpleUserResponse(user.getId(),
-                        user.getUsername(),
-                        user.getProfileImage()));
+                updateCB(id,"delB");
                 break;
         }
+    }
+    public void updateCB(Long id,String sel){
+            for(SimpleUserResponse contact : UserHolder.getCurrentUser().getContacts()){
+                if(contact.getId() == id){
+                    if(sel.contains("C")) {
+                        UserHolder.getCurrentUser().getContacts().remove(contact);
+                        break;
+                    }else{
+                        UserHolder.getCurrentUser().getBlocks().add(contact);
+                        break;
+                }
+            }
+        }
+        for(SimpleUserResponse blocked : UserHolder.getCurrentUser().getBlocks()){
+            if(blocked.getId() == id){
+                UserHolder.getCurrentUser().getBlocks().remove(blocked);
+                break;
+            }
+        }
+
     }
 }

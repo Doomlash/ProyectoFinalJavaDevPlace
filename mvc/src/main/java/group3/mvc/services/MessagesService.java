@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
-import group3.mvc.model.UserHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -12,6 +11,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import group3.mvc.model.Message;
+import group3.mvc.model.UserHolder;
 import group3.mvc.model.request.MessageRequest;
 import group3.mvc.services.connection.Connection;
 import group3.mvc.services.implementation.IMessages;

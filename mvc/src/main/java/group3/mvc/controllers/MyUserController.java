@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import group3.mvc.model.MyUser;
-import group3.mvc.services.connection.Connection;
 import group3.mvc.services.implementation.IMyUser;
 
 @RequestMapping("/mvc/users")
