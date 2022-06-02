@@ -2,7 +2,6 @@ package group3.mvc.services.implementation;
 
 import group3.mvc.model.Message;
 import group3.mvc.model.request.MessageRequest;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
