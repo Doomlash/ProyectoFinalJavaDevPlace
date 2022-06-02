@@ -1,6 +1,5 @@
 package group3.mvc.controllers;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,7 +128,6 @@ public class AppController {
         if(chatId.length()!=0){
             m.setReceiverId(Long.valueOf(chatId));
             List<Message> l = iM.filterMessagesContact(Long.valueOf(chatId));
-            Collections.sort(l);
             model.addAttribute("messages", l);
             model.addAttribute("listTab", "");
             model.addAttribute("chatTab", "active");
