@@ -43,7 +43,7 @@ public class GroupService implements IGroup {
                     .toEntity(Integer.class)
                     .block();
 
-            updateHolderGR(group,"crG");
+            updateHolderGR(group,"crG",0L);
 
             return response.getBody();
         }catch (WebClientResponseException e){
@@ -107,7 +107,7 @@ public class GroupService implements IGroup {
                     .toEntity(Integer.class)
                     .block();
 
-            updateHolderGR(group,"updG");
+            updateHolderGR(group,"updG",0L);
             return ug.getBody();
         }catch (WebClientResponseException e){
             if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
@@ -132,6 +132,9 @@ public class GroupService implements IGroup {
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
+
+            updateHolderGR(new Group(),"delG",id);
+
             return dg.getBody();
         }catch (WebClientResponseException e){
             if(e.getStatusCode().compareTo(HttpStatus.INTERNAL_SERVER_ERROR) ==0){
@@ -243,8 +246,8 @@ public class GroupService implements IGroup {
         }
     }
 
-
-    public void updateHolderGR(Group group, String rta){
+    /**Herramientas Auxiliares*/
+    public void updateHolderGR(Group group, String rta,Long idG){
         switch (rta){
             case "crG":
                 UserHolder.getCurrentUser().addGroup(retrieveGroup(group.getName()));
@@ -252,6 +255,8 @@ public class GroupService implements IGroup {
             case "updG":
                 updateGroup(group);
                 break;
+            case "delG":
+                deleteGtoHolder(idG);
         }
     }
 
@@ -273,6 +278,15 @@ public class GroupService implements IGroup {
             }
         }
         return null;
+    }
+
+    public void deleteGtoHolder(Long idG){
+        for(SimpleGroupResponse sgr : UserHolder.getCurrentUser().getGroups()){
+            if(idG == sgr.getId()){
+                UserHolder.getCurrentUser().getGroups().remove(sgr);
+                break;
+            }
+        }
     }
 
 }

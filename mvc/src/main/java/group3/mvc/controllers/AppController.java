@@ -164,20 +164,30 @@ public class AppController {
         return "redirect:/mvc/chatRoom";
     }
 
-    @GetMapping("/editGroup/{idG}")
-    public String editGget(@PathVariable("idG") Long idG,Model model){
-        Group group = iG.readG(idG);
-        model.addAttribute("eGroup",group);
-        return "redirect:/mvc/chatRoom";
-    }
+//    @GetMapping("/editGroup/{idG}")
+//    public String editGget(@PathVariable("idG") Long idG,Model model){
+//        Group group = iG.readG(idG);
+//        model.addAttribute("eGroup",group);
+//        return "redirect:/mvc/chatRoom";
+//    }
 
     @PostMapping("/editGroup/{idG}")
     public String editG(@PathVariable("idG") Long idG,@ModelAttribute("eGroup") Group eGroup, Model model){
         eGroup.setId(idG);
         System.out.println(eGroup.toString());
-//        iG.updateG(eGroup);
+        iG.updateG(eGroup);
         return "redirect:/mvc/chatRoom";
     }
+
+    @GetMapping("/deleteG/{idG}")
+    public String deleteG(@PathVariable("idG")Long idG){
+        iG.deleteG(idG);
+        return "redirect:/mvc/chatRoom";
+    }
+
+    
+
+
 
     // ////////ADDGROUP/////
     // @GetMapping("/addGroup")

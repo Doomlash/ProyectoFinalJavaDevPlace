@@ -5,8 +5,10 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import group3.mvc.model.MyUser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -209,7 +211,8 @@ public class MessagesService implements IMessages{
         return response;
     }
 
-	@Override
+
+    @Override
 	public Message getMessage(Long messageId) {
         for (Message message : UserHolder.getCurrentUser().getReceived()) {
             if(message.getId()==messageId){
