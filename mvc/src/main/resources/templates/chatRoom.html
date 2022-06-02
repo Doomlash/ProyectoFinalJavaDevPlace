@@ -36,7 +36,7 @@
         <div class="row col-12">
             <h1 class="text-white fst-italic fw-semibold ">Chat Room</h1>
             <div class="col-2">
-            <a type="text" href="login.html" class="btn btn-secondary" value="Back">Logout</a>
+            <a type="text" th:href="@{/logout}" class="btn btn-secondary" value="Back">Logout</a>
             </div>
 
             <div class="mx-auto col-sm-8 mt-5 " id="myTab" role="tablist">
@@ -72,7 +72,7 @@
                                         </thead>
                                         <tbody>
                                             <tr th:each="contact : ${contacts}">
-                                                <td class="fst-italic fw-bold fs-6" th:text="(contact.name)">nombre
+                                                <td class="fst-italic fw-bold fs-6" th:text="${contact.username}">nombre
                                                 </td>
 
                                                 <td class="text-end">
@@ -80,9 +80,9 @@
                                                     <!-- link trigger modal add member into group-->
                                                     <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal3"><i
                                                             class="fas fa-user-group"></i></a>|
-                                                    <a href="#" th:href="(mapeo de eliminar contacto)"><i
+                                                    <a href="#" th:href="@{/mvc/deleteContact}"><i
                                                             class="fas fa-user-times"></i></a>|
-                                                    <a href="#" th:href="(mapeo de bloquear contacto)"><i
+                                                    <a href="#" th:href="@{/mvc/blockContact}"><i
                                                             class="fas fa-ban"></i></a>
                                                 </td>
                                             </tr>
@@ -91,7 +91,7 @@
                                 </div>
                                 <div class="col-lg-12 text-center">
                                     
-                                    <a type="text" href="addContact.html" class="btn btn-primary" value="Contact">New
+                                    <a type="text" th:href="@{/mvc/addContact}" class="btn btn-primary" value="Contact">New
                                         Contact</a>
                                     <!-- Button trigger modal list block -->
                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
@@ -129,7 +129,7 @@
                                                 <td th:text="group.name"></td>
                                                 <td th:text="group.description"></td>
                                                 <td class="text-end">
-                                                    <a href="#chatList" th:href="(mapeo de agregar un grupo)"><i
+                                                    <a href="#chatList" th:href="@{/mvc/addGroup}"><i
                                                             class="fas fa-comment"></i></a>|
                                                     <!-- link trigger modal edit group -->
                                                     <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal2"><i class="fas fa-edit"></i></a>|
@@ -171,18 +171,18 @@
 
                                         </thead>
                                         <tbody>
-                                            <tr th:each="message: ${messages}}">
+                                            <tr th:each="message: ${messages}">
                                                 <td class="width:90%  text-start">
-                                                    <a style="color:black" th:href="(mapeo de traducir un mensaje)">hola
+                                                    <a style="color:black" th:href="@{/mvc/traducir}">hola
                                                         soy un ejemplo de chat</a>
                                                 </td>
                                                 <td class="width:5%  text-end">
                                                     <a style="color:black"
-                                                        th:href="(mapeo de traducir un mensaje)">10:30</a>
+                                                        th:href="@{/mvc/traducir}">10:30</a>
                                                 </td>
                                                 <td class="width:5% text-end">
 
-                                                    <a href="#" th:href="(mapeo de traducir un mensaje)"><i
+                                                    <a href="#" th:href="@{/mvc/traducir}"><i
                                                             class="fas fa-language"></i></a>
     
                                                 </td>
@@ -216,8 +216,8 @@
 
             </div>
         </div>
-        <!-- Modal de new group-->
-        <div class="modal fade color-primary" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        <!-- Modal de new group
+        <!-- <div class="modal fade color-primary" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog">
                 <form action="">
@@ -230,7 +230,7 @@
 
                             <label for="newName" class="form-label">Insert name</label>
                             <input class="form-control mb-3 mx-1 col-10 fst-italic fw-bold fs-7 " id="newName"
-                                type="text" th:field="(campo_nombreGrupo)">
+                                type="text" th:field="${group.name}">
 
 
 
@@ -245,7 +245,7 @@
         </div>
         <!-- Fin Modal de new group-->
         <!-- Modal de edit group-->
-        <div class="modal fade color-primary" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2"
+        <!-- <div class="modal fade color-primary" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2"
             aria-hidden="true">
             <div class="modal-dialog">
                 <form action="">
@@ -258,11 +258,11 @@
 
                             <label for="editName" class="form-label fst-italic fw-bold">Insert name</label>
                             <input class="form-control mb-3 mx-1 col-10 fst-italic  fs-7 " id="editName" type="text"
-                                th:field="(campo_nombreGrupo)">
+                                th:field="${group.name}">
                             
                             <label for="newDescription" class="form-label fst-italic fw-bold">Description</label>
                             <input class="form-control mb-3 mx-1 col-10 fst-italic  fs-7 " id="newDescription" type="text"
-                                th:field="(campo_descriptionGrupo)">
+                                th:field="${group.description}">
 
                         </div>
                         <div class="modal-footer">
@@ -272,11 +272,11 @@
                     </div>
                 </form>
             </div>
-        </div>
+        </div> -->
         <!--Fin Modal de edit group-->
         <!-- Modal de agregar miembro grupo-->
-        <div class="modal fade color-primary" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel3"
-            aria-hidden="true">
+        <!-- <div class="modal fade color-primary" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel3"
+            <!-- aria-hidden="true">
             <div class="modal-dialog">
                 
                     <div class="modal-content">
@@ -293,7 +293,7 @@
                                         </div>
                                         <div>
                                             <input class="form-control mb-3 mx-1 col-10 fst-italic fw-bold fs-7 " id="groupName" type="text"
-                                                th:field="(campo_nombreGrupo)">
+                                                th:field="${group.name}">
                                         </div>
                                         <div>
                                             <button type="submit" class="btn btn-primary"><i class="fas fa-magnifying-glass"></i></button>
@@ -314,10 +314,10 @@
                     </div>
                 
             </div>
-        </div>
+        </div> -->
         <!--Fin Modal de agregar miembro al group-->
         <!-- Modal de lista contactos bloqueados-->
-        <div class="modal fade color-primary" id="exampleModal4" tabindex="-1" aria-labelledby="exampleModalLabel4"
+        <!-- <div class="modal fade color-primary" id="exampleModal4" tabindex="-1" aria-labelledby="exampleModalLabel4"
             aria-hidden="true">
             <div class="modal-dialog">
                 <form action="">
@@ -334,12 +334,12 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr th:each="(objeto lista contactos bloqueados del usuario)">
+                                    <tr th:each="block : ${blocks}">
                                         <td><img th:src="SE APLICA EL TH DE LA IMG/ICON" src="/grupo3/src/main/resources/img/icons/1.png"
                                                 width="28px" alt="">
                         
                                         </td>
-                                        <td class="fst-italic fw-bold fs-6" th:text="(contacto_nombre)">nombre
+                                        <td class="fst-italic fw-bold fs-6" th:text="${block.username}">nombre
                                         </td>
                         
                                         <td class="text-end">
@@ -358,10 +358,10 @@
                     </div>
                 </form>
             </div>
-        </div>
+        </div> -->
         <!--Fin Modal de lista contactos bloqueados-->
         <!-- Modal de agregar miembro grupo-->
-        <div class="modal fade color-primary" id="exampleModal5" tabindex="-1" aria-labelledby="exampleModalLabel5"
+        <!-- <div class="modal fade color-primary" id="exampleModal5" tabindex="-1" aria-labelledby="exampleModalLabel5"
             aria-hidden="true">
             <div class="modal-dialog">
                 
@@ -401,7 +401,7 @@
                                                 <td class="text-end">
                                                     <a href="#chatList"><i class="fas fa-comment"></i></a>|
                                                     <!-- link trigger modal add member into group-->
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal3"><i
+                                                    <!-- <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal3"><i
                                                             class="fas fa-user-group"></i></a>|
                                                     <a href="#" th:href="(mapeo de eliminar contacto)"><i
                                                             class="fas fa-user-times"></i></a>|
@@ -423,8 +423,8 @@
                     </div>
                 
             </div>
-        </div>
-        <!--Fin Modal busqueda contacto-->
+        </div> -->
+        <!-- Fin Modal busqueda contacto --> -->
     </div>
     </div>
 

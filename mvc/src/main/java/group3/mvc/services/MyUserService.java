@@ -3,8 +3,6 @@ package group3.mvc.services;
 import java.util.Arrays;
 import java.util.List;
 
-
-import group3.mvc.model.UserHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -12,6 +10,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import group3.mvc.model.MyUser;
+import group3.mvc.model.UserHolder;
 import group3.mvc.model.request.RelationRequest;
 import group3.mvc.services.connection.Connection;
 import group3.mvc.services.implementation.IMyUser;
@@ -25,6 +24,7 @@ public class MyUserService implements IMyUser {
     public Integer createU(MyUser myUser) {
         try{
             ResponseEntity<Integer> rCu = wCu.post()
+                    .uri("/users")
                     .body(Mono.just(myUser),MyUser.class)
                     .retrieve()
                     .toEntity(Integer.class)
@@ -44,6 +44,7 @@ public class MyUserService implements IMyUser {
     @Override
     public List<MyUser> listAllUsers() {
         ResponseEntity<MyUser[]> rLAu = wCu.get()
+                .uri("/users")
                 .retrieve()
                 .toEntity(MyUser[].class)
                 .block();
@@ -55,7 +56,7 @@ public class MyUserService implements IMyUser {
     public MyUser readUById(Long idU) {
         try{
             ResponseEntity<MyUser> rRu = wCu.get()
-                    .uri("/"+idU)
+                    .uri("/users/"+idU)
                     .retrieve()
                     .toEntity(MyUser.class)
                     .block();
@@ -69,12 +70,13 @@ public class MyUserService implements IMyUser {
     public MyUser readUByUsername(String username) {
         try{
             ResponseEntity<MyUser> rRu = wCu.get()
-                    .uri("/byUsername"+username)
+                    .uri("/users/byUsername"+username)
                     .retrieve()
                     .toEntity(MyUser.class)
                     .block();
             return rRu.getBody();
         }catch (WebClientResponseException e){
+            System.out.println(e.getStatusCode());
             return null;
         }
     }
@@ -83,6 +85,7 @@ public class MyUserService implements IMyUser {
     public Integer updateMyUser(MyUser myUser) {
         try {
             ResponseEntity<Integer> rUu = wCu.put()
+                    .uri("/users")
                     .body(Mono.just(myUser),MyUser.class)
                     .retrieve()
                     .toEntity(Integer.class)
@@ -102,7 +105,7 @@ public class MyUserService implements IMyUser {
     public Integer deleteU(Long idU) {
         try {
             ResponseEntity<Integer> rDu = wCu.delete()
-                    .uri("/"+ idU)
+                    .uri("/users/"+ idU)
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
@@ -124,7 +127,7 @@ public class MyUserService implements IMyUser {
         RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), user.getId());
         try {
             ResponseEntity<Integer> rACu = wCu.post()
-                    .uri("/contact")
+                    .uri("/users/contact")
                     .body(Mono.just(rr),RelationRequest.class)
                     .retrieve()
                     .toEntity(Integer.class)
@@ -145,7 +148,7 @@ public class MyUserService implements IMyUser {
         RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), idC);
         try {
             ResponseEntity<Integer> rRCu = wCu.put()
-                    .uri("/contact")
+                    .uri("/users/contact")
                     .body(Mono.just(rr),RelationRequest.class)
                     .retrieve()
                     .toEntity(Integer.class)
@@ -166,7 +169,7 @@ public class MyUserService implements IMyUser {
         RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), user.getId());
         try {
             ResponseEntity<Integer> rABu = wCu.post()
-                    .uri("/block")
+                    .uri("/users/block")
                     .body(Mono.just(rr),RelationRequest.class)
                     .retrieve()
                     .toEntity(Integer.class)
@@ -187,7 +190,7 @@ public class MyUserService implements IMyUser {
         RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), idB);
         try{
             ResponseEntity<Integer> rABu = wCu.put()
-                    .uri("/block")
+                    .uri("/users/block")
                     .body(Mono.just(rr),RelationRequest.class)
                     .retrieve()
                     .toEntity(Integer.class)

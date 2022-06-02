@@ -31,6 +31,7 @@ public class MiddleService {
                     .block();
         UserHolder.setCurrentUser(response.getUser());
         Connection.setToken(response.getToken());
+        System.out.println(UserHolder.getCurrentUser().toString());
         
     }
 
@@ -44,6 +45,7 @@ public class MiddleService {
                     .block();
         UserHolder.setCurrentUser(response.getUser());
         Connection.setToken(response.getToken());
+        System.out.println(UserHolder.getCurrentUser().toString());
     }
     
 }
