@@ -34,7 +34,7 @@ public class MessagesService implements IMessages{
             }
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-                createMessage(mr);
+                return createMessage(mr);
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -55,7 +55,7 @@ public class MessagesService implements IMessages{
         }catch (WebClientResponseException e){
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-                listAllMessages();
+                return listAllMessages();
             }
             return null;
         }
@@ -76,7 +76,7 @@ public class MessagesService implements IMessages{
             }
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-               receiveMessage(idM);
+                return receiveMessage(idM);
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -100,7 +100,7 @@ public class MessagesService implements IMessages{
             }
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-                readMessage(idM);
+                return readMessage(idM);
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -121,7 +121,7 @@ public class MessagesService implements IMessages{
         }catch (WebClientResponseException e){
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-                translate(message,langU);
+                return translate(message,langU);
             }
             return null;
         }
