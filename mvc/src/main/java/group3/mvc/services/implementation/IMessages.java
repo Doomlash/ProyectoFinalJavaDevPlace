@@ -13,4 +13,5 @@ public interface IMessages {
 
      public Message translate(Message m,String lanU);
     public List<Message> filterMessagesContact(Long id);
+    public Message getMessage(Long messageId);
 }

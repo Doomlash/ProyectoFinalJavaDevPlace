@@ -104,6 +104,13 @@ public class AppController {
         return "redirect:/mvc/chatRoom";
     }
 
+    @GetMapping("/blockContact/{id}")
+    public String createBlock(@PathVariable("id") Long id, Model model){
+        iMU.addB(id);
+        return "redirect:/mvc/chatRoom";
+    }
+
+
     //////Chat room
     @GetMapping("/chatRoom")
     public String chatRoom(@ModelAttribute("chatId")String chatId,  Model model){
@@ -112,14 +119,20 @@ public class AppController {
         model.addAttribute("blocks", user.getBlocks());
         model.addAttribute("listTab", "active");
         model.addAttribute("userId",user.getId());
+        Message m = new Message();
+        m.setLanguage(user.getLanguage());
+        m.setSenderId(user.getId());
+        model.addAttribute("newMessage", m);
         if(chatId.length()!=0){
-            System.out.println("asd");
-            System.out.println(chatId.length());
+            m.setReceiverId(Long.valueOf(chatId));
             List<Message> l = iM.filterMessagesContact(Long.valueOf(chatId));
             model.addAttribute("chatTab", "active");
             model.addAttribute("listTab", "disable");
+            
+            
             model.addAttribute("messages", l);
         }
+        
         return "chatRoom";
     }
 
@@ -133,9 +146,16 @@ public class AppController {
     public String translateMessage(@PathVariable("id") Long messageId, Model model, RedirectAttributes ra){
         
         Message m = iM.translate(iM.getMessage(messageId), "en");
+        System.out.println(m.toString());
         ra.addFlashAttribute("chatId", m.getSenderId());
         return "redirect:/mvc/chatRoom";
- 
+    }
+
+    @PostMapping("/newMessage")
+    public String createMessage(@ModelAttribute("newMessage")Message m, Model model, RedirectAttributes ra){
+        iM.createMessage(m);
+        ra.addFlashAttribute("chatId", m.getReceiverId());
+        return "redirect:/mvc/chatRoom";
     }
 
     // ////////ADDGROUP/////

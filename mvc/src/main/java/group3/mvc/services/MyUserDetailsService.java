@@ -54,7 +54,6 @@ public class MyUserDetailsService implements UserDetailsService{
         } catch (WebClientResponseException e) {
            return Integer.valueOf(e.getResponseBodyAsString());
         }
-
     }
     
 }

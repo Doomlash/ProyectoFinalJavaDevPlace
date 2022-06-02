@@ -195,14 +195,12 @@ public class MessagesService implements IMessages{
     public List<Message> filterMessagesContact(Long id) {
         List<Message> response = new LinkedList<>();
         for (Message message : UserHolder.getCurrentUser().getSent()) {
-            System.out.println(message.toString());
             if(message.getReceiverId()==id){
                 response.add(message);
                 readMessage(message);
             }
         }
         for (Message message : UserHolder.getCurrentUser().getReceived()) {
-            System.out.println(message.toString());
             if(message.getSenderId()==id){
                 response.add(message);
                 readMessage(message);
