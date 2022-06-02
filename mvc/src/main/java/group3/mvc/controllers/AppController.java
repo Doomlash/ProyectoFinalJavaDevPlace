@@ -114,7 +114,10 @@ public class AppController {
 
     //////Chat room
     @GetMapping("/chatRoom")
-    public String chatRoom(){
+    public String chatRoom(Model model){
+        MyUser user = UserHolder.getCurrentUser();
+        model.addAttribute("contacts", user.getContacts());
+        model.addAttribute("listTab", "active");
         return "chatRoom";
     }
 
