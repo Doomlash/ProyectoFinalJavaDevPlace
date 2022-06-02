@@ -76,11 +76,11 @@
                                                 </td>
 
                                                 <td class="text-end">
-                                                    <a href="#chatList"><i class="fas fa-comment"></i></a>|
+                                                    <a th:href="@{/mvc/chat/{id}(id = ${contact.id})}"><i class="fas fa-comment"></i></a>|
                                                     <!-- link trigger modal add member into group-->
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal3"><i
-                                                            class="fas fa-user-group"></i></a>|
-                                                    <a href="#" th:href="@{/mvc/deleteContact}"><i
+                                                    <!-- <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal3"><i
+                                                            class="fas fa-user-group"></i></a>| -->
+                                                    <a href="#" th:href="@{/mvc/deleteContact/{id}(id = ${contact.id})}"><i
                                                             class="fas fa-user-times"></i></a>|
                                                     <a href="#" th:href="@{/mvc/blockContact}"><i
                                                             class="fas fa-ban"></i></a>
@@ -317,7 +317,7 @@
         </div> -->
         <!--Fin Modal de agregar miembro al group-->
         <!-- Modal de lista contactos bloqueados-->
-        <!-- <div class="modal fade color-primary" id="exampleModal4" tabindex="-1" aria-labelledby="exampleModalLabel4"
+        <div class="modal fade color-primary" id="exampleModal4" tabindex="-1" aria-labelledby="exampleModalLabel4"
             aria-hidden="true">
             <div class="modal-dialog">
                 <form action="">
@@ -335,16 +335,14 @@
                                 </thead>
                                 <tbody>
                                     <tr th:each="block : ${blocks}">
-                                        <td><img th:src="SE APLICA EL TH DE LA IMG/ICON" src="/grupo3/src/main/resources/img/icons/1.png"
+                                        <!-- <td><img th:src="SE APLICA EL TH DE LA IMG/ICON" src="/grupo3/src/main/resources/img/icons/1.png"
                                                 width="28px" alt="">
-                        
-                                        </td>
+                                        </td> -->
                                         <td class="fst-italic fw-bold fs-6" th:text="${block.username}">nombre
                                         </td>
                         
                                         <td class="text-end">
-                                            <a href="#chatList"><i class="fas fa-thumbs-up"></i></a>
-                                            
+                                            <a th:href="@{/mvc/deleteBlock/{id}(id = ${block.id})}"><i class="fas fa-thumbs-up"></i></a>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -358,7 +356,7 @@
                     </div>
                 </form>
             </div>
-        </div> -->
+        </div>
         <!--Fin Modal de lista contactos bloqueados-->
         <!-- Modal de agregar miembro grupo-->
         <!-- <div class="modal fade color-primary" id="exampleModal5" tabindex="-1" aria-labelledby="exampleModalLabel5"

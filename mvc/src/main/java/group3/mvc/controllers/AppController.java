@@ -54,12 +54,6 @@ public class AppController {
         return "redirect:/mvc/chatRoom";
     }
 
-    @GetMapping("/home")
-    public String home(Model model){
-        model.addAttribute("text", UserHolder.getCurrentUser().toString());
-        return "home";
-    }
-
     @PostMapping("/gif")
     public String postGif(FormRequest request, Model model, RedirectAttributes ra) {
         ra.addFlashAttribute("id", request.getS());
@@ -81,6 +75,7 @@ public class AppController {
     public String indexAddC(@RequestParam(required = false,name = "username") String username, Model model){
         if(username != null) {
             MyUser user = iMU.readUByUsername(username);
+            
             model.addAttribute("users", user);
         }
         return "addContact";
@@ -88,57 +83,65 @@ public class AppController {
 
     @PostMapping("/contact")
     public String addContact(@ModelAttribute("users") MyUser user, Model model){
-        UserHolder.setCurrentUser(iMU.readUByUsername("pataPollo"));
-        Integer rta = iMU.addC(user);
-        return "redirect:/mvc/addContact";
+        iMU.addC(user);
+        return "redirect:/mvc/chatRoom";
     }
 
-    ////////ADDGROUP/////
-    @GetMapping("/addGroup")
-    public String indexAddG(){
-        return "addGroup";
+    @GetMapping("/deleteContact/{id}")
+    public String deleteContact(@PathVariable("id") Long id, Model model){
+        iMU.removeC(id);
+        return "redirect:/mvc/chatRoom";
     }
 
-    @GetMapping("/searchG")
-    public String searchG(@RequestParam("username") String username, Model model){
-        model.addAttribute("users",iMU.readUByUsername(username));
-        return "redirect:/mvc/addGroup";
+    @GetMapping("/deleteBlock/{id}")
+    public String deleteBlock(@PathVariable("id") Long id, Model model){
+        iMU.removeB(id);
+        return "redirect:/mvc/chatRoom";
     }
-
-    @PostMapping("/{idG}/group/{idC}")//////("{idGroup}/addGroup/{idC}")
-    public String addGroup(@PathVariable("idG") Long idG, @PathVariable("idC") Long idC){
-        Integer rta = iG.addM(idG,idC);
-        return "redirect:/mvc/addGroup";
-    }
-
 
     //////Chat room
     @GetMapping("/chatRoom")
     public String chatRoom(Model model){
         MyUser user = UserHolder.getCurrentUser();
         model.addAttribute("contacts", user.getContacts());
+        model.addAttribute("blocks", user.getBlocks());
         model.addAttribute("listTab", "active");
         return "chatRoom";
     }
 
-    @PostMapping("/contact/removeC/{idC}")
-    public String removeContact(@PathVariable("idC")Long idC){
-        Integer rta = iMU.removeC(idC);
-        return "redirect:/mvc/chatRoom";
+    @GetMapping("/chat/{id}")
+    public String loadChat(@PathVariable("id") Long id, Model model){
+        model.addAttribute("chatTab", "active");
+        return "chatRoom";
     }
 
-    @PostMapping("/contact/addB/{idC}")
-    public String addBlock(@ModelAttribute("block") MyUser block, Model model){
-        Integer rta = iMU.addB(block);
-        return "redirect:/mvc/chatRoom";
-    }
+    // ////////ADDGROUP/////
+    // @GetMapping("/addGroup")
+    // public String indexAddG(){
+    //     return "addGroup";
+    // }
+
+    // @GetMapping("/searchG")
+    // public String searchG(@RequestParam("username") String username, Model model){
+    //     model.addAttribute("users",iMU.readUByUsername(username));
+    //     return "redirect:/mvc/addGroup";
+    // }
+
+    // @PostMapping("/{idG}/group/{idC}")//////("{idGroup}/addGroup/{idC}")
+    // public String addGroup(@PathVariable("idG") Long idG, @PathVariable("idC") Long idC){
+    //     Integer rta = iG.addM(idG,idC);
+    //     return "redirect:/mvc/addGroup";
+    // }
 
 
-    @PostMapping("/group/delete/{idG}")
-    public String delGroup(@PathVariable("idG")Long idG){
-        Integer rta = iG.deleteG(idG);
-        return "redirect:/mvc/chatRoom";
-    }
+    
+
+
+    // @PostMapping("/group/delete/{idG}")
+    // public String delGroup(@PathVariable("idG")Long idG){
+    //     Integer rta = iG.deleteG(idG);
+    //     return "redirect:/mvc/chatRoom";
+    // }
 
 
 }

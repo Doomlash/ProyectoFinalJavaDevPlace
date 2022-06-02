@@ -38,19 +38,17 @@
                         <table  id="listaUsuarios" class="table table-dark table-striped">
                             <thead>
                                 <tr>
-                                  <th scope="col">#ID</th>
                                   <th scope="col">UserName</th>
                                   <th scope="col">Mail</th>
+                                  <th scope="col">Actions</th>></th>
                                 </tr>
                               </thead>
                               <tbody>
                                 <tr>
-                                  <th scope="row"></th>
-                                  <td th:text="${users.id}"></td>
                                   <td th:text="${users.username}"></td>
                                   <td th:text="${users.mail}"></td>
                                     <td>
-                                        <form th:object="${users}" method="POST" th:action="@{/contact}">
+                                        <form th:object="${users}" method="POST" th:action="@{/mvc/contact}">
                                             <input type="hidden" th:field="*{id}"/>
                                             <button type="submit" name="submit" value="value" class="link-button">AddContact</button>
                                         </form>

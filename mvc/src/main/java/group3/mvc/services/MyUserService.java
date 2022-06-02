@@ -52,6 +52,7 @@ public class MyUserService implements IMyUser {
                     .block();
             return rRu.getBody();
         }catch (WebClientResponseException e){
+            
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
                 return readUById(idU);
@@ -64,13 +65,15 @@ public class MyUserService implements IMyUser {
     public MyUser readUByUsername(String username) {
         try{
             ResponseEntity<MyUser> rRu = wCu.get()
-                    .uri("/users/byUsername"+username)
+                    .uri("/users/byUsername/"+username)
                     .header("Authorization", "Bearer "+ Connection.getToken())
                     .retrieve()
                     .toEntity(MyUser.class)
                     .block();
+            System.out.println(rRu.getBody().toString());
             return rRu.getBody();
         }catch (WebClientResponseException e){
+            System.out.println(e.getStatusCode());
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
                 return readUByUsername(username);
