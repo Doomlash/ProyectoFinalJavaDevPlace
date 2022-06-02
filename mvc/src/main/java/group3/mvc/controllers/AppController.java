@@ -1,8 +1,8 @@
 package group3.mvc.controllers;
 
+import java.util.Collections;
 import java.util.List;
 
-import group3.mvc.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -15,6 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import group3.mvc.model.FormRequest;
+import group3.mvc.model.Group;
+import group3.mvc.model.Message;
+import group3.mvc.model.MyUser;
+import group3.mvc.model.UserHolder;
 import group3.mvc.services.MiddleService;
 import group3.mvc.services.implementation.IGroup;
 import group3.mvc.services.implementation.IMessages;
@@ -111,26 +116,23 @@ public class AppController {
     //////Chat room
     @GetMapping("/chatRoom")
     public String chatRoom(@ModelAttribute("chatId")String chatId,  Model model){
+        model.addAttribute("listTab", "active");
         MyUser user = UserHolder.getCurrentUser();
         model.addAttribute("contacts", user.getContacts());
         model.addAttribute("blocks", user.getBlocks());
         model.addAttribute("nGroup",new Group());
         model.addAttribute("eGroup",new Group());
         model.addAttribute("groups",user.getGroups());
-        model.addAttribute("listTab", "active");
         model.addAttribute("userId",user.getId());
         Message m = new Message();
-        m.setLanguage(user.getLanguage());
-        m.setSenderId(user.getId());
         model.addAttribute("newMessage", m);
         if(chatId.length()!=0){
             m.setReceiverId(Long.valueOf(chatId));
             List<Message> l = iM.filterMessagesContact(Long.valueOf(chatId));
-            model.addAttribute("chatTab", "active");
-            model.addAttribute("listTab", "disable");
-            
-            
+            Collections.sort(l);
             model.addAttribute("messages", l);
+            model.addAttribute("listTab", "");
+            model.addAttribute("chatTab", "active");
         }
         
         return "chatRoom";
@@ -144,17 +146,19 @@ public class AppController {
 
     @GetMapping("/translate/{id}")
     public String translateMessage(@PathVariable("id") Long messageId, Model model, RedirectAttributes ra){
-        
-        Message m = iM.translate(iM.getMessage(messageId), "en");
-        System.out.println(m.toString());
-        ra.addFlashAttribute("chatId", m.getSenderId());
+        Message m = iM.getMessage(messageId);
+        m=iM.translate(m, UserHolder.getCurrentUser().getLanguage());
+        ra.addFlashAttribute("chatId", String.valueOf(m.getSenderId()));
         return "redirect:/mvc/chatRoom";
     }
 
     @PostMapping("/newMessage")
     public String createMessage(@ModelAttribute("newMessage")Message m, Model model, RedirectAttributes ra){
+        MyUser user = UserHolder.getCurrentUser();
+        m.setLanguage(user.getLanguage());
+        m.setSenderId(user.getId());
         iM.createMessage(m);
-        ra.addFlashAttribute("chatId", m.getReceiverId());
+        ra.addFlashAttribute("chatId",String.valueOf( m.getReceiverId()));
         return "redirect:/mvc/chatRoom";
     }
 

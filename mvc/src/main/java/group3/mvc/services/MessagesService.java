@@ -34,7 +34,6 @@ public class MessagesService implements IMessages{
                     .block();
 
             updateHolderMS(ms,"crM");
-
             return rCm.getBody();
         }catch (WebClientResponseException e){
             if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
@@ -197,13 +196,14 @@ public class MessagesService implements IMessages{
         for (Message message : UserHolder.getCurrentUser().getSent()) {
             if(message.getReceiverId()==id){
                 response.add(message);
-                readMessage(message);
             }
         }
         for (Message message : UserHolder.getCurrentUser().getReceived()) {
             if(message.getSenderId()==id){
                 response.add(message);
-                readMessage(message);
+                if(message.getReadDate()!=null){
+                    readMessage(message);
+                }
             }
         }
         return response;

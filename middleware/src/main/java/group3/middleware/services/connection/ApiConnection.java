@@ -33,10 +33,6 @@ public class ApiConnection {
                 case 'a':
                     connection = this.createConection("http://localhost:8080/api/token");
                     break;
-
-                case 't':
-                    connection = this.createConection("https://just-translated.p.rapidapi.com/");
-                    break;
             }
         }catch (Exception e){
             System.out.println(e.getMessage());
