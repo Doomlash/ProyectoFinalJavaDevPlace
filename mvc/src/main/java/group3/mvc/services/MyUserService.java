@@ -35,6 +35,7 @@ public class MyUserService implements IMyUser {
        }catch (WebClientResponseException e){
            if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                Connection.generateToken();
+               return listAllUsers();
            }
            return Collections.emptyList();
        }
@@ -53,6 +54,7 @@ public class MyUserService implements IMyUser {
         }catch (WebClientResponseException e){
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
+                return readUById(idU);
             }
             return null;
         }
@@ -71,6 +73,7 @@ public class MyUserService implements IMyUser {
         }catch (WebClientResponseException e){
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
+                return readUByUsername(username);
             }
             return null;
         }
@@ -86,6 +89,7 @@ public class MyUserService implements IMyUser {
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
+            UserHolder.setCurrentUser(myUser);
             return rUu.getBody();
         }catch (WebClientResponseException e){
             if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
@@ -93,7 +97,8 @@ public class MyUserService implements IMyUser {
             }
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build().getStatusCodeValue();
+                return updateMyUser(myUser);
+
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -117,7 +122,7 @@ public class MyUserService implements IMyUser {
             }
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build().getStatusCodeValue();
+                return deleteU(idU);
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -145,7 +150,7 @@ public class MyUserService implements IMyUser {
             }
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build().getStatusCodeValue();
+                return addC(user);
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -171,7 +176,7 @@ public class MyUserService implements IMyUser {
             }
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build().getStatusCodeValue();
+                return removeC(idC);
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -197,7 +202,7 @@ public class MyUserService implements IMyUser {
             }
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build().getStatusCodeValue();
+                return addB(user);
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -223,7 +228,7 @@ public class MyUserService implements IMyUser {
             }
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build().getStatusCodeValue();
+                return removeB(idB);
             }
             return ResponseEntity
                     .status(e.getStatusCode())
