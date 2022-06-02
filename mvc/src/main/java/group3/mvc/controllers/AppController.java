@@ -87,6 +87,7 @@ public class AppController {
 
     @PostMapping("/contact")
     public String addContact(@ModelAttribute("users") MyUser user, Model model){
+        System.out.println(user.toString());
         iMU.addC(user);
         return "redirect:/mvc/chatRoom";
     }
@@ -105,21 +106,33 @@ public class AppController {
 
     //////Chat room
     @GetMapping("/chatRoom")
-    public String chatRoom(Model model){
+    public String chatRoom(@ModelAttribute("chatId")String chatId,  Model model){
         MyUser user = UserHolder.getCurrentUser();
         model.addAttribute("contacts", user.getContacts());
         model.addAttribute("blocks", user.getBlocks());
         model.addAttribute("listTab", "active");
+        if(chatId.length()!=0){
+            System.out.println("asd");
+            System.out.println(chatId.length());
+            List<Message> l = iM.filterMessagesContact(Long.valueOf(chatId));
+            model.addAttribute("chatTab", "active");
+            model.addAttribute("listTab", "disable");
+            model.addAttribute("messages", l);
+        }
         return "chatRoom";
     }
 
     @GetMapping("/chat/{id}")
-    public String loadChat(@PathVariable("id") Long id, Model model){
-        System.out.println(id);
-        List<Message> l = iM.filterMessagesContact(id);
-        model.addAttribute("messages", l);
-        model.addAttribute("chatTab", "active");
-        return "chatRoom";
+    public String loadChat(@PathVariable("id") String id, Model model, RedirectAttributes ra){
+        ra.addFlashAttribute("chatId", id);
+        return "redirect:/mvc/chatRoom";
+    }
+
+    @GetMapping("/translate/{id}")
+    public String translateMessage(Model model, RedirectAttributes ra){
+        ra.addFlashAttribute("chatId", 0);
+        return "redirect:/mvc/chatRoom";
+ 
     }
 
     // ////////ADDGROUP/////

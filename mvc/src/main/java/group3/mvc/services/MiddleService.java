@@ -1,11 +1,14 @@
 package group3.mvc.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import group3.mvc.model.LoginResponse;
+import group3.mvc.model.Message;
+import group3.mvc.model.MyUser;
 import group3.mvc.model.UserHolder;
 import group3.mvc.services.connection.Connection;
 import group3.mvc.services.connection.MiddleConection;
@@ -16,6 +19,9 @@ public class MiddleService {
     MiddleConection mc = new MiddleConection();
 
     private WebClient webClient = Connection.getClient();
+
+    @Autowired
+    MessagesService ms;
 
     public Object getRatio(String id) {
         return mc.getRatio(id);
@@ -31,6 +37,7 @@ public class MiddleService {
                     .block();
         UserHolder.setCurrentUser(response.getUser());
         Connection.setToken(response.getToken());
+        receiveMessages();
     }
 
     public void register() {
@@ -43,6 +50,14 @@ public class MiddleService {
                     .block();
         UserHolder.setCurrentUser(response.getUser());
         Connection.setToken(response.getToken());
+        receiveMessages();
+    }
+
+    private void receiveMessages(){
+        MyUser user = UserHolder.getCurrentUser();
+        for (Message message : user.getReceived()) {
+            ms.receiveMessage(message);
+        }
     }
     
 }
