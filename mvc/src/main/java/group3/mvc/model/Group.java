@@ -22,4 +22,13 @@ public class Group extends Messenger{
     public void addMember(Long id, String username, boolean admin){
         group_members.add(new SimpleMemberResponse(id, username,admin));
     }
+
+    @Override
+    public String toString() {
+        return "Group{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", group_members=" + group_members +
+                '}';
+    }
 }

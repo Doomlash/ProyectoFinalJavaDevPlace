@@ -107,7 +107,7 @@ public class MessagesService implements IMessages{
 
 ////////////////////////////////////////////////////////////////////////////////////
 
-    public void translate(Message m,String lanU){
+    public Message translate(Message m,String lanU){
         ResponseEntity<String> response = wCT.get()
                 .uri("/?lang=" + lanU + "&text=" + m.getContent())
                 .header("X-RapidAPI-Host", "just-translated.p.rapidapi.com")
@@ -125,5 +125,6 @@ public class MessagesService implements IMessages{
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return m;
     }
 }

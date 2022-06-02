@@ -126,8 +126,8 @@
                                         <tbody>
                                             <tr th:each="group: ${groups}">
                                                 <th scope="row" th:text="(campos de th)"></th>
-                                                <td th:text="group.name"></td>
-                                                <td th:text="group.description"></td>
+                                                <td th:text="${group.name}"></td>
+                                                <td th:text="${group.description}"></td>
                                                 <td class="text-end">
                                                     <a href="#chatList" th:href="@{/mvc/addGroup}"><i
                                                             class="fas fa-comment"></i></a>|
@@ -226,11 +226,11 @@
 
             </div>
         </div>
-        <!-- Modal de new group
-        <!-- <div class="modal fade color-primary" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        <!--Modal de new group-->
+        <div class="modal fade color-primary" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog">
-                <form action="">
+                <form th:object="${nGroup}" action="@{/createGroup}" method="post">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">New Group</h5>
@@ -240,14 +240,11 @@
 
                             <label for="newName" class="form-label">Insert name</label>
                             <input class="form-control mb-3 mx-1 col-10 fst-italic fw-bold fs-7 " id="newName"
-                                type="text" th:field="${group.name}">
-
-
-
+                                type="text" th:field="${nGroup.name}">
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
                         </div>
                     </div>
                 </form>
