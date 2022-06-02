@@ -118,11 +118,11 @@ public class AppController {
         return "chatRoom";
     }
 
-    @PostMapping("/contact/removeC/{idC}")
-    public String removeContact(@PathVariable("idC")Long idC){
-        Integer rta = iMU.removeC(idC);
-        return "redirect:/mvc/chatRoom";
-    }
+//    @PostMapping("/contact/removeC/{idC}")
+//    public String removeContact(@PathVariable("idC")Long idC){
+//        Integer rta = iMU.removeC(idC);
+//        return "redirect:/mvc/chatRoom";
+//    }
 
     @PostMapping("/contact/addB/{idC}")
     public String addBlock(@ModelAttribute("block") MyUser block, Model model){

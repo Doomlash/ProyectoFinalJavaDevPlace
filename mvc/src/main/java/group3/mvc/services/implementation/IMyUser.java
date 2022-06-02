@@ -15,7 +15,7 @@ public interface IMyUser {
     public Integer updateMyUser(MyUser myUser);
     public Integer deleteU(Long id);
     public Integer addC(MyUser user);
-    public Integer removeC(Long idC);
+    public Integer removeC(MyUser myUse);
     public Integer addB(MyUser user);
-    public Integer removeB(Long idC);
+    public Integer removeB(MyUser myUse);
 }

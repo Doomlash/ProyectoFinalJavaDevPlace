@@ -7,10 +7,10 @@ import java.util.List;
 
 
 public interface IMessages {
-     public Integer createMessage(MessageRequest message);
+     public Integer createMessage(Message ms);
      public List<Message> listAllMessages();
-     public Integer receiveMessage(Long id);
-     public Integer readMessage(Long id);
+     public Integer receiveMessage(Message ms);
+     public Integer readMessage(Message ms);
 
      public Message translate(Message m,String lanU);
 }
