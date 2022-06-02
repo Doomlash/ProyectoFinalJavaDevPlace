@@ -69,7 +69,7 @@ body{
     
 }
 .sectionForm{
-    background-color: black;
+    background: url('../img/rocket.svg') repeat;
     width: 100%;
     height: 100%; 
     animation: moveimage 3s infinite forwards;
@@ -83,10 +83,9 @@ body{
 }
 
 .bgDiv{
-    background-image: url('/mvc/src/main/resources/static/img/bgSection.png');
+    background: url('../img/bgSection.png') no-repeat;
     width: 100%; 
     height: 100%;
-    background-repeat: no-repeat;
 }
 
 

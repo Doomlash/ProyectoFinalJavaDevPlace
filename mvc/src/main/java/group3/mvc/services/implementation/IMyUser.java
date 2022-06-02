@@ -9,7 +9,6 @@ import java.util.Optional;
 
 
 public interface IMyUser {
-    public Integer createU(MyUser myUser);
     public List<MyUser> listAllUsers();
     public MyUser readUById(Long id);
     public MyUser readUByUsername(String username);

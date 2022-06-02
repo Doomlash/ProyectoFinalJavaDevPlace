@@ -21,4 +21,5 @@ public interface IGroup {
     public Object isAdmin(Long idG, Long idU);
     public Object changeAdmin(Long idG, Long idU);
 
+
 }

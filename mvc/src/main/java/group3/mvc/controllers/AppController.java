@@ -131,4 +131,6 @@ public class AppController {
         Integer rta = iG.deleteG(idG);
         return "redirect:/chatRoom";
     }
+
+
 }

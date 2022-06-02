@@ -2,6 +2,7 @@ package group3.mvc.controllers;
 
 import group3.mvc.model.MyUser;
 import group3.mvc.model.request.RelationRequest;
+import group3.mvc.services.connection.Connection;
 import group3.mvc.services.implementation.IMyUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,18 +18,13 @@ public class MyUserController {
 
     @GetMapping
     public List<MyUser> listAll(){
+        System.out.println(Connection.getToken());
         return iMU.listAllUsers();
     }
 
-    @PostMapping
-    public Integer create(@RequestBody MyUser user){
-        return iMU.createU(user);
-    }
-
-
 
     @GetMapping("/{idU}")
-    public MyUser get(@PathVariable("idU") Long idU){
+    public MyUser getByid(@PathVariable("idU") Long idU){
         return iMU.readUById(idU);
     }
 

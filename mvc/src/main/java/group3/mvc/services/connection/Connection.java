@@ -43,15 +43,13 @@ public class Connection{
     }
 
     public static String generateToken(){
-        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        LoginResponse response = getClient().post()
+        String response = getClient().post()
                     .uri("/security/token/")
                     .headers(headers -> headers.setBasicAuth("admin", "admin_otaku"))
                     .retrieve()
-                    .bodyToMono(LoginResponse.class)
+                    .bodyToMono(String.class)
                     .block();
-        UserHolder.setCurrentUser(response.getUser());
-        Connection.setToken(response.getToken());
+        Connection.setToken(response);
         return token;
     }
 

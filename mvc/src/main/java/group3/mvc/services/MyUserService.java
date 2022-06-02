@@ -1,10 +1,12 @@
 package group3.mvc.services;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 
 import group3.mvc.model.UserHolder;
+import group3.mvc.services.connection.SecurityConnection;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,45 +24,38 @@ public class MyUserService implements IMyUser {
     private WebClient wCu = Connection.getClient();
 
     @Override
-    public Integer createU(MyUser myUser) {
-        try{
-            ResponseEntity<Integer> rCu = wCu.post()
-                    .body(Mono.just(myUser),MyUser.class)
-                    .retrieve()
-                    .toEntity(Integer.class)
-                    .block();
-            return rCu.getBody();
-        }catch (WebClientResponseException e){
-            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
-                return ResponseEntity.internalServerError().build().getStatusCodeValue();
-            }
-            return ResponseEntity
-                    .status(e.getStatusCode())
-                    .body((Integer.valueOf(e.getResponseBodyAsString()))).getBody();
-        }
-
-    }
-
-    @Override
     public List<MyUser> listAllUsers() {
-        ResponseEntity<MyUser[]> rLAu = wCu.get()
-                .retrieve()
-                .toEntity(MyUser[].class)
-                .block();
-        List<MyUser> rLAul = Arrays.asList(rLAu.getBody());
-        return rLAul;
+       try {
+           ResponseEntity<MyUser[]> rLAu = wCu.get()
+                   .uri("/users")
+                   .header("Authorization", "Bearer "+ Connection.getToken())
+                   .retrieve()
+                   .toEntity(MyUser[].class)
+                   .block();
+           List<MyUser> rLAul = Arrays.asList(rLAu.getBody());
+           return rLAul;
+       }catch (WebClientResponseException e){
+           if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
+               Connection.generateToken();
+           }
+           return Collections.emptyList();
+       }
     }
 
     @Override
     public MyUser readUById(Long idU) {
         try{
             ResponseEntity<MyUser> rRu = wCu.get()
-                    .uri("/"+idU)
+                    .uri("/users/"+idU)
+                    .header("Authorization", "Bearer "+ Connection.getToken())
                     .retrieve()
                     .toEntity(MyUser.class)
                     .block();
             return rRu.getBody();
         }catch (WebClientResponseException e){
+            if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
+                Connection.generateToken();
+            }
             return null;
         }
     }
@@ -69,12 +64,16 @@ public class MyUserService implements IMyUser {
     public MyUser readUByUsername(String username) {
         try{
             ResponseEntity<MyUser> rRu = wCu.get()
-                    .uri("/byUsername"+username)
+                    .uri("/users/byUsername"+username)
+                    .header("Authorization", "Bearer "+ Connection.getToken())
                     .retrieve()
                     .toEntity(MyUser.class)
                     .block();
             return rRu.getBody();
         }catch (WebClientResponseException e){
+            if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
+                Connection.generateToken();
+            }
             return null;
         }
     }
@@ -83,6 +82,8 @@ public class MyUserService implements IMyUser {
     public Integer updateMyUser(MyUser myUser) {
         try {
             ResponseEntity<Integer> rUu = wCu.put()
+                    .uri("/users")
+                    .header("Authorization", "Bearer "+ Connection.getToken())
                     .body(Mono.just(myUser),MyUser.class)
                     .retrieve()
                     .toEntity(Integer.class)
@@ -91,6 +92,10 @@ public class MyUserService implements IMyUser {
         }catch (WebClientResponseException e){
             if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
                 return ResponseEntity.internalServerError().build().getStatusCodeValue();
+            }
+            if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
+                Connection.generateToken();
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build().getStatusCodeValue();
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -102,7 +107,8 @@ public class MyUserService implements IMyUser {
     public Integer deleteU(Long idU) {
         try {
             ResponseEntity<Integer> rDu = wCu.delete()
-                    .uri("/"+ idU)
+                    .uri("/users/"+ idU)
+                    .header("Authorization", "Bearer "+ Connection.getToken())
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
@@ -110,6 +116,10 @@ public class MyUserService implements IMyUser {
         }catch (WebClientResponseException e){
             if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
                 return ResponseEntity.internalServerError().build().getStatusCodeValue();
+            }
+            if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
+                Connection.generateToken();
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build().getStatusCodeValue();
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -124,7 +134,8 @@ public class MyUserService implements IMyUser {
         RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), user.getId());
         try {
             ResponseEntity<Integer> rACu = wCu.post()
-                    .uri("/contact")
+                    .uri("/users/contact")
+                    .header("Authorization", "Bearer "+ Connection.getToken())
                     .body(Mono.just(rr),RelationRequest.class)
                     .retrieve()
                     .toEntity(Integer.class)
@@ -133,6 +144,10 @@ public class MyUserService implements IMyUser {
         }catch (WebClientResponseException e){
             if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
                 return ResponseEntity.internalServerError().build().getStatusCodeValue();
+            }
+            if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
+                Connection.generateToken();
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build().getStatusCodeValue();
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -145,7 +160,8 @@ public class MyUserService implements IMyUser {
         RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), idC);
         try {
             ResponseEntity<Integer> rRCu = wCu.put()
-                    .uri("/contact")
+                    .uri("/users/contact")
+                    .header("Authorization", "Bearer "+ Connection.getToken())
                     .body(Mono.just(rr),RelationRequest.class)
                     .retrieve()
                     .toEntity(Integer.class)
@@ -154,6 +170,10 @@ public class MyUserService implements IMyUser {
         }catch (WebClientResponseException e){
             if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
                 return ResponseEntity.internalServerError().build().getStatusCodeValue();
+            }
+            if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
+                Connection.generateToken();
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build().getStatusCodeValue();
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -166,7 +186,8 @@ public class MyUserService implements IMyUser {
         RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), user.getId());
         try {
             ResponseEntity<Integer> rABu = wCu.post()
-                    .uri("/block")
+                    .uri("/users/block")
+                    .header("Authorization", "Bearer "+ Connection.getToken())
                     .body(Mono.just(rr),RelationRequest.class)
                     .retrieve()
                     .toEntity(Integer.class)
@@ -175,6 +196,10 @@ public class MyUserService implements IMyUser {
         }catch (WebClientResponseException e){
             if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
                 return ResponseEntity.internalServerError().build().getStatusCodeValue();
+            }
+            if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
+                Connection.generateToken();
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build().getStatusCodeValue();
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -187,7 +212,8 @@ public class MyUserService implements IMyUser {
         RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), idB);
         try{
             ResponseEntity<Integer> rABu = wCu.put()
-                    .uri("/block")
+                    .uri("/users/block")
+                    .header("Authorization", "Bearer "+ Connection.getToken())
                     .body(Mono.just(rr),RelationRequest.class)
                     .retrieve()
                     .toEntity(Integer.class)
@@ -196,6 +222,10 @@ public class MyUserService implements IMyUser {
         }catch (WebClientResponseException e){
             if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
                 return ResponseEntity.internalServerError().build().getStatusCodeValue();
+            }
+            if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
+                Connection.generateToken();
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build().getStatusCodeValue();
             }
             return ResponseEntity
                     .status(e.getStatusCode())

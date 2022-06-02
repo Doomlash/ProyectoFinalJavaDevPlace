@@ -1,5 +1,4 @@
 package group3.mvc.services;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,6 +21,8 @@ public class MessagesService implements IMessages{
     public Integer createMessage(MessageRequest mr){
         try {
             ResponseEntity<Integer> rCm = wCs.post()
+                    .uri("/messages")
+                    .header("Authorization", "Bearer "+ Connection.getToken())
                     .body(Mono.just(mr), MessageRequest.class)
                     .retrieve()
                     .toEntity(Integer.class)
@@ -31,6 +32,10 @@ public class MessagesService implements IMessages{
             if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
                 return ResponseEntity.internalServerError().build().getStatusCodeValue();
             }
+            if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
+                Connection.generateToken();
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build().getStatusCodeValue();
+            }
             return ResponseEntity
                     .status(e.getStatusCode())
                     .body((Integer.valueOf(e.getResponseBodyAsString()))).getBody();
@@ -38,18 +43,28 @@ public class MessagesService implements IMessages{
     }
 
     public List<Message> listAllMessages(){
-        ResponseEntity<Message[]> rLAm = wCs.get()
-                .retrieve()
-                .toEntity(Message[].class)
-                .block();
-        List<Message> rLAml = Arrays.asList(rLAm.getBody());
-        return rLAml;
+        try {
+            ResponseEntity<Message[]> rLAm = wCs.get()
+                    .uri("/messages")
+                    .header("Authorization", "Bearer "+ Connection.getToken())
+                    .retrieve()
+                    .toEntity(Message[].class)
+                    .block();
+            List<Message> rLAml = Arrays.asList(rLAm.getBody());
+            return rLAml;
+        }catch (WebClientResponseException e){
+            if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
+                Connection.generateToken();
+            }
+            return null;
+        }
     }
 
     public Integer receiveMessage(Long idM){
         try{
             ResponseEntity<Integer> rRCm = wCs.put()
-                    .uri("/receive/"+ idM)
+                    .uri("/messages/receive/"+ idM)
+                    .header("Authorization", "Bearer "+ Connection.getToken())
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
@@ -57,6 +72,10 @@ public class MessagesService implements IMessages{
         }catch (WebClientResponseException e){
             if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
                 return ResponseEntity.internalServerError().build().getStatusCodeValue();
+            }
+            if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
+                Connection.generateToken();
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build().getStatusCodeValue();
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -68,7 +87,8 @@ public class MessagesService implements IMessages{
     public Integer readMessage (Long idM){
         try{
             ResponseEntity<Integer> rRDm = wCs.put()
-                    .uri("/read/"+ idM)
+                    .uri("/messages/read/"+ idM)
+                    .header("Authorization", "Bearer "+ Connection.getToken())
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
@@ -77,6 +97,10 @@ public class MessagesService implements IMessages{
             if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
                 return ResponseEntity.internalServerError().build().getStatusCodeValue();
             }
+            if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
+                Connection.generateToken();
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build().getStatusCodeValue();
+            }
             return ResponseEntity
                     .status(e.getStatusCode())
                     .body((Integer.valueOf(e.getResponseBodyAsString()))).getBody();
@@ -84,12 +108,20 @@ public class MessagesService implements IMessages{
     }
 
     public Message translate(Message message, String langU){
+        try {
             ResponseEntity<Message> rTm = wCs.post()
-                    .uri("/translate/"+langU)
+                    .uri("/messages/translate/"+langU)
+                    .header("Authorization", "Bearer "+ Connection.getToken())
                     .body(Mono.just(message),Message.class)
                     .retrieve()
                     .toEntity(Message.class)
                     .block();
             return rTm.getBody();
+        }catch (WebClientResponseException e){
+            if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
+                Connection.generateToken();
+            }
+            return null;
+        }
     }
 }
