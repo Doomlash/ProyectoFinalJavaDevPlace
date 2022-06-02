@@ -6,9 +6,10 @@ import java.util.List;
 
 
 import group3.mvc.model.UserHolder;
-import group3.mvc.services.connection.SecurityConnection;
+import group3.mvc.model.request.SimpleUserResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -37,6 +38,7 @@ public class MyUserService implements IMyUser {
        }catch (WebClientResponseException e){
            if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                Connection.generateToken();
+               listAllUsers();
            }
            return Collections.emptyList();
        }
@@ -55,6 +57,7 @@ public class MyUserService implements IMyUser {
         }catch (WebClientResponseException e){
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
+                readUById(idU);
             }
             return null;
         }
@@ -73,6 +76,7 @@ public class MyUserService implements IMyUser {
         }catch (WebClientResponseException e){
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
+                readUByUsername(username);
             }
             return null;
         }
@@ -88,6 +92,7 @@ public class MyUserService implements IMyUser {
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
+            UserHolder.setCurrentUser(myUser);
             return rUu.getBody();
         }catch (WebClientResponseException e){
             if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
@@ -95,7 +100,8 @@ public class MyUserService implements IMyUser {
             }
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build().getStatusCodeValue();
+                updateMyUser(myUser);
+
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -119,7 +125,7 @@ public class MyUserService implements IMyUser {
             }
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build().getStatusCodeValue();
+                deleteU(idU);
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -147,7 +153,7 @@ public class MyUserService implements IMyUser {
             }
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build().getStatusCodeValue();
+                addC(user);
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -173,7 +179,7 @@ public class MyUserService implements IMyUser {
             }
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build().getStatusCodeValue();
+                removeC(idC);
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -199,7 +205,7 @@ public class MyUserService implements IMyUser {
             }
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build().getStatusCodeValue();
+                addB(user);
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -225,7 +231,7 @@ public class MyUserService implements IMyUser {
             }
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build().getStatusCodeValue();
+                removeB(idB);
             }
             return ResponseEntity
                     .status(e.getStatusCode())

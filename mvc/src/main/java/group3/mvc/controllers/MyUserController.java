@@ -18,7 +18,6 @@ public class MyUserController {
 
     @GetMapping
     public List<MyUser> listAll(){
-        System.out.println(Connection.getToken());
         return iMU.listAllUsers();
     }
 

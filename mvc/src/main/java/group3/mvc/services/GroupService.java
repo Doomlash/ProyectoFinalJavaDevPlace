@@ -4,7 +4,6 @@ import group3.mvc.model.Group;
 import group3.mvc.model.request.GroupMemberRequest;
 import group3.mvc.model.request.GroupRequest;
 import group3.mvc.services.connection.Connection;
-import group3.mvc.services.connection.SecurityConnection;
 import group3.mvc.services.implementation.IGroup;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +40,7 @@ public class GroupService implements IGroup {
             }
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build().getStatusCodeValue();
+                createG(group);
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -51,21 +50,21 @@ public class GroupService implements IGroup {
 
     public List<Group> listAllG(){
         try {
-
+            ResponseEntity<Group[]> rLAg = wCg.get()
+                    .uri("/groups")
+                    .header("Authorization", "Bearer "+ Connection.getToken())
+                    .retrieve()
+                    .toEntity(Group[].class)
+                    .block();
+            List<Group> rLAgl = Arrays.asList(rLAg.getBody());
+            return rLAgl;
         }catch (WebClientResponseException e){
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
+                listAllG();
             }
             return Collections.emptyList();
         }
-        ResponseEntity<Group[]> rLAg = wCg.get()
-                .uri("/groups")
-                .header("Authorization", "Bearer "+ Connection.getToken())
-                .retrieve()
-                .toEntity(Group[].class)
-                .block();
-        List<Group> rLAgl = Arrays.asList(rLAg.getBody());
-        return rLAgl;
     }
 
     public Group readG(Long id){
@@ -80,8 +79,8 @@ public class GroupService implements IGroup {
         }catch (WebClientResponseException e){
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
+                readG(id);
             }
-
             return null;
         }
     }
@@ -102,7 +101,7 @@ public class GroupService implements IGroup {
             }
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build().getStatusCodeValue();
+                updateG(group);
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -126,7 +125,7 @@ public class GroupService implements IGroup {
             }
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build().getStatusCodeValue();
+                deleteG(id);
             }
             return ResponseEntity
                     .status(e.getStatusCode()).build().getStatusCodeValue();
@@ -148,7 +147,7 @@ public class GroupService implements IGroup {
             }
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build().getStatusCodeValue();
+                isAdmin(idG,idU);
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -171,7 +170,7 @@ public class GroupService implements IGroup {
             }
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build().getStatusCodeValue();
+                changeAdmin(idG,idU);
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -195,7 +194,11 @@ public class GroupService implements IGroup {
         }catch (WebClientResponseException e){
             if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
                 return ResponseEntity.internalServerError().build().getStatusCodeValue();
+            }if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
+                Connection.generateToken();
+                addM(idG,idC);
             }
+
             return ResponseEntity
                     .status(e.getStatusCode())
                     .body((Integer.valueOf(e.getResponseBodyAsString()))).getBody();
@@ -218,7 +221,7 @@ public class GroupService implements IGroup {
             }
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build().getStatusCodeValue();
+                removeM(gmr);
             }
             return ResponseEntity
                     .status(e.getStatusCode())
