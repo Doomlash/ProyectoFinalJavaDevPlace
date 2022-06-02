@@ -2,11 +2,8 @@ package group3.mvc.services.connection;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import group3.mvc.model.LoginResponse;
-import group3.mvc.model.UserHolder;
 import lombok.Data;
 
 @Data

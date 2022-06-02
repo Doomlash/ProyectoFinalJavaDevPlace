@@ -1,22 +1,21 @@
 package group3.mvc.services;
 
-import group3.mvc.model.Group;
-import group3.mvc.model.request.GroupMemberRequest;
-import group3.mvc.model.request.GroupRequest;
-import group3.mvc.services.connection.Connection;
-import group3.mvc.services.connection.SecurityConnection;
-import group3.mvc.services.implementation.IGroup;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+
+import group3.mvc.model.Group;
+import group3.mvc.model.request.GroupMemberRequest;
+import group3.mvc.model.request.GroupRequest;
+import group3.mvc.services.connection.Connection;
+import group3.mvc.services.implementation.IGroup;
 import reactor.core.publisher.Mono;
-
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 
 @Service
