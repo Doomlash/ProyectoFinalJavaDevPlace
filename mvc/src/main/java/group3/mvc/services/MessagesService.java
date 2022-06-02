@@ -1,7 +1,7 @@
 package group3.mvc.services;
-import java.sql.Date;
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -131,6 +131,7 @@ public class MessagesService implements IMessages{
                     .retrieve()
                     .toEntity(Message.class)
                     .block();
+            updateMessageContent(rTm.getBody());
             return rTm.getBody();
         }catch (WebClientResponseException e){
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
@@ -141,10 +142,27 @@ public class MessagesService implements IMessages{
         }
     }
 
-    public void updateHolderMS(Message message, String rta){
+    private void updateMessageContent(Message body) {
+        for (Message message : UserHolder.getCurrentUser().getReceived()) {
+            if(message.getId()==body.getId()){
+                message.setContent(body.getContent());
+                message.setLanguage(body.getLanguage());
+                break;
+            }
+        }
+        for (Message message : UserHolder.getCurrentUser().getSent()) {
+            if(message.getId()==body.getId()){
+                message.setContent(body.getContent());
+                message.setLanguage(body.getLanguage());
+                break;
+            }
+        }
+	}
+
+	public void updateHolderMS(Message message, String rta){
         switch (rta){
             case "crM":
-                message.setCreationDate(Date.valueOf(LocalDate.now()));
+                message.setCreationDate(Date.from(Instant.now()));
                 UserHolder.getCurrentUser().addMessage(message);
                 break;
             case "rdM":
@@ -163,10 +181,10 @@ public class MessagesService implements IMessages{
         for(Message message : UserHolder.getCurrentUser().getReceived()){
             if (message.getId() == mess.getId()) {
                 if(rta.compareTo("rdM") ==0) {
-                    message.setReceptionDate(Date.valueOf(LocalDate.now()));
+                    message.setReceptionDate(Date.from(Instant.now()));
                     break;
                 }else {
-                    message.setReadDate(Date.valueOf(LocalDate.now()));
+                    message.setReadDate(Date.from(Instant.now()));
                     break;
                 }
             }
@@ -180,16 +198,33 @@ public class MessagesService implements IMessages{
             System.out.println(message.toString());
             if(message.getReceiverId()==id){
                 response.add(message);
+                readMessage(message);
             }
         }
         for (Message message : UserHolder.getCurrentUser().getReceived()) {
             System.out.println(message.toString());
             if(message.getSenderId()==id){
                 response.add(message);
+                readMessage(message);
             }
         }
         return response;
     }
+
+	@Override
+	public Message getMessage(Long messageId) {
+        for (Message message : UserHolder.getCurrentUser().getReceived()) {
+            if(message.getId()==messageId){
+                return message;
+            }
+        }
+        for (Message message : UserHolder.getCurrentUser().getSent()) {
+            if(message.getId()==messageId){
+                return message;
+            }
+        }
+        return null;
+	}
 
 
 }

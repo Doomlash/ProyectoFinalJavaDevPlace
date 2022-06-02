@@ -99,10 +99,10 @@
                                         Block List
                                     </button>
                                     <!-- Button trigger modal search contact -->
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                         data-bs-target="#exampleModal5">
                                         <i class="fas fa-magnifying-glass"></i>
-                                    </button>
+                                    </button> -->
                                 </div>
                             </div>
                         </div>
@@ -176,20 +176,30 @@
                                         </thead>
                                         <tbody>
                                             <tr th:each="message: ${messages}">
-                                                <td class="width:90%  text-start">
-                                                    <a style="color:black" th:href="@{/mvc/traducir}">hola
-                                                        soy un ejemplo de chat</a>
-                                                </td>
-                                                <td class="width:5%  text-end">
-                                                    <a style="color:black"
-                                                        th:href="@{/mvc/traducir}">10:30</a>
-                                                </td>
-                                                <td class="width:5% text-end">
-
-                                                    <a href="#" th:href="@{/mvc/traducir}"><i
-                                                            class="fas fa-language"></i></a>
-    
-                                                </td>
+                                                <div th:if="${message.senderId == userId}">
+                                                    <td class="width:30%  text-start">
+                                                    </td>
+                                                    <td class="width:5%  text-start">
+                                                        <a style="color:black"><span th:text="${message.creationDate}"></span></a>
+                                                    </td>
+                                                    <td class="width:65%  text-start">
+                                                        <a style="color:black"><span th:text="${message.content}"></span></a>
+                                                    </td>
+                                                    
+                                                </div>
+                                                <div th:if="${message.senderId != userId}">
+                                                    <td class="width:65%  text-start">
+                                                        <a style="color:black" th:href="@{/mvc/traducir}"><span th:text="${message.content}"></span></a>
+                                                    </td>
+                                                    <td class="width:5%  text-end">
+                                                        <a style="color:black"><span th:text="${message.receptionDate}"></span></a>
+                                                    </td>
+                                                    <td class="width:30% text-end">
+                                                        <a href="#" th:href="@{/mvc/traducir}"><i
+                                                                class="fas fa-language"></i></a>
+                                                    </td>
+                                                </div>
+                                                
                                             </tr>
                                         </tbody>
                                     </table>
@@ -423,7 +433,7 @@
                 
             </div>
         </div> -->
-        <!-- Fin Modal busqueda contacto --> -->
+        <!-- Fin Modal busqueda contacto -->
     </div>
     </div>
 
