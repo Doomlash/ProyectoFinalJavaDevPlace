@@ -126,13 +126,11 @@ public class AppController {
         Message m = new Message();
         model.addAttribute("newMessage", m);
         if(chatId.length()!=0){
-            s.login();
             m.setReceiverId(Long.valueOf(chatId));
             List<Message> l = iM.filterMessagesContact(Long.valueOf(chatId));
             model.addAttribute("messages", l);
             model.addAttribute("listTab", "");
             model.addAttribute("chatTab", "active");
-            
         }
         
         return "chatRoom";
@@ -141,6 +139,7 @@ public class AppController {
     @GetMapping("/chat/{id}")
     public String loadChat(@PathVariable("id") String id, Model model, RedirectAttributes ra){
         ra.addFlashAttribute("chatId", id);
+        s.login();
         return "redirect:/mvc/chatRoom";
     }
 
@@ -159,6 +158,7 @@ public class AppController {
         m.setSenderId(user.getId());
         iM.createMessage(m);
         ra.addFlashAttribute("chatId",String.valueOf( m.getReceiverId()));
+        s.login();
         return "redirect:/mvc/chatRoom";
     }
 
