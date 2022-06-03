@@ -177,21 +177,12 @@
                                         <tbody>
                                             <tr th:each="message: ${messages}">
                                                 <div th:if="${message.senderId == userId}">
-                                                    <td class="width:10%  text-start">
-                                                        <a style="color:black; font-size: x-small;"><span th:text="${message.creationDate}"></span></a>
-                                                    </td>
-                                                    <td class="width:95%  text-end">
-                                                        <a style="color:black"><span th:text="${message.content}"></span></a>
-                                                    </td>
-                                                    
+                                                    <div th:if="${message.gif}" th:insert="gif :: gifSent"></div>
+                                                    <div th:unless="${message.gif}" th:insert="text :: textSent"></div>
                                                 </div>
                                                 <div th:if="${message.senderId != userId}">
-                                                    <td class="width:95%  text-start">
-                                                        <a style="color:black" th:href="@{/mvc/translate/{id}(id=${message.id})}"><span th:text="${message.content}"></span></a>
-                                                    </td>
-                                                    <td class="width:5%  text-end">
-                                                        <a style="color:black; font-size: x-small;"><span th:text="${message.creationDate}"></span></a>
-                                                    </td>
+                                                    <div th:if="${message.gif}" th:insert="gif :: gifReceived"></div>
+                                                    <div th:unless="${message.gif}" th:insert="text :: textReceived"></div>
                                                 </div>
                                                 
                                             </tr>

@@ -1,13 +1,32 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
-    <div th:fragment = "gif">
-        <div class="tenor-gif-embed" 
-            th:data-postid="${id}" 
-            data-share-method="host" 
-            th:data-aspect-ratio="${ratio}"
-            th:data-width="${width}">
-        </div>
+    <div th:fragment = "gifSent">
+        <td class="width:5%  text-start">
+            <a style="color:black; font-size: x-small;"><span th:text="${message.creationDate}"></span></a>
+        </td>
+        <td class="width:95%  text-end">
+            <div class="tenor-gif-embed" 
+                th:data-postid="${message.gifId}" 
+                data-share-method="host" 
+                th:data-aspect-ratio="${message.aspectRatio}"
+                data-width="100%">
+            </div>
+        </td>
+        <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+    </div>
+    <div th:fragment = "gifReceived">
+        <td class="width:95%  text-start">
+            <div class="tenor-gif-embed" 
+                th:data-postid="${message.gifId}" 
+                data-share-method="host" 
+                th:data-aspect-ratio="${message.aspectRatio}"
+                data-width="100%">
+            </div>
+        </td>
+        <td class="width:5%  text-end">
+            <a style="color:black; font-size: x-small;"><span th:text="${message.creationDate}"></span></a>
+        </td>
         <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
     </div>
 </body>

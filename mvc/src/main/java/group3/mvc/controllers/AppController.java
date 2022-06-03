@@ -126,11 +126,13 @@ public class AppController {
         Message m = new Message();
         model.addAttribute("newMessage", m);
         if(chatId.length()!=0){
+            s.login();
             m.setReceiverId(Long.valueOf(chatId));
             List<Message> l = iM.filterMessagesContact(Long.valueOf(chatId));
             model.addAttribute("messages", l);
             model.addAttribute("listTab", "");
             model.addAttribute("chatTab", "active");
+            
         }
         
         return "chatRoom";
