@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import group3.mvc.model.request.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -12,8 +13,6 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 
 import group3.mvc.model.MyUser;
 import group3.mvc.model.UserHolder;
-import group3.mvc.model.request.RelationRequest;
-import group3.mvc.model.request.SimpleUserResponse;
 import group3.mvc.services.connection.Connection;
 import group3.mvc.services.implementation.IMyUser;
 import reactor.core.publisher.Mono;
@@ -21,6 +20,7 @@ import reactor.core.publisher.Mono;
 @Service
 public class MyUserService implements IMyUser {
     private WebClient wCu = Connection.getClient();
+
 
     @Override
     public List<MyUser> listAllUsers() {
@@ -298,6 +298,7 @@ public class MyUserService implements IMyUser {
         }
         return null;
     }
+
 }
 
 

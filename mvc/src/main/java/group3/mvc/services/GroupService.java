@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import group3.mvc.model.MyUser;
+import group3.mvc.model.request.SimpleMemberResponse;
 import group3.mvc.services.implementation.IMyUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -224,7 +225,8 @@ public class GroupService implements IGroup {
         }
     }
 
-    public Integer removeM(GroupMemberRequest gmr) {
+    public Integer removeM(Long idG, Long idM) {
+        GroupMemberRequest gmr = retrieveMember(idG,idM);
         try {
             ResponseEntity<Integer> response = wCg.put()
                     .uri("/groups/member")
@@ -240,7 +242,7 @@ public class GroupService implements IGroup {
             }
             if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
                 Connection.generateToken();
-                return removeM(gmr);
+                return removeM(idG,idM);
             }
             return ResponseEntity
                     .status(e.getStatusCode())
@@ -283,6 +285,21 @@ public class GroupService implements IGroup {
                 break;
             }
         }
+    }
+
+    public GroupMemberRequest retrieveMember(Long idG,Long idM){
+        Group group = readG(idG);
+        GroupMemberRequest gmr = new GroupMemberRequest();
+        for(SimpleMemberResponse smr: group.getGroup_members()){
+            if(smr.getId()==idM){
+                if(smr.isAdmin()){
+                    gmr =  new GroupMemberRequest(idG,idM,true);
+                }else{
+                    gmr = new GroupMemberRequest(idG,idM,false);
+                }
+            }
+        }
+        return gmr;
     }
 
 }

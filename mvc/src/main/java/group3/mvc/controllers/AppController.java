@@ -3,8 +3,10 @@ package group3.mvc.controllers;
 import java.util.Collections;
 import java.util.List;
 
+import group3.mvc.model.request.GroupMemberRequest;
 import group3.mvc.model.request.SimpleUserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -116,7 +118,7 @@ public class AppController {
 
     //////Chat room
     @GetMapping("/chatRoom")
-    public String chatRoom(@RequestParam(required = false,name = "username") String username,@ModelAttribute("chatId")String chatId,  Model model){
+    public String chatRoom(@ModelAttribute("chatId")String chatId,  Model model){
         model.addAttribute("listTab", "active");
         MyUser user = UserHolder.getCurrentUser();
         model.addAttribute("contacts", user.getContacts());
@@ -125,11 +127,6 @@ public class AppController {
         model.addAttribute("eGroup",new Group());
         model.addAttribute("groups",user.getGroups());
         model.addAttribute("userId",user.getId());
-        if(username != null) {
-            SimpleUserResponse sur = iMU.retrieveContact(username);
-            System.out.println(sur.toString());
-            model.addAttribute("searchC", sur);
-        }
         Message m = new Message();
         model.addAttribute("newMessage", m);
         if(chatId.length()!=0){
@@ -177,23 +174,36 @@ public class AppController {
     @PostMapping("/editGroup/{idG}")
     public String editG(@PathVariable("idG") Long idG,@ModelAttribute("eGroup") Group eGroup, Model model){
         eGroup.setId(idG);
-        System.out.println(eGroup.toString());
         iG.updateG(eGroup);
         return "redirect:/mvc/chatRoom";
     }
 
     @GetMapping("/deleteG/{idG}")
     public String deleteG(@PathVariable("idG")Long idG){
-        //iG.deleteG(idG);
-        UserHolder.getCurrentUser().getGroups().remove(0);
+        iG.deleteG(idG);
         return "redirect:/mvc/chatRoom";
     }
 
-    @PostMapping("/mvc/addM/{idG}")
-    public String addMemberEndpoint(@ModelAttribute("searchC") SimpleUserResponse sur, @PathVariable("idG") Long idG, Model model){
-        System.err.println("SIMPLE USER DEL ADD MEMBER ENDPOINT"+sur.toString());
-        System.out.println("ID DEL ADD MEMBER ENDPOINT"+idG);
-//        iMU.addC(user);
+    @GetMapping("/toGroupM/{idG}")
+    public String passToGroupMembers(@PathVariable("idG") Long idG, Model model, RedirectAttributes ra){
+
+        MyUser user = UserHolder.getCurrentUser();
+        model.addAttribute("contacts", user.getContacts());
+        model.addAttribute("membersGroup",iG.readG(idG).getGroup_members());
+        model.addAttribute("idG", idG);
+        return "groupMembers";
+    }
+
+
+    @GetMapping("/addM/{idG}/{idC}")
+    public String addMember(@PathVariable("idG") Long idG,@PathVariable("idC") Long idC, Model model){
+        iG.addM(idG, idC);
+        return "redirect:/mvc/chatRoom";
+    }
+
+    @GetMapping("/remvM/{idG}/{idC}")
+    public String remvMember(@PathVariable("idG") Long idG,@PathVariable("idC") Long idC, Model model){
+                iG.removeM(idG,idC);
         return "redirect:/mvc/chatRoom";
     }
 
