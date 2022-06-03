@@ -43,7 +43,7 @@ public class GroupService implements IGroup {
                     .toEntity(Integer.class)
                     .block();
 
-            updateHolderGR(group,"crG",0L);
+            UserHolder.getCurrentUser().addGroup(retrieveGroup(group.getName()));
 
             return response.getBody();
         }catch (WebClientResponseException e){
@@ -107,7 +107,8 @@ public class GroupService implements IGroup {
                     .toEntity(Integer.class)
                     .block();
 
-            updateHolderGR(group,"updG",0L);
+            updateGroup(group);
+
             return ug.getBody();
         }catch (WebClientResponseException e){
             if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
@@ -133,10 +134,11 @@ public class GroupService implements IGroup {
                     .toEntity(Integer.class)
                     .block();
 
-            updateHolderGR(new Group(),"delG",id);
+            deleteGtoHolder(id);
 
             return dg.getBody();
         }catch (WebClientResponseException e){
+            System.out.println("FALLO");
             if(e.getStatusCode().compareTo(HttpStatus.INTERNAL_SERVER_ERROR) ==0){
                 return ResponseEntity.internalServerError().build().getStatusCodeValue();
             }
@@ -247,25 +249,18 @@ public class GroupService implements IGroup {
     }
 
     /**Herramientas Auxiliares*/
-    public void updateHolderGR(Group group, String rta,Long idG){
-        switch (rta){
-            case "crG":
-                UserHolder.getCurrentUser().addGroup(retrieveGroup(group.getName()));
-                break;
-            case "updG":
-                updateGroup(group);
-                break;
-            case "delG":
-                deleteGtoHolder(idG);
-        }
-    }
-
     public void updateGroup(Group group){
 //       SimpleGroupResponse sgr = retrieveGroup(group.getName());
        for(SimpleGroupResponse sgrE : UserHolder.getCurrentUser().getGroups()){
            if(sgrE.getId() == group.getId()){
-               sgrE.setName(group.getName());
-               sgrE.setDescription(group.getDescription());
+               if(!group.getName().isEmpty()){
+                   sgrE.setName(group.getName());
+
+               }
+               if(!group.getDescription().isEmpty()){
+                   sgrE.setDescription(group.getDescription());
+               }
+               break;
            }
        }
     }
@@ -281,9 +276,10 @@ public class GroupService implements IGroup {
     }
 
     public void deleteGtoHolder(Long idG){
-        for(SimpleGroupResponse sgr : UserHolder.getCurrentUser().getGroups()){
-            if(idG == sgr.getId()){
-                UserHolder.getCurrentUser().getGroups().remove(sgr);
+        List<SimpleGroupResponse> list = UserHolder.getCurrentUser().getGroups();
+        for (int i = 0; i < list.size() ; i++) {
+            if(list.get(i).getId() == idG){
+                list.remove(i);
                 break;
             }
         }

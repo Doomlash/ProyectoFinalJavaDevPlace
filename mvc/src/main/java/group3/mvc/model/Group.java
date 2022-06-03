@@ -25,7 +25,7 @@ public class Group extends Messenger{
 
     @Override
     public String toString() {
-        return "Group{" +
+        return "Group{" +super.toString() +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", group_members=" + group_members +

@@ -72,54 +72,11 @@
                                         </thead>
                                         <tbody>
                                             <tr th:each="contact : ${contacts}">
-                                                <!-- Modal de agregar miembro grupo-->
-                                                <div class="modal fade color-primary" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel3"
-                                                     aria-hidden="true">
-                                                    <div class="modal-dialog">
 
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="exampleModalLabel3">Add member</h5>
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-                                                            <form th:object="${searchG}" action="@{/mvc/addM/{idG} (idG = ${searchG.id})/{idC} (idC = ${contact.id})}">
-                                                                <div class="modal-body">
-                                                                    <form action=@{/mvc/searchG}">
-                                                                        <div>
-                                                                            <label for="groupName" class="form-label fst-italic ">Insert name group</label>
-                                                                        </div>
-                                                                        <div>
-                                                                            <input class="form-control mb-3 mx-1 col-10 fst-italic fw-bold fs-7 " id="groupName" type="text"
-                                                                                   th:name ="idG">
-                                                                        </div>
-                                                                        <div>
-                                                                            <button type="submit" class="btn btn-primary"><i class="fas fa-magnifying-glass"></i></button>
-
-                                                                        </div>
-                                                                    </form>
-                                                                    <div class="mt-3">
-                                                                        <label id="groupSearched" th:txt="${searchG.name}" class="form-label fst-italic fw-bold">ejemplo grupo encontrado</label>
-                                                                    </div>
-
-                                                                </div>
-
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                                    <button type="button" class="btn btn-primary">Save changes</button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                                <!--Fin Modal de agregar miembro al group-->
                                                 <td class="fst-italic fw-bold fs-6" th:text="${contact.username}">nombre</td>
 
                                                 <td class="text-end">
                                                     <a th:href="@{/mvc/chat/{id}(id = ${contact.id})}"><i class="fas fa-comment"></i></a>|
-                                                    <!-- link trigger modal add member into group-->
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal3"><i
-                                                            class="fas fa-user-group"></i></a>
                                                     <a href="#" th:href="@{/mvc/deleteContact/{id}(id = ${contact.id})}"><i
                                                             class="fas fa-user-times"></i></a>|
                                                         <a href="#" th:href="@{/mvc/blockContact/{id}(id = ${contact.id})}"><i
@@ -130,14 +87,9 @@
                                     </table>
                                 </div>
                                 <div class="col-lg-12 text-center">
-                                    
-                                    <a type="text" th:href="@{/mvc/addContact}" class="btn btn-primary" value="Contact">New
-                                        Contact</a>
+                                    <a type="text" th:href="@{/mvc/addContact}" class="btn btn-primary" value="Contact">New Contact</a>
                                     <!-- Button trigger modal list block -->
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#exampleModal4">
-                                        Block List
-                                    </button>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal4">Block List</button>
                                     <!-- Button trigger modal search contact -->
                                     <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                         data-bs-target="#exampleModal5">
@@ -199,15 +151,54 @@
                                                         </form>
                                                     </div>
                                                 </div>
-                                                <!--Fin Modal de edit group-->
+<!--                                                Fin Modal de edit group-->
+                                                        <!-- Modal de agregar miembro grupo-->
+                                                        <div class="modal fade color-primary" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel3" aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="exampleModalLabel3">Add member</h5>
+                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    </div>
+                                                                    <form th:object="${searchC}"  th:action = "@{/mvc/addM/{idG} (idG = ${group.id})}"> <!--th:if="${searchC}"-->
+                                                                        <div class="modal-body">
+                                                                            <form th:action = "@{/mvc/chatRoom}">
+                                                                                <div>
+                                                                                    <label for="groupName" class="form-label fst-italic ">Insert username</label>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <input class="form-control mb-3 mx-1 col-10 fst-italic fw-bold fs-7 " id="groupName" type="text"
+                                                                                           th:name ="username">
+                                                                                </div>
+                                                                                <div>
+                                                                                    <button type="submit" class="btn btn-primary"><i class="fas fa-magnifying-glass"></i></button>
 
+                                                                                </div>
+                                                                            </form>
+                                                                            <div >
+                                                                                <div class="mt-3" th:if="${searchC}">
+                                                                                    <label id="groupSearched" th:txt="${searchC.name}" class="form-label fst-italic fw-bold"></label>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                                                            </div>
+                                                                            </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!--Fin Modal de agregar miembro al group-->
                                                 <td th:text="${group.id}"></td>
                                                 <td th:text="${group.name}"></td>
                                                 <td th:text="${group.description}"></td>
                                                 <td class="text-end">
-                                                    <a href="#chatList" ><i class="fas fa-comment"></i></a>
+                                                    <a href="#chatList" ><i class="fas fa-comment"></i></a>|
+                                                    <!-- link trigger modal add member into group-->
+                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal3"><i class="fas fa-user-group"></i></a>|
                                                     <!-- link trigger modal edit group -->
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal2"><i class="fas fa-edit"></i></a>
+                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal2"><i class="fas fa-edit"></i></a>|
                                                     <!-- button borrar group -->
                                                      <a href="#" th:href="@{/mvc/deleteG/{idG}(idG = ${group.id})}"><i class="fas fa-user-times"></i></a>
                                                 </td>
@@ -363,6 +354,9 @@
             </div>
         </div>
         <!--Fin Modal de lista contactos bloqueados-->
+
+
+
         <!-- Modal de agregar miembro grupo-->
         <!-- <div class="modal fade color-primary" id="exampleModal5" tabindex="-1" aria-labelledby="exampleModalLabel5"
             aria-hidden="true">

@@ -3,6 +3,7 @@ package group3.mvc.controllers;
 import java.util.Collections;
 import java.util.List;
 
+import group3.mvc.model.request.SimpleUserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -115,7 +116,7 @@ public class AppController {
 
     //////Chat room
     @GetMapping("/chatRoom")
-    public String chatRoom(@ModelAttribute("chatId")String chatId,  Model model){
+    public String chatRoom(@RequestParam(required = false,name = "username") String username,@ModelAttribute("chatId")String chatId,  Model model){
         model.addAttribute("listTab", "active");
         MyUser user = UserHolder.getCurrentUser();
         model.addAttribute("contacts", user.getContacts());
@@ -124,6 +125,11 @@ public class AppController {
         model.addAttribute("eGroup",new Group());
         model.addAttribute("groups",user.getGroups());
         model.addAttribute("userId",user.getId());
+        if(username != null) {
+            SimpleUserResponse sur = iMU.retrieveContact(username);
+            System.out.println(sur.toString());
+            model.addAttribute("searchC", sur);
+        }
         Message m = new Message();
         model.addAttribute("newMessage", m);
         if(chatId.length()!=0){
@@ -168,13 +174,6 @@ public class AppController {
         return "redirect:/mvc/chatRoom";
     }
 
-//    @GetMapping("/editGroup/{idG}")
-//    public String editGget(@PathVariable("idG") Long idG,Model model){
-//        Group group = iG.readG(idG);
-//        model.addAttribute("eGroup",group);
-//        return "redirect:/mvc/chatRoom";
-//    }
-
     @PostMapping("/editGroup/{idG}")
     public String editG(@PathVariable("idG") Long idG,@ModelAttribute("eGroup") Group eGroup, Model model){
         eGroup.setId(idG);
@@ -185,7 +184,16 @@ public class AppController {
 
     @GetMapping("/deleteG/{idG}")
     public String deleteG(@PathVariable("idG")Long idG){
-        iG.deleteG(idG);
+        //iG.deleteG(idG);
+        UserHolder.getCurrentUser().getGroups().remove(0);
+        return "redirect:/mvc/chatRoom";
+    }
+
+    @PostMapping("/mvc/addM/{idG}")
+    public String addMemberEndpoint(@ModelAttribute("searchC") SimpleUserResponse sur, @PathVariable("idG") Long idG, Model model){
+        System.err.println("SIMPLE USER DEL ADD MEMBER ENDPOINT"+sur.toString());
+        System.out.println("ID DEL ADD MEMBER ENDPOINT"+idG);
+//        iMU.addC(user);
         return "redirect:/mvc/chatRoom";
     }
 
