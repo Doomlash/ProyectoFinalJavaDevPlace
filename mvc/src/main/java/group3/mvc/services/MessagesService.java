@@ -202,11 +202,8 @@ public class MessagesService implements IMessages{
             }
         }
         for (Message message : UserHolder.getCurrentUser().getReceived()) {
-            if(message.getSenderId()==id){
+            if(message.getSenderId()==id || message.getReceiverId() == id){
                 response.add(message);
-                if(message.getReadDate()!=null){
-                    readMessage(message);
-                }
             }
         }
         Collections.sort(response);
@@ -225,6 +222,11 @@ public class MessagesService implements IMessages{
                 response.add(message);
             }
         }
+        System.out.println(id);
+        for(Message message : response){
+            System.out.println(message.toString());
+        }
+
         Collections.sort(response);
         return response;
     }

@@ -117,7 +117,9 @@ public class AppController {
 
     //////Chat room
     @GetMapping("/chatRoom")
-    public String chatRoom(@ModelAttribute("chatId")String chatId,  Model model){
+    public String chatRoom(@ModelAttribute("chatId")String chatId,
+                           @ModelAttribute("chatIdGroup")String chatIdGroup,
+                           Model model){
         model.addAttribute("listTab", "active");
         MyUser user = UserHolder.getCurrentUser();
         model.addAttribute("contacts", user.getContacts());
@@ -135,7 +137,14 @@ public class AppController {
             model.addAttribute("listTab", "");
             model.addAttribute("chatTab", "active");
         }
-        
+
+//        if(chatIdGroup.length()!=0){
+//            m.setReceiverId(Long.valueOf(chatIdGroup));
+//            List<Message> l = iM.filterMessagesGroup(Long.valueOf(chatIdGroup));
+//            model.addAttribute("messages", l);
+//            model.addAttribute("listTab", "");
+//            model.addAttribute("chatTab", "active");
+//        }
         return "chatRoom";
     }
 
@@ -145,6 +154,17 @@ public class AppController {
         s.login();
         return "redirect:/mvc/chatRoom";
     }
+
+//    @GetMapping("/chatGroup/{id}")
+//    public String loadChatGroup(@PathVariable("id") String id, Model model, RedirectAttributes ra){
+//        ra.addFlashAttribute("chatIdGroup", id);
+//        System.out.println(id);
+//        s.login();
+//        return "redirect:/mvc/chatRoom";
+//    }
+
+
+
 
     @GetMapping("/translate/{id}")
     public String translateMessage(@PathVariable("id") Long messageId, Model model, RedirectAttributes ra){
