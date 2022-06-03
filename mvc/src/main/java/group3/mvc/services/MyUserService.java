@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import group3.mvc.model.request.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -12,8 +13,6 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 
 import group3.mvc.model.MyUser;
 import group3.mvc.model.UserHolder;
-import group3.mvc.model.request.RelationRequest;
-import group3.mvc.model.request.SimpleUserResponse;
 import group3.mvc.services.connection.Connection;
 import group3.mvc.services.implementation.IMyUser;
 import reactor.core.publisher.Mono;
@@ -22,39 +21,40 @@ import reactor.core.publisher.Mono;
 public class MyUserService implements IMyUser {
     private WebClient wCu = Connection.getClient();
 
+
     @Override
     public List<MyUser> listAllUsers() {
-       try {
-           ResponseEntity<MyUser[]> rLAu = wCu.get()
-                   .uri("/users")
-                   .header("Authorization", "Bearer "+ Connection.getToken())
-                   .retrieve()
-                   .toEntity(MyUser[].class)
-                   .block();
-           List<MyUser> rLAul = Arrays.asList(rLAu.getBody());
-           return rLAul;
-       }catch (WebClientResponseException e){
-           if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
-               Connection.generateToken();
-               return listAllUsers();
-           }
-           return Collections.emptyList();
-       }
+        try {
+            ResponseEntity<MyUser[]> rLAu = wCu.get()
+                    .uri("/users")
+                    .header("Authorization", "Bearer " + Connection.getToken())
+                    .retrieve()
+                    .toEntity(MyUser[].class)
+                    .block();
+            List<MyUser> rLAul = Arrays.asList(rLAu.getBody());
+            return rLAul;
+        } catch (WebClientResponseException e) {
+            if (e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0) {
+                Connection.generateToken();
+                return listAllUsers();
+            }
+            return Collections.emptyList();
+        }
     }
 
     @Override
     public MyUser readUById(Long idU) {
-        try{
+        try {
             ResponseEntity<MyUser> rRu = wCu.get()
-                    .uri("/users/"+idU)
-                    .header("Authorization", "Bearer "+ Connection.getToken())
+                    .uri("/users/" + idU)
+                    .header("Authorization", "Bearer " + Connection.getToken())
                     .retrieve()
                     .toEntity(MyUser.class)
                     .block();
             return rRu.getBody();
-        }catch (WebClientResponseException e){
-            
-            if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
+        } catch (WebClientResponseException e) {
+
+            if (e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0) {
                 Connection.generateToken();
                 return readUById(idU);
             }
@@ -64,18 +64,16 @@ public class MyUserService implements IMyUser {
 
     @Override
     public MyUser readUByUsername(String username) {
-        try{
+        try {
             ResponseEntity<MyUser> rRu = wCu.get()
-                    .uri("/users/byUsername/"+username)
-                    .header("Authorization", "Bearer "+ Connection.getToken())
+                    .uri("/users/byUsername/" + username)
+                    .header("Authorization", "Bearer " + Connection.getToken())
                     .retrieve()
                     .toEntity(MyUser.class)
                     .block();
-            System.out.println(rRu.getBody().toString());
             return rRu.getBody();
-        }catch (WebClientResponseException e){
-            System.out.println(e.getStatusCode());
-            if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
+        } catch (WebClientResponseException e) {
+            if (e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0) {
                 Connection.generateToken();
                 return readUByUsername(username);
             }
@@ -88,20 +86,20 @@ public class MyUserService implements IMyUser {
         try {
             ResponseEntity<Integer> rUu = wCu.put()
                     .uri("/users")
-                    .header("Authorization", "Bearer "+ Connection.getToken())
-                    .body(Mono.just(myUser),MyUser.class)
+                    .header("Authorization", "Bearer " + Connection.getToken())
+                    .body(Mono.just(myUser), MyUser.class)
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
 
-            updateHolderUS(myUser,"upd",0L);
+            UserHolder.setCurrentUser(myUser);
 
             return rUu.getBody();
-        }catch (WebClientResponseException e){
-            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+        } catch (WebClientResponseException e) {
+            if (e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
                 return ResponseEntity.internalServerError().build().getStatusCodeValue();
             }
-            if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
+            if (e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0) {
                 Connection.generateToken();
                 return updateMyUser(myUser);
 
@@ -116,17 +114,17 @@ public class MyUserService implements IMyUser {
     public Integer deleteU(Long idU) {
         try {
             ResponseEntity<Integer> rDu = wCu.delete()
-                    .uri("/users/"+ idU)
-                    .header("Authorization", "Bearer "+ Connection.getToken())
+                    .uri("/users/" + idU)
+                    .header("Authorization", "Bearer " + Connection.getToken())
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
             return rDu.getBody();
-        }catch (WebClientResponseException e){
-            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+        } catch (WebClientResponseException e) {
+            if (e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
                 return ResponseEntity.internalServerError().build().getStatusCodeValue();
             }
-            if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
+            if (e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0) {
                 Connection.generateToken();
                 return deleteU(idU);
             }
@@ -144,21 +142,20 @@ public class MyUserService implements IMyUser {
         try {
             ResponseEntity<Integer> rACu = wCu.post()
                     .uri("/users/contact")
-                    .header("Authorization", "Bearer "+ Connection.getToken())
-                    .body(Mono.just(rr),RelationRequest.class)
+                    .header("Authorization", "Bearer " + Connection.getToken())
+                    .body(Mono.just(rr), RelationRequest.class)
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
 
-            updateHolderUS(contact,"addC",0L);
-            System.out.println(UserHolder.getCurrentUser().toString());
+            createContact(contact);
 
             return rACu.getBody();
-        }catch (WebClientResponseException e){
-            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+        } catch (WebClientResponseException e) {
+            if (e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
                 return ResponseEntity.internalServerError().build().getStatusCodeValue();
             }
-            if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
+            if (e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0) {
                 Connection.generateToken();
                 return addC(contact);
             }
@@ -174,22 +171,22 @@ public class MyUserService implements IMyUser {
         try {
             ResponseEntity<Integer> rRCu = wCu.put()
                     .uri("/users/contact")
-                    .header("Authorization", "Bearer "+ Connection.getToken())
-                    .body(Mono.just(rr),RelationRequest.class)
+                    .header("Authorization", "Bearer " + Connection.getToken())
+                    .body(Mono.just(rr), RelationRequest.class)
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
 
-            updateHolderUS(new MyUser(),"delC",idC);
+            removeContact(idC);
 
             return rRCu.getBody();
 
 
-        }catch (WebClientResponseException e){
-            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+        } catch (WebClientResponseException e) {
+            if (e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
                 return ResponseEntity.internalServerError().build().getStatusCodeValue();
             }
-            if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
+            if (e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0) {
                 Connection.generateToken();
                 return removeC(idC);
             }
@@ -205,19 +202,20 @@ public class MyUserService implements IMyUser {
         try {
             ResponseEntity<Integer> rABu = wCu.post()
                     .uri("/users/block")
-                    .header("Authorization", "Bearer "+ Connection.getToken())
-                    .body(Mono.just(rr),RelationRequest.class)
+                    .header("Authorization", "Bearer " + Connection.getToken())
+                    .body(Mono.just(rr), RelationRequest.class)
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
-            updateHolderUS(new MyUser(),"addB",idB);
+
+            addBlock(idB);
 
             return rABu.getBody();
-        }catch (WebClientResponseException e){
-            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+        } catch (WebClientResponseException e) {
+            if (e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
                 return ResponseEntity.internalServerError().build().getStatusCodeValue();
             }
-            if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
+            if (e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0) {
                 Connection.generateToken();
                 return addB(idB);
             }
@@ -230,24 +228,23 @@ public class MyUserService implements IMyUser {
     @Override
     public Integer removeB(Long idB) {
         RelationRequest rr = new RelationRequest(UserHolder.getCurrentUser().getId(), idB);
-        System.out.println("ANTES DE BORRAR\n"+UserHolder.getCurrentUser().getContacts());
-        try{
+        try {
             ResponseEntity<Integer> rABu = wCu.put()
                     .uri("/users/block")
-                    .header("Authorization", "Bearer "+ Connection.getToken())
-                    .body(Mono.just(rr),RelationRequest.class)
+                    .header("Authorization", "Bearer " + Connection.getToken())
+                    .body(Mono.just(rr), RelationRequest.class)
                     .retrieve()
                     .toEntity(Integer.class)
                     .block();
 
-            updateHolderUS(new MyUser(),"addB",idB);
+            removeBlock(idB);
 
             return rABu.getBody();
-        }catch (WebClientResponseException e){
-            if(e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR){
+        } catch (WebClientResponseException e) {
+            if (e.getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR) {
                 return ResponseEntity.internalServerError().build().getStatusCodeValue();
             }
-            if(e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0){
+            if (e.getStatusCode().compareTo(HttpStatus.UNAUTHORIZED) == 0) {
                 Connection.generateToken();
                 return removeB(idB);
             }
@@ -258,47 +255,50 @@ public class MyUserService implements IMyUser {
     }
 
 
-
-    //////////FUNCIONES AUXILIARES
-    public void updateHolderUS(MyUser user,String rta,Long id){
-        System.out.println("USER Q LLEGA\n"+user.toString());
-        switch (rta){
-            case "upd":
-                UserHolder.setCurrentUser(user);
-                break;
-            case "addC":
-                SimpleUserResponse simpleUserResponse = new SimpleUserResponse(user.getId(), user.getUsername(), user.getProfileImage());
-                UserHolder.getCurrentUser().addContact(simpleUserResponse);
-                System.out.println("DESPUES DE actualizar\n"+UserHolder.getCurrentUser().toString());
-                break;
-            case "delC":
-               updateCB(id,"delC");
-                break;
-            case "addB":
-                updateCB(id,"addB");
-                break;
-            case "delB":
-                updateCB(id,"delB");
-                break;
-        }
+    /**
+     * FUNCIONES AUXILIARES
+     */
+    private void createContact(MyUser user) {
+        SimpleUserResponse simpleUserResponse = new SimpleUserResponse(user.getId(), user.getUsername(), user.getProfileImage());
+        UserHolder.getCurrentUser().addContact(simpleUserResponse);
     }
-    public void updateCB(Long id,String sel){
-            for(SimpleUserResponse contact : UserHolder.getCurrentUser().getContacts()){
-                if(contact.getId() == id){
-                    if(sel.contains("C")) {
-                        UserHolder.getCurrentUser().getContacts().remove(contact);
-                        break;
-                    }else{
-                        UserHolder.getCurrentUser().getBlocks().add(contact);
-                        break;
-                }
+
+    private void removeContact(Long id) {
+        for (SimpleUserResponse contact : UserHolder.getCurrentUser().getContacts()) {
+            if (contact.getId() == id) {
+                UserHolder.getCurrentUser().getContacts().remove(contact);
+                break;
             }
         }
-        for(SimpleUserResponse blocked : UserHolder.getCurrentUser().getBlocks()){
-            if(blocked.getId() == id){
+    }
+
+    private void addBlock(Long id) {
+        for (SimpleUserResponse contact : UserHolder.getCurrentUser().getContacts()) {
+            if (contact.getId() == id) {
+                UserHolder.getCurrentUser().addBlock(contact);
+                break;
+            }
+        }
+    }
+
+    private void removeBlock(Long id) {
+        for (SimpleUserResponse blocked : UserHolder.getCurrentUser().getBlocks()) {
+            if (blocked.getId() == id) {
                 UserHolder.getCurrentUser().getBlocks().remove(blocked);
                 break;
             }
         }
     }
+
+    public SimpleUserResponse retrieveContact(String username) {
+        for (SimpleUserResponse contact : UserHolder.getCurrentUser().getContacts()) {
+            if (contact.getUsername().compareTo(username) == 0) {
+                return contact;
+            }
+        }
+        return null;
+    }
+
 }
+
+

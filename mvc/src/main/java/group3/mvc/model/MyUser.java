@@ -1,8 +1,6 @@
 package group3.mvc.model;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import group3.mvc.model.request.SimpleGroupResponse;
 import group3.mvc.model.request.SimpleUserResponse;
@@ -25,7 +23,7 @@ public class MyUser extends Messenger{
 	private Set<SimpleUserResponse> contacts = new HashSet<>();
 	private Set<SimpleUserResponse> blocks = new HashSet<>();
 
-	private Set<SimpleGroupResponse> groups = new HashSet<>();
+	private List<SimpleGroupResponse> groups = new ArrayList<>();
 
 
 	public void addContact(SimpleUserResponse user) {

@@ -10,13 +10,12 @@ public interface IGroup {
     public Integer createG(Group group);
 
     public Integer addM(Long idG,Long idC);
-    public Integer removeM(GroupMemberRequest member);
+    public Integer removeM(Long idG, Long idC);
     public List<Group> listAllG();
     public Group readG(Long id);
     public Integer updateG(Group group) throws NoSuchElementException;
     public Integer deleteG(Long id);
     public Object isAdmin(Long idG, Long idU);
     public Object changeAdmin(Long idG, Long idU);
-
 
 }

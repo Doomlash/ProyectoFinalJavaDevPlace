@@ -3,6 +3,7 @@ package group3.mvc.services.implementation;
 import java.util.List;
 
 import group3.mvc.model.MyUser;
+import group3.mvc.model.request.SimpleUserResponse;
 
 
 public interface IMyUser {
@@ -15,4 +16,6 @@ public interface IMyUser {
     public Integer removeC(Long idB);
     public Integer addB(Long idB);
     public Integer removeB(Long idB);
+
+    public SimpleUserResponse retrieveContact(String username);
 }
