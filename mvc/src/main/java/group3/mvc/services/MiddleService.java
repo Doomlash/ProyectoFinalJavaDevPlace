@@ -1,5 +1,9 @@
 package group3.mvc.services;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.regex.Pattern;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -10,6 +14,7 @@ import group3.mvc.model.LoginResponse;
 import group3.mvc.model.Message;
 import group3.mvc.model.MyUser;
 import group3.mvc.model.UserHolder;
+import group3.mvc.model.request.MessageForShow;
 import group3.mvc.services.connection.Connection;
 import group3.mvc.services.connection.MiddleConection;
 
@@ -23,7 +28,7 @@ public class MiddleService {
     @Autowired
     MessagesService ms;
 
-    public Object getRatio(String id) {
+    public double getRatio(String id) {
         return mc.getRatio(id);
     }
 
@@ -38,6 +43,16 @@ public class MiddleService {
         UserHolder.setCurrentUser(response.getUser());
         Connection.setToken(response.getToken());
         receiveMessages();
+        List<Message> l = new LinkedList<>();
+        for (Message m : UserHolder.getCurrentUser().getSent()) {
+            l.add(prepareMessageForShow(m));
+        }
+        UserHolder.getCurrentUser().setSent(l);
+        l = new LinkedList<>();
+        for (Message m : UserHolder.getCurrentUser().getReceived()) {
+            l.add(prepareMessageForShow(m));
+        }
+        UserHolder.getCurrentUser().setReceived(l);
     }
 
     public void register() {
@@ -60,4 +75,16 @@ public class MiddleService {
         }
     }
     
+    private MessageForShow prepareMessageForShow(Message m){
+        String regex = "^/gif .*tenor.com.*-[0-9]*$";
+        boolean isGif = false;
+        double aspectRatio = 0;
+        String gifId = "";
+        if(Pattern.matches(regex, m.getContent())){
+            isGif = true;
+            gifId = m.getContent().substring(m.getContent().lastIndexOf('-')+1);
+            aspectRatio = getRatio(gifId);
+        }
+        return new MessageForShow(m,isGif,gifId,aspectRatio);
+    }
 }

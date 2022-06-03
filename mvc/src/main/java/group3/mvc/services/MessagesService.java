@@ -1,6 +1,7 @@
 package group3.mvc.services;
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -208,6 +209,23 @@ public class MessagesService implements IMessages{
                 }
             }
         }
+        Collections.sort(response);
+        return response;
+    }
+    @Override
+    public List<Message> filterMessagesGroup(Long id) {
+        List<Message> response = new LinkedList<>();
+        for (Message message : UserHolder.getCurrentUser().getSent()) {
+            if(message.getReceiverId()==id){
+                response.add(message);
+            }
+        }
+        for (Message message : UserHolder.getCurrentUser().getReceived()) {
+            if(message.getReceiverId()==id){
+                response.add(message);
+            }
+        }
+        Collections.sort(response);
         return response;
     }
 

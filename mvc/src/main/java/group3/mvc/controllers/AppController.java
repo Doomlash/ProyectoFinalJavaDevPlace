@@ -1,6 +1,5 @@
 package group3.mvc.controllers;
 
-import java.util.Collections;
 import java.util.List;
 
 import group3.mvc.model.request.GroupMemberRequest;
@@ -130,12 +129,13 @@ public class AppController {
         Message m = new Message();
         model.addAttribute("newMessage", m);
         if(chatId.length()!=0){
+            s.login();
             m.setReceiverId(Long.valueOf(chatId));
             List<Message> l = iM.filterMessagesContact(Long.valueOf(chatId));
-            Collections.sort(l);
             model.addAttribute("messages", l);
             model.addAttribute("listTab", "");
             model.addAttribute("chatTab", "active");
+            
         }
         
         return "chatRoom";
