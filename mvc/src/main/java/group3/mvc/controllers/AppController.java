@@ -91,7 +91,6 @@ public class AppController {
 
     @PostMapping("/contact")
     public String addContact(@ModelAttribute("users") MyUser user, Model model){
-        System.out.println(user.toString());
         iMU.addC(user);
         return "redirect:/mvc/chatRoom";
     }
@@ -158,7 +157,6 @@ public class AppController {
 //    @GetMapping("/chatGroup/{id}")
 //    public String loadChatGroup(@PathVariable("id") String id, Model model, RedirectAttributes ra){
 //        ra.addFlashAttribute("chatIdGroup", id);
-//        System.out.println(id);
 //        s.login();
 //        return "redirect:/mvc/chatRoom";
 //    }
