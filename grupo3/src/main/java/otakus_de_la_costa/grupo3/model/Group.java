@@ -1,17 +1,24 @@
 package otakus_de_la_costa.grupo3.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.List;
-
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Group extends Messenger{
-    private Long id;
     private String name;
     private String description;
-    private Boolean active;
+
+    private Set<SimpleMemberResponse> group_members = new HashSet<>();
+
+    public void addMember(Long id, String username, boolean admin){
+        group_members.add(new SimpleMemberResponse(id, username,admin));
+    }
 }

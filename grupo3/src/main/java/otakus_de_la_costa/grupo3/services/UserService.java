@@ -1,15 +1,27 @@
 package otakus_de_la_costa.grupo3.services;
 
+import static otakus_de_la_costa.grupo3.model.Constants.IDS_NOT_FOUND;
+import static otakus_de_la_costa.grupo3.model.Constants.NOT_FOUND;
+import static otakus_de_la_costa.grupo3.model.Constants.OK;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import otakus_de_la_costa.grupo3.database.GroupMembersJPA;
+import otakus_de_la_costa.grupo3.database.MessageJPA;
 import otakus_de_la_costa.grupo3.database.MyUserJPA;
+import otakus_de_la_costa.grupo3.model.Message;
 import otakus_de_la_costa.grupo3.model.MyUser;
-import otakus_de_la_costa.grupo3.repositories.UserRepository;
+import otakus_de_la_costa.grupo3.model.RelationRequest;
+import otakus_de_la_costa.grupo3.model.SimpleGroupResponse;
+import otakus_de_la_costa.grupo3.model.SimpleUserResponse;
+import otakus_de_la_costa.grupo3.repositories.MessageRepository;
 import otakus_de_la_costa.grupo3.repositories.UserRepository;
 
 //CRUD DE USUARIOS FUNCIONES PRINCIPALES
@@ -17,18 +29,24 @@ import otakus_de_la_costa.grupo3.repositories.UserRepository;
 public class UserService implements IUserService{
 	@Autowired
 	private UserRepository uRepo;
+
+    @Autowired
+    private MessageRepository mRepo;
 	
-	//GUARDADO DEL OBJETO JSON A JPA
-	@Override
-	public MyUser createUser(MyUser myUser) {
-		MyUserJPA myUserJPA= mapearMyUserJPA(myUser);
-		MyUserJPA  newUserJPA = uRepo.save(myUserJPA);
-		MyUser response = mapearMyUser(newUserJPA);
-		return response;
-		
-	}
-	
-	private MyUser mapearMyUser(MyUserJPA myUserJPA) {
+	private Message mapMessageJPAToMessage(MessageJPA m){
+        return new Message(
+            m.getId(),
+            m.getContent(),
+            m.getLanguage(),
+            m.getCreationDate(),
+            m.getReceptionDate(),
+            m.getReadDate(),
+            m.getSender().getId(),
+            m.getReceiver().getId()
+        );
+    }
+    
+    private MyUser mapearMyUser(MyUserJPA myUserJPA) {
 		MyUser myUser = new MyUser();
 		myUser.setId(myUserJPA.getId());
 		myUser.setUsername(myUserJPA.getUsername());
@@ -37,24 +55,55 @@ public class UserService implements IUserService{
 		myUser.setMail(myUserJPA.getMail());
 		myUser.setLanguage(myUserJPA.getLanguage());
 		myUser.setProfileImage(myUserJPA.getProfileImage());
-		myUser.setActive(myUserJPA.getActive());
 		myUser.setBirthDate(myUserJPA.getBirthDate());
+        for (MyUserJPA u : myUserJPA.getContacts()) {
+            myUser.addContact(new SimpleUserResponse(u.getId(), u.getUsername(), u.getProfileImage()));
+        }
+        for (MyUserJPA u : myUserJPA.getBlocks()) {
+            myUser.addBlock(new SimpleUserResponse(u.getId(), u.getUsername(), u.getProfileImage()));
+        }
+        for(GroupMembersJPA g : myUserJPA.getGroups()){
+            myUser.addGroup(new SimpleGroupResponse(g.getId().getGroupId(),g.getGroup().getName(),g.getGroup().getDescription()));
+            for(MessageJPA m : mRepo.getMessageFromGroup(g.getId().getGroupId(),myUserJPA.getId())){
+                myUser.addReceived(mapMessageJPAToMessage(m));
+            }
+        }
+        for(MessageJPA m : myUserJPA.getSent()){
+            myUser.addSent(mapMessageJPAToMessage(m));
+        }
+        for(MessageJPA m : myUserJPA.getReceived()){
+            myUser.addReceived(mapMessageJPAToMessage(m));
+        }
 		return myUser;
 	}
-	
 
-	
-	private MyUserJPA mapearMyUserJPA(MyUser myUser) {
-		MyUserJPA myUserJPA = new MyUserJPA();
-		myUserJPA.setUsername(myUser.getUsername());
-		myUserJPA.setFirstName(myUser.getFirstName());
-		myUserJPA.setLastName(myUser.getLastName());
-		myUserJPA.setMail(myUser.getMail());
-		myUserJPA.setLanguage(myUser.getLanguage());
-		myUserJPA.setProfileImage(myUser.getProfileImage());
-		myUserJPA.setActive(myUser.getActive());
-		myUserJPA.setBirthDate(myUser.getBirthDate());
-		return myUserJPA;
+	private MyUserJPA mapearMyUserJPASinListas(MyUser myUser) {
+		MyUserJPA u = new MyUserJPA();
+		u.setUsername(myUser.getUsername());
+        u.setMail(myUser.getMail());
+        u.setFirstName(myUser.getFirstName());
+        u.setLastName(myUser.getLastName());
+        u.setLanguage(myUser.getLanguage());
+        u.setBirthDate(myUser.getBirthDate());
+        u.setProfileImage(myUser.getProfileImage());
+		return u;
+	}
+
+    //GUARDADO DEL OBJETO JSON A JPA
+	@Override
+	public int createUser(MyUser myUser) {
+        int response = 0;
+        if(uRepo.findByUsername(myUser.getUsername()).isPresent()){
+            response++;
+        }
+        if(uRepo.findByMail(myUser.getMail()).isPresent()){
+            response+=2;
+        }
+        if(response == 0){
+            uRepo.save(mapearMyUserJPASinListas(myUser));
+        }
+        return response;
+		
 	}
 	
 	@Override
@@ -67,34 +116,106 @@ public class UserService implements IUserService{
 	public MyUser findUserById(Long id) {
 		Optional<MyUserJPA> myUserJPA= uRepo.findById(id);
 		if(myUserJPA.isPresent()) {
-		return mapearMyUser(myUserJPA.get());
+		    return mapearMyUser(myUserJPA.get());
 		}
 		return null;
 	}
 	@Override
-	public MyUser updateMyUser(MyUser myUser, Long id) {
-		Optional<MyUserJPA> myUserJPA = uRepo.findById(id);
-		myUserJPA.get().setUsername(myUser.getUsername());
-		myUserJPA.get().setFirstName(myUser.getFirstName());
-		myUserJPA.get().setLastName(myUser.getLastName());
-		myUserJPA.get().setMail(myUser.getMail());
-		myUserJPA.get().setLanguage(myUser.getLanguage());
-		myUserJPA.get().setProfileImage(myUser.getProfileImage());
-		myUserJPA.get().setActive(myUser.getActive());
-		myUserJPA.get().setBirthDate(myUser.getBirthDate());
-		MyUserJPA updateUser = uRepo.save(myUserJPA.get());
-		return mapearMyUser(updateUser);
+	public int updateMyUser(MyUser myUser) {
+        int response = 0;
+        if(uRepo.findByUsername(myUser.getUsername()).isPresent()){
+            response++;
+        }
+        if(uRepo.findByMail(myUser.getMail()).isPresent()){
+            response+=2;
+        }
+        if(response == 0){
+            Optional<MyUserJPA> optional = uRepo.findById(myUser.getId());
+            if(optional.isEmpty()){
+                return NOT_FOUND;
+            }
+            MyUserJPA myUserJPA = optional.get();
+            if(myUser.getUsername()!=null){
+                myUserJPA.setUsername(myUser.getUsername());
+            }
+            if(myUser.getFirstName()!=null){
+                myUserJPA.setFirstName(myUser.getFirstName());
+            }
+            if(myUser.getLastName()!=null){
+                myUserJPA.setLastName(myUser.getLastName());
+            }
+            if(myUser.getMail()!=null){
+                myUserJPA.setMail(myUser.getMail());
+            }
+            if(myUser.getLanguage()!=null){
+                myUserJPA.setLanguage(myUser.getLanguage());
+            }
+            if(myUser.getProfileImage()!=null){
+                myUserJPA.setProfileImage(myUser.getProfileImage());
+            }
+            if(myUser.getBirthDate()!=null){
+                myUserJPA.setBirthDate(myUser.getBirthDate());
+            }
+            uRepo.save(myUserJPA);
+        }
+        return response;
 	}
 	
 	@Override
-	public boolean deleteUser(Long id) {
-		Optional<MyUserJPA> myUser=uRepo.findById(id);
-		if(myUser.isPresent())
-		{
-			uRepo.delete(myUser.get());
-			return true;
-		}
-		return false;
-		
+	public void deleteUser(Long id) {
+        uRepo.deleteById(id);
 	}
+
+    @Override
+    @Transactional
+    public void addContact(RelationRequest request) {
+        uRepo.addContact(request.getRelationOwner(), request.getRelated());
+    }
+
+    @Override
+    @Transactional
+    public int deleteContact(RelationRequest request) {
+        if(uRepo.findById(request.getRelationOwner()).isEmpty() || uRepo.findById(request.getRelated()).isEmpty()){
+            return IDS_NOT_FOUND;
+        }
+        uRepo.deleteContact(request.getRelationOwner(), request.getRelated());
+        return OK;
+    }
+
+    @Override
+    @Transactional
+    public void addBlock(RelationRequest request) {
+        uRepo.addBlock(request.getRelationOwner(), request.getRelated());
+        
+    }
+
+    @Override
+    @Transactional
+    public int deleteBlock(RelationRequest request) {
+        
+        if(uRepo.findById(request.getRelationOwner()).isEmpty() || uRepo.findById(request.getRelated()).isEmpty()){
+            return IDS_NOT_FOUND;
+        }
+        uRepo.deleteBlock(request.getRelationOwner(), request.getRelated());
+        return OK;
+    }
+
+    @Override
+    public MyUser findByUsername(String username) {
+        Optional<MyUserJPA> optional = uRepo.findByUsername(username);
+        if(optional.isPresent()){
+            return mapearMyUser(optional.get());
+        }
+        return null;
+
+    }
+	
+
+	
+
+	
+
+	
+
+
 }

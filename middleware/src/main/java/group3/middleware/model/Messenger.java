@@ -1,14 +1,15 @@
 package group3.middleware.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
 public class Messenger {
-    private List<Messages> sent;
-    private List<Messages> received;
+    private Long id;
+    private	Set<Message> sent= new HashSet<>();
+    private Set<Message> received= new HashSet<>();
 }

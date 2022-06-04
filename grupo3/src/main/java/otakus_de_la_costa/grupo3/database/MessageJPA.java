@@ -13,18 +13,18 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import lombok.Getter;
+import org.hibernate.annotations.CreationTimestamp;
+
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "messages")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class MessageJPA {
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -43,6 +43,7 @@ public class MessageJPA {
     private String language;
 
     @Column(name = "creation_date")
+    @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationDate;
 
@@ -53,4 +54,6 @@ public class MessageJPA {
     @Column(name = "read_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date readDate;
+
+
 }

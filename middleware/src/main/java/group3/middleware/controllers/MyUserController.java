@@ -1,55 +1,70 @@
 package group3.middleware.controllers;
 
-import group3.middleware.model.MyUser;
-import group3.middleware.services.MyUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/middleware/user")
+import group3.middleware.model.MyUser;
+import group3.middleware.model.request.RelationRequest;
+import group3.middleware.services.interfaces.IMyUser;
+
+@RequestMapping("/middle/users")
 @RestController
 public class MyUserController {
     @Autowired
-    private MyUserService uService;
+    private IMyUser iMU;
 
-    @PostMapping
-    public int create(@RequestBody MyUser user){
-        return uService.createUser(user);
+    @GetMapping
+    public ResponseEntity<MyUser[]> listAll(){
+        return iMU.listAllUsers();
     }
 
-    @GetMapping("/{id}")
-    public MyUser get(@PathVariable("id") Long id){
-        return uService.readUser(id);
+    @GetMapping("/{idU}")
+    public ResponseEntity<MyUser> getById(@PathVariable("idU") Long idU){
+        return iMU.readUById(idU);
     }
 
-    @PutMapping("/{id}")
-    public int update(@PathVariable("id") Long id,@RequestBody MyUser user){
-        return uService.updateUser(id,user);
+    @GetMapping("/byUsername/{username}")
+    public ResponseEntity<MyUser> getByUsername(@PathVariable("username") String username){
+        return iMU.readUByUsername(username);
     }
 
-    @DeleteMapping("/{id}")
-    public int delete(@PathVariable("id") Long id){
-        return uService.deleteUser(id);
+    @PutMapping()
+    public ResponseEntity<Integer> update(@RequestBody MyUser user){
+        return iMU.updateMyUser(user);
+    }
+
+    @DeleteMapping("/{idU}")
+    public ResponseEntity<Integer> delete(@PathVariable("idU") Long idU){
+        return iMU.deleteU(idU);
     }
 
     /////////////////////////////////////////////////////////////////////////////
 
-    @PostMapping("/contact/{idU}/{idC}")
-    public int addContact(@PathVariable("idU") Long idU,@PathVariable("idC") Long idC){
-        return uService.addContact(idU, idC);
+    @PostMapping("/contact")
+    public ResponseEntity<Integer> addContact(@RequestBody RelationRequest rr){
+        return iMU.addC(rr);
     }
 
-    @PostMapping("/block/{idU}/{idC}")
-    public int addBlock(@PathVariable("idU") Long idU,@PathVariable("idC") Long idC){
-        return uService.addBlock(idU, idC);
+    @PutMapping("/contact")
+    public ResponseEntity<Integer> delContact(@RequestBody RelationRequest rr){
+       return iMU.removeC(rr);
     }
 
-    @DeleteMapping("/contact/{idU}/{idC}")
-    public int delContact(@PathVariable("idU") Long idU,@PathVariable("idC") Long idC){
-        return uService.deleteContact(idU, idC);
+    @PostMapping("/block")
+    public ResponseEntity<Integer> addBlock(@RequestBody RelationRequest rr){
+        return iMU.addB(rr);
     }
 
-    @DeleteMapping("/block/{idU}/{idC}")
-    public int delBlock(@PathVariable("idU") Long idU,@PathVariable("idC") Long idC){
-        return uService.deleteBlock(idU, idC);
+    @PutMapping("/block")
+    public ResponseEntity<Integer> delBlock(@RequestBody RelationRequest rr){
+        return iMU.removeB(rr);
     }
 }

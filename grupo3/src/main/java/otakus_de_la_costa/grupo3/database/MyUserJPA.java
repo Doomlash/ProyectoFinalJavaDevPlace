@@ -3,11 +3,13 @@ package otakus_de_la_costa.grupo3.database;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -45,18 +47,18 @@ public class MyUserJPA extends MessengerJPA{
     @Temporal(TemporalType.DATE)
     private Date birthDate;
 
-    @Column(name = "active")
-    private Boolean active;
-
-    @ManyToMany()
+    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.DETACH})
     @JoinTable(name = "contacts",
                 joinColumns = {@JoinColumn(name = "contact_owner")}, 
                 inverseJoinColumns = {@JoinColumn(name = "contacted")})
     private List<MyUserJPA> contacts;
 
-    @ManyToMany()
+    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.DETACH})
     @JoinTable(name = "blocks",
                 joinColumns = {@JoinColumn(name = "block_owner")}, 
                 inverseJoinColumns = {@JoinColumn(name = "blocked")})
     private List<MyUserJPA> blocks;
+
+    @OneToMany(mappedBy = "user")
+    private List<GroupMembersJPA> groups;
 }

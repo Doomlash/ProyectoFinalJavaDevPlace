@@ -23,8 +23,13 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class MessengerJPA {
+
+    public MessengerJPA(Long id){
+        this.id=id;
+    }
+
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 

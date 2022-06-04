@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment = "textSent">
+        <td class="width:5%  text-start">
+            <a style="color:black; font-size: x-small;"><span th:text="${message.creationDate}"></span></a>
+        </td>
+        <td class="width:95%  text-end text-wrap">
+            <a style="color:black;"><span th:text="${message.content}"></span></a>
+        </td>
+    </div>
+    <div th:fragment = "textReceived">
+        <td class="width:95%  text-start text-wrap">
+            <a style="color:black;" th:href="@{/mvc/translate/{id}(id=${message.id})}"><span th:text="${message.content}"></span></a>
+        </td>
+        <td class="width:5%  text-end">
+            <a style="color:black; font-size: x-small;"><span th:text="${message.creationDate}"></span></a>
+        </td>
+    </div>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;600;800&display=swap" rel="stylesheet">
+        <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+      
+        <title>Welcome!</title>
+      </head>
+
+<body class="mp-0">
+  <section>
+    <h1 class="title text-white fst-italic fw-semibold fs-1 text-start p-4">Another messenger </h1>
+    <div class="container-text col-6  container-fluid align-items-center text-center pt-5  ">
+      <form class="col-12 mb-3" th:action="@{/login}" method="post">
+        <div class="mb-6 col-6 ">
+            <div th:if="${param.error}">
+                Invalid username and password.</div>
+            <div th:if="${param.logout}">
+                You have been logged out.</div>
+        </div>
+        <div class="mb-6 col-6 ">
+          <label for="username" class="form-label text-white fst-italic fw-semibold fs-3">Usuario</label>
+          <input type="text" class="form-control" name="username" id="username" >
+        </div>
+        <div class="mb-6 col-6">
+          <label for="password"
+            class="form-label mt-3 text-white fst-italic fw-semibold fs-3">Contraseña</label>
+          <input type="password" class="form-control mb-3" name="password" id="password">
+        </div>
+        <div class="col-4 mx-5 ">
+        <button type="submit" class="btn btn-primary mb-3 text-dark  mx-4  fst-italic fw-bold fs-5">Ingresar</button>
+      </div>
+      </form>
+
+    </div>
+    
+
+    <div class="col-4 mx-auto  ">
+        <a class="btn btn-primary text-dark fst-italic fw-bold fs-5 mx-2 mt-3 " th:href="@{/register}" role="button">Registrarme</a>
+      </div>
+      </div>
+  
+      <div class="container-img  col-6   ">
+        <img th:src="@{/img/chatLogin.svg}" alt="" class="img-fluid image">
+      </div>
+      <img th:src="@{/img/VectorLogin.svg}" alt="" class="vector img-fluid">
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+      crossorigin="anonymous"></script>
+</body>
+
+</html>

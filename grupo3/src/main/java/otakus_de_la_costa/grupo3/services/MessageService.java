@@ -1,88 +1,84 @@
 package otakus_de_la_costa.grupo3.services;
 
+import static otakus_de_la_costa.grupo3.model.Constants.NOT_FOUND;
+import static otakus_de_la_costa.grupo3.model.Constants.OK;
 
-
-
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import otakus_de_la_costa.grupo3.database.MessageJPA;
-import otakus_de_la_costa.grupo3.model.Messages;
+import otakus_de_la_costa.grupo3.database.MessengerJPA;
+import otakus_de_la_costa.grupo3.model.Message;
+import otakus_de_la_costa.grupo3.model.MessageRequest;
 import otakus_de_la_costa.grupo3.repositories.MessageRepository;
 
 @Service
 public class MessageService implements IMenssageService {
 	@Autowired
-	private MessageRepository mRepo;
-	//GUARDADO DEL OBJETO JSON A JPA
-	public Messages createMessage(Messages message) {
-		MessageJPA myMessageJPA= mapearMessageJPA(message);
-		MessageJPA  newMessageJPA = mRepo.save(myMessageJPA);
-		Messages response = mapearMessage(newMessageJPA);
-		return response;
-		
-	}
-	//MAPEOS DEL JSON AL JPA
-	private MessageJPA mapearMessageJPA(Messages message) {
-		MessageJPA myMessageJPA = new MessageJPA();
-		myMessageJPA.setContent(message.getContent());
-		myMessageJPA.setCreationDate(message.getCreationDate());
-		myMessageJPA.setLanguage(message.getLanguage());
-		myMessageJPA.setReadDate(message.getReadDate());
-		myMessageJPA.setReceptionDate(message.getReceptionDate());
-		return myMessageJPA;
-	}
-	//MAPEOS DEL JPA AL JSON
-	private Messages mapearMessage(MessageJPA newMessageJPA) {
-		Messages myMessage = new Messages();
-		myMessage.setId(newMessageJPA.getId());
-		myMessage.setContent(newMessageJPA.getContent());
-		myMessage.setCreationDate(newMessageJPA.getCreationDate());
-		myMessage.setLanguage(newMessageJPA.getLanguage());
-		myMessage.setReadDate(newMessageJPA.getReadDate());
-		myMessage.setReceptionDate(newMessageJPA.getReceptionDate());
-		return myMessage;
-	}
-	@Override
-	public List<Messages> listAllMessages() {
-		List<MessageJPA> messages = mRepo.findAll();
-		return messages.stream().map(messageJPA -> mapearMessage(messageJPA)).collect(Collectors.toList());
-	}
+	private MessageRepository mr;
 	
-	@Override
-	public Messages findMessageById(Long id) {
-		Optional<MessageJPA> myMessageJPA= mRepo.findById(id);
-		if(myMessageJPA.isPresent()) {
-		return mapearMessage(myMessageJPA.get());
-		}
-		return null;
-	}
-	@Override
-	public Messages updateMessage(Messages message, Long id) {
-		Optional<MessageJPA> myMessageJPA = mRepo.findById(id);
-		myMessageJPA.get().setContent(message.getContent());
-		myMessageJPA.get().setCreationDate(message.getCreationDate());
-		myMessageJPA.get().setLanguage(message.getLanguage());
-		myMessageJPA.get().setReadDate(message.getReadDate());
-		myMessageJPA.get().setReceptionDate(message.getReceptionDate());
-		MessageJPA updateMessage = mRepo.save(myMessageJPA.get());
-		return mapearMessage(updateMessage);
-	}
-	
-	@Override
-	public boolean deleteMessage(Long id) {
-		Optional<MessageJPA> message=mRepo.findById(id);
-		if(message.isPresent())
-		{
-			mRepo.delete(message.get());
-			return true;
-		}
-		return false;
-		
-	}
+    private Message mapMessageJPAToMessage(MessageJPA m){
+        return new Message(
+            m.getId(),
+            m.getContent(),
+            m.getLanguage(),
+            m.getCreationDate(),
+            m.getReceptionDate(),
+            m.getReadDate(),
+            m.getSender().getId(),
+            m.getReceiver().getId()
+        );
+    }
+
+    @Override
+    public List<Message> listAllMessages() {
+        List<MessageJPA> l = mr.findAll();
+        List<Message> result = new LinkedList<>();
+        for (MessageJPA messageJPA : l) {
+            result.add(mapMessageJPAToMessage(messageJPA));
+        }
+        return result;
+    }
+
+    @Override
+    public boolean createMessage(MessageRequest message) {
+        MessageJPA m = new MessageJPA();
+        m.setLanguage(message.getLanguage());
+        m.setContent(message.getContent());
+        m.setSender(new MessengerJPA(message.getSenderId()));
+        m.setReceiver(new MessengerJPA(message.getReceiverId()));
+        System.out.println("--------------------------------------------------");
+        System.out.println(m.toString());
+        if (mr.save(m) != null) {
+            System.out.println(m.toString());
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    @Transactional
+    public int receiveMessage(Long id) {
+        if(mr.findById(id).isEmpty()){
+            return NOT_FOUND;
+        }
+        mr.receiveMessage(id);
+        return OK;      
+    }
+
+    @Override
+    @Transactional
+    public int readMessage(Long id) {
+        if(mr.findById(id).isEmpty()){
+            return NOT_FOUND;
+        }
+        mr.readMessage(id);  
+        return OK;      
+    }
 }
 	
