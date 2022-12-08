@@ -202,7 +202,7 @@ public class MessagesService implements IMessages{
             }
         }
         for (Message message : UserHolder.getCurrentUser().getReceived()) {
-            if(message.getSenderId()==id || message.getReceiverId() == id){
+            if((message.getSenderId()==id && message.getReceiverId() == UserHolder.getCurrentUser().getId())  || message.getReceiverId() == id){
                 response.add(message);
             }
         }
